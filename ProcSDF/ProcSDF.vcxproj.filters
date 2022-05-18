@@ -13,13 +13,46 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Vendor">
+      <UniqueIdentifier>{84e77b53-becd-4eeb-b308-100ae29c2e14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vendor\ImGUI">
+      <UniqueIdentifier>{a1d038f1-c621-4b1b-8559-c0e0c03702b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Vendor\Glad">
+      <UniqueIdentifier>{cfb5e5ae-3eca-4d88-8d8f-5d3b5d08655d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui_demo.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui_draw.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui_stdlib.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui_tables.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imgui_widgets.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Vendor\Glad</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
