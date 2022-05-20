@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Vendor\Glad">
       <UniqueIdentifier>{cfb5e5ae-3eca-4d88-8d8f-5d3b5d08655d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{3b44741b-814d-4b9c-9096-6dde4a65f308}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>Source Files\Vendor\Glad</Filter>
+    </ClCompile>
+    <ClCompile Include="Rendering\Renderer.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

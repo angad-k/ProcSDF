@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_draw.cpp" />
