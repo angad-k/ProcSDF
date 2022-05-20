@@ -163,6 +163,9 @@
     <ClCompile Include="Vendor\Include\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_widgets.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Rendering\Renderer.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
