@@ -29,6 +29,8 @@ private:
 	void link_shader(unsigned int vertexShader, unsigned int fragmentShader);
 	void setup_frame_buffer();
 	void resize_render_texture(float height, float width);
+
+	bool renderValid = false;
 public:
 	Renderer();
 	void draw(float width, float height);
@@ -42,6 +44,8 @@ public:
 		cameraOriginValue[0] = p_cameraOrigin[0];
 		cameraOriginValue[1] = p_cameraOrigin[1];
 		cameraOriginValue[2] = p_cameraOrigin[2];
+
+		renderValid = false;
 	}
 
 	float* get_camera_origin()
@@ -52,6 +56,7 @@ public:
 	void set_focal_length(float p_focalLength)
 	{
 		focalLengthValue = p_focalLength;
+		renderValid = false;
 	}
 
 	float* get_focal_length()

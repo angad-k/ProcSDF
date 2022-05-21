@@ -10,10 +10,15 @@
 #include "Renderer.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
+#include <windows.h>
 
 static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
+
+extern "C" {
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
 
 GLFWwindow* setup_imgui_glfw()
