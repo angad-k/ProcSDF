@@ -7,7 +7,7 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 #include <glad/glad.h>
-#include "Rendering/Renderer.h"
+#include "Renderer.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 
@@ -72,18 +72,34 @@ int main(int, char**)
 
 		ImGui::NewFrame();
 		{
-			ImGui::Begin("Scene");
+			{
+				ImGui::Begin("Scene");
 
-			ImVec2 vMin = ImGui::GetWindowContentRegionMin();
-			ImVec2 vMax = ImGui::GetWindowContentRegionMax();
+				ImVec2 vMin = ImGui::GetWindowContentRegionMin();
+				ImVec2 vMax = ImGui::GetWindowContentRegionMax();
 
-			vMin.x += ImGui::GetWindowPos().x;
-			vMin.y += ImGui::GetWindowPos().y;
-			vMax.x += ImGui::GetWindowPos().x;
-			vMax.y += ImGui::GetWindowPos().y;
-			renderSceneSize = ImVec2(vMax.x - vMin.x, vMax.y - vMin.y);
-			ImGui::Image((ImTextureID)render_texture, renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
-			ImGui::End();
+				vMin.x += ImGui::GetWindowPos().x;
+				vMin.y += ImGui::GetWindowPos().y;
+				vMax.x += ImGui::GetWindowPos().x;
+				vMax.y += ImGui::GetWindowPos().y;
+				renderSceneSize = ImVec2(vMax.x - vMin.x, vMax.y - vMin.y);
+				ImGui::Image((ImTextureID)render_texture, renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::End();
+			}
+
+			{
+				ImGui::Begin("Camera");
+				
+				float origin[3] = { renderer->get_camera_origin()[0], renderer->get_camera_origin()[1], renderer->get_camera_origin()[2] };
+				ImGui::SliderFloat3("Camera Origin", origin, -10.0, 10.0);
+				renderer->set_camera_origin(origin);
+
+				//float focalLength = renderer->get_focal_length();
+				ImGui::SliderFloat("Focal Length", renderer->get_focal_length(), -10.0, 10.0);
+				ImGui::SliderFloat3("Light Position", renderer->get_light_position(), -10.0, 10.0);
+				
+				ImGui::End();
+			}
 		}
 
 		renderer->draw(renderSceneSize.x, renderSceneSize.y);

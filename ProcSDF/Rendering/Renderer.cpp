@@ -53,9 +53,10 @@ void Renderer::draw(float width, float height)
 	glClear(GL_COLOR_BUFFER_BIT);
 	float timeValue = glfwGetTime();
 
-	glUniform3f(cameraOrigin, 0.0f, 0.0f, 0.0f);// +5.0 * sin(timeValue));
+	glUniform3f(lightPosition, lightPositionValue[0], lightPositionValue[1], lightPositionValue[2]);
+	glUniform3f(cameraOrigin, cameraOriginValue[0], cameraOriginValue[1], cameraOriginValue[2]);// +5.0 * sin(timeValue));
 	glUniform2f(viewportSize, width, height);
-	glUniform1f(focalLength, 1.0);
+	glUniform1f(focalLength, focalLengthValue);
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -105,9 +106,12 @@ void Renderer::link_shader(unsigned int vertexShader, unsigned int fragmentShade
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
+
 	cameraOrigin = glGetUniformLocation(shaderProgram, "cameraOrigin");
 	viewportSize = glGetUniformLocation(shaderProgram, "viewportSize");
 	focalLength = glGetUniformLocation(shaderProgram, "focalLength");
+	lightPosition = glGetUniformLocation(shaderProgram, "lightPosition");
+
 	int  success;
 	char infoLog[512];
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);

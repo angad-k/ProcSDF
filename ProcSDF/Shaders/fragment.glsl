@@ -1,4 +1,7 @@
 #version 330 core
+
+uniform vec3 lightPosition;
+
 float distance_from_sphere(in vec3 p, in vec3 c, float r)
 {
     return length(p - c) - r;
@@ -37,8 +40,7 @@ vec3 ray_march(in vec3 ro, in vec3 rd)
         if (distance_to_closest < MINIMUM_HIT_DISTANCE)
         {
            vec3 normal = calculate_normal(current_position);
-           vec3 light_position = vec3(2.0, 5.0, -3.0);
-           vec3 direction_to_light = normalize(current_position - light_position);
+           vec3 direction_to_light = normalize(current_position - lightPosition);
 
             float diffuse_intensity = max(0.0, dot(normal, direction_to_light));
 

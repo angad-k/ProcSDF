@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Rendering">
       <UniqueIdentifier>{3b44741b-814d-4b9c-9096-6dde4a65f308}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{d823201f-be59-4f79-8b8b-2eeaba30337b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -63,6 +66,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rendering\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\ProcVec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
