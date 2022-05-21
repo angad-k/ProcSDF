@@ -6,9 +6,9 @@ float distance_from_sphere(in vec3 p, in vec3 c, float r)
 
 float map_the_world(in vec3 p)
 {
-    float displacement = sin(5.0 * p.x) * sin(5.0 * p.y) * sin(5.0 * p.z) * 0.25;
-    float sphere_0 = distance_from_sphere(p, vec3(0.0), 1.0);
-    return sphere_0+ displacement;
+    //float displacement = sin(5.0 * p.x) * sin(5.0 * p.y) * sin(5.0 * p.z) * 0.25;
+    float sphere_0 = distance_from_sphere(p, vec3(0.0, 0.0, -1.0), 0.5);
+    return sphere_0;//+ displacement;
 }
 
 vec3 calculate_normal(in vec3 p)
@@ -25,7 +25,7 @@ vec3 ray_march(in vec3 ro, in vec3 rd)
 {
     float total_distance_traveled = 0.0;
     const int NUMBER_OF_STEPS = 32;
-    const float MINIMUM_HIT_DISTANCE = 0.001;
+    const float MINIMUM_HIT_DISTANCE = 0.0001;
     const float MAXIMUM_TRACE_DISTANCE = 1000.0;
 
     for (int i = 0; i < NUMBER_OF_STEPS; ++i)
@@ -37,7 +37,7 @@ vec3 ray_march(in vec3 ro, in vec3 rd)
         if (distance_to_closest < MINIMUM_HIT_DISTANCE)
         {
            vec3 normal = calculate_normal(current_position);
-           vec3 light_position = vec3(2.0, -5.0, 3.0);
+           vec3 light_position = vec3(2.0, 5.0, -3.0);
            vec3 direction_to_light = normalize(current_position - light_position);
 
             float diffuse_intensity = max(0.0, dot(normal, direction_to_light));
@@ -55,14 +55,21 @@ vec3 ray_march(in vec3 ro, in vec3 rd)
 }
 
 out vec4 FragColor;
-uniform vec3 cameraPosition;
+uniform vec3 cameraOrigin;
+uniform vec2 viewportSize;
+uniform float focalLength;
+
 void main()
 {
-vec2 uv = (gl_FragCoord.xy/vec2(600.0, 600.0))*2.0 - 1.0;
-vec3 camera_position = vec3(0.0, 0.0, -5.0);
-vec3 ro = cameraPosition;
-vec3 rd = vec3(uv, 1.0);
+    vec2 vSize = vec2(2.0*viewportSize.x/viewportSize.y, 2.0);
 
-vec3 shaded_color = ray_march(ro, rd);
-   FragColor = vec4(shaded_color, 1.0);
+    vec3 horizontal = vec3(vSize.x, 0.0, 0.0);
+    vec3 vertical = vec3(0.0, vSize.y, 0.0);
+    vec3 lowerLeftCorner = cameraOrigin - horizontal/2 - vertical/2 - vec3(0, 0, focalLength);
+
+    vec2 uv = gl_FragCoord.xy/viewportSize;
+    vec3 ro = cameraOrigin;
+    vec3 rd = lowerLeftCorner + uv.x*horizontal + uv.y*vertical - cameraOrigin;
+    vec3 shaded_color = ray_march(ro, rd);
+    FragColor = vec4(shaded_color, 1.0);
 }

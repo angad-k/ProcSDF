@@ -14,7 +14,9 @@ private :
     unsigned int FBO;
     float cachedWidth = 600;
     float cachedHeight = 600;
-    int cameraLocation;
+    int cameraOrigin;
+    int focalLength;
+    int viewportSize;
     void assemble_shader();
     unsigned int compile_shader(std::string shaderPath, unsigned int shaderType);
     void link_shader(unsigned int vertexShader, unsigned int fragmentShader);
