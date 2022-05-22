@@ -59,7 +59,6 @@ void Renderer::draw(float width, float height)
 	glClear(GL_COLOR_BUFFER_BIT);
 	float timeValue = glfwGetTime();
 
-	glUniform3f(lightPosition, lightPositionValue[0], lightPositionValue[1], lightPositionValue[2]);
 	glUniform3f(cameraOrigin, cameraOriginValue[0], cameraOriginValue[1], cameraOriginValue[2]);// +5.0 * sin(timeValue));
 	glUniform2f(viewportSize, width, height);
 	glUniform1f(focalLength, focalLengthValue);
@@ -118,7 +117,6 @@ void Renderer::link_shader(unsigned int vertexShader, unsigned int fragmentShade
 	cameraOrigin = glGetUniformLocation(shaderProgram, "cameraOrigin");
 	viewportSize = glGetUniformLocation(shaderProgram, "viewportSize");
 	focalLength = glGetUniformLocation(shaderProgram, "focalLength");
-	lightPosition = glGetUniformLocation(shaderProgram, "lightPosition");
 
 	int  success;
 	char infoLog[512];
@@ -143,14 +141,6 @@ void Renderer::setup_frame_buffer()
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
 
-	unsigned int rbo;
-	glGenRenderbuffers(1, &rbo);
-	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 600, 600);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -161,6 +151,12 @@ void Renderer::resize_render_texture(float width, float height)
 	glBindTexture(GL_TEXTURE_2D, render_texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	cachedWidth = width;
 	cachedHeight = height;

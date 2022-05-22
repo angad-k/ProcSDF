@@ -7,6 +7,7 @@
 class Renderer
 {
 private:
+	static Renderer* renderer;
 	unsigned int render_texture;
 	unsigned int VAO;
 	unsigned int shaderProgram;
@@ -22,7 +23,6 @@ private:
 
 	float cameraOriginValue[3] = { 0.0, 0.0, 0.0 };
 	float focalLengthValue = 1.0;
-	float lightPositionValue[3] = { 2.0, 5.0, -3.0 };
 
 	void assemble_shader();
 	unsigned int compile_shader(std::string shaderPath, unsigned int shaderType);
@@ -33,6 +33,15 @@ private:
 	bool renderValid = false;
 public:
 	Renderer();
+
+	static Renderer* get_singleton() {
+		if (!renderer)
+		{
+			renderer = new Renderer();
+		}
+		return renderer;
+	}
+
 	void draw(float width, float height);
 	unsigned int get_render_texture()
 	{
@@ -62,10 +71,5 @@ public:
 	float* get_focal_length()
 	{
 		return &focalLengthValue;
-	}
-
-	float* get_light_position()
-	{
-		return lightPositionValue;
 	}
 };

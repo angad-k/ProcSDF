@@ -1,8 +1,3 @@
-// Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
-// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
-// Read online: https://github.com/ocornut/imgui/tree/master/docs
-
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
@@ -17,6 +12,8 @@ static void glfw_error_callback(int error, const char* description)
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+// This is just a one-liner I found online that increases the code's affinity to Nvidia's GPU and so, 
+// doesn't run on the integrated card by default.
 extern "C" {
 	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
@@ -54,6 +51,8 @@ GLFWwindow* setup_imgui_glfw()
 	return window;
 }
 
+Renderer* Renderer::renderer = 0;
+
 int main(int, char**)
 {
 	GLFWwindow* window = setup_imgui_glfw();
@@ -63,7 +62,8 @@ int main(int, char**)
 		return -1;
 	}
 
-	Renderer* renderer = new Renderer();
+	Renderer* renderer = Renderer::get_singleton();
+	// refactor the next line to directly get the texture from Renderer's singleton
 	unsigned int render_texture = renderer->get_render_texture();
 
 	while (!glfwWindowShouldClose(window))
@@ -101,7 +101,6 @@ int main(int, char**)
 
 				//float focalLength = renderer->get_focal_length();
 				ImGui::SliderFloat("Focal Length", renderer->get_focal_length(), -10.0, 10.0);
-				ImGui::SliderFloat3("Light Position", renderer->get_light_position(), -10.0, 10.0);
 				
 				ImGui::End();
 			}

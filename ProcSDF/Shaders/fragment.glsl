@@ -1,6 +1,13 @@
 #version 330 core
 
-uniform vec3 lightPosition;
+uniform vec3 cameraOrigin;
+uniform vec2 viewportSize;
+uniform float focalLength;
+
+const int SPHERE_0 = 0;
+const int SPHERE_1 = 1;
+
+int current_hit = -1;
 
 float random(in vec2 uv)
 {
@@ -14,9 +21,35 @@ vec2 random2(in vec2 uv)
     return vec2(x, y);
 }
 
+vec3 random3(in vec2 uv)
+{
+    float x = random(uv);
+    float y = random(vec2(uv.x*x, uv.y*x));
+    float z = random(vec2(uv.x*y, uv.y*y));
+    return vec3(x, y, z);
+}
+
+vec3 random_unit_vector(in vec2 uv)
+{
+    return normalize(random3(uv));
+}
+
+vec3 random_in_unit_sphere(in vec2 uv)
+{
+    vec3 randomVec = random3(uv);
+    randomVec = normalize(randomVec);
+    randomVec = randomVec * 2.0 - 1.0;
+    return randomVec;
+}
+
 float distance_from_sphere(in vec3 p, in vec3 c, float r)
 {
     return length(p - c) - r;
+}
+
+vec3 diffuse_scatter(in vec3 intersection, in vec3 normal)
+{
+    return intersection + normal + random_unit_vector(intersection.xy);
 }
 
 float map_the_world(in vec3 p)
@@ -24,7 +57,18 @@ float map_the_world(in vec3 p)
     //float displacement = sin(5.0 * p.x) * sin(5.0 * p.y) * sin(5.0 * p.z) * 0.25;
     float sphere_0 = distance_from_sphere(p, vec3(0.0, 0.0, -1.0), 0.5);
     float sphere_1 = distance_from_sphere(p, vec3(0,-100.5,-1), 100);
-    return min(sphere_0, sphere_1);//+ displacement;
+    float min_dist = min(sphere_0, sphere_1);
+
+    if(min_dist == sphere_0)
+    {
+        current_hit = SPHERE_0;
+    }
+    else if(min_dist == sphere_1)
+    {
+        current_hit = SPHERE_1;
+    }
+    
+    return min_dist;
 }
 
 vec3 calculate_normal(in vec3 p)
@@ -40,7 +84,7 @@ vec3 calculate_normal(in vec3 p)
 vec3 ray_march(in vec3 ro, in vec3 rd, in int depth)
 {
     float total_distance_traveled = 0.0;
-    const int NUMBER_OF_STEPS = 32;
+    const int NUMBER_OF_STEPS = 16;
     const float MINIMUM_HIT_DISTANCE = 0.0001;
     const float MAXIMUM_TRACE_DISTANCE = 1000.0;
     vec3 color = vec3(1.0);
@@ -65,8 +109,18 @@ vec3 ray_march(in vec3 ro, in vec3 rd, in int depth)
             {
                 vec3 normal = calculate_normal(current_position);
 
-                vec3 target = current_position + normal + random(current_position.xy);
+                vec3 target = vec3(0.0);
                 
+                switch(current_hit)
+                {
+                    case SPHERE_0 :
+                        target = diffuse_scatter(current_position, normal);
+                        break;
+                    case SPHERE_1 :
+                        target = diffuse_scatter(current_position, normal);
+                        break;
+                }
+
                 color *= 0.5;
                 ro = current_position;
                 rd = target;
@@ -95,9 +149,6 @@ vec3 ray_march(in vec3 ro, in vec3 rd, in int depth)
 }
 
 out vec4 FragColor;
-uniform vec3 cameraOrigin;
-uniform vec2 viewportSize;
-uniform float focalLength;
 
 void main()
 {
