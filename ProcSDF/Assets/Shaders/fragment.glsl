@@ -8,6 +8,7 @@ out vec4 FragColor;
 
 const int SPHERE_0 = 0;
 const int SPHERE_1 = 1;
+const int SPHERE_2 = 1;
 
 int current_hit = -1;
 
@@ -71,6 +72,14 @@ vec3 random_in_unit_sphere(in vec2 uv)
     return randomVec;
 }
 
+vec3 random_in_hemisphere(in vec3 normal, in vec3 intersection) {
+    vec3 in_unit_sphere = random_in_unit_sphere(intersection.xy);
+    if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
+        return in_unit_sphere;
+    else
+        return -in_unit_sphere;
+}
+
 vec3 random_unit_vector(in vec2 uv)
 {
     return normalize(random_in_unit_sphere(uv));
@@ -83,23 +92,24 @@ float distance_from_sphere(in vec3 p, in vec3 c, float r)
 
 vec3 diffuse_scatter(in vec3 intersection, in vec3 normal)
 {
-    return intersection + normal + random_unit_vector(intersection.xy);
+    return intersection + random_in_hemisphere(normal, intersection);
+}
+
+
+float smooth_union(in float p1, in float p2, in float transition)
+{
+    float h = clamp( 0.5 + 0.5*(p2-p1)/transition, 0.0, 1.0 );
+    return mix( p2, p1, h ) - transition*h*(1.0-h); 
 }
 
 float map_the_world(in vec3 p)
 {
-    float sphere_0 = distance_from_sphere(p, vec3(0.0, 0.0, -1.0), 0.5);
+    float sphere_0 = distance_from_sphere(p, vec3(-0.25, 0.0, -1.0), 0.5);
+    float sphere_2 = distance_from_sphere(p, vec3(0.25, 0.0, -1.0), 0.5);
     float sphere_1 = distance_from_sphere(p, vec3(0,-100.5,-1), 100);
-    float min_dist = min(sphere_0, sphere_1);
+    float min_dist = smooth_union(sphere_2, sphere_0, 0.05);
 
-    if(min_dist == sphere_0)
-    {
-        current_hit = SPHERE_0;
-    }
-    else if(min_dist == sphere_1)
-    {
-        current_hit = SPHERE_1;
-    }
+    current_hit = SPHERE_0;
     
     return min_dist;
 }
@@ -129,6 +139,7 @@ vec3 ray_march(in vec3 ro, in vec3 rd, in int depth)
         if(depth <= 0)
         {
             color *= 0.0;
+            color = vec3(1.0, 0.0, 0.0);
             break;
         }
 
@@ -149,7 +160,7 @@ vec3 ray_march(in vec3 ro, in vec3 rd, in int depth)
                     case SPHERE_0 :
                         target = diffuse_scatter(current_position, normal);
                         break;
-                    case SPHERE_1 :
+                    case SPHERE_2 :
                         target = diffuse_scatter(current_position, normal);
                         break;
                 }
@@ -184,7 +195,7 @@ vec3 ray_march(in vec3 ro, in vec3 rd, in int depth)
 void main()
 {
     int MAX_DEPTH = 50;
-    int SAMPLES = 32;
+    int SAMPLES = 50;
 
     vec2 vSize = vec2(2.0*viewportSize.x/viewportSize.y, 2.0);
 
