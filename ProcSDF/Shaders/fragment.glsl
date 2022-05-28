@@ -153,7 +153,7 @@ out vec4 FragColor;
 void main()
 {
     int MAX_DEPTH = 50;
-    int SAMPLES = 50;
+    int SAMPLES = 32;
 
     vec2 vSize = vec2(2.0*viewportSize.x/viewportSize.y, 2.0);
 

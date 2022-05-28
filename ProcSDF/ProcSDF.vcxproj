@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="GUI\GUI.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="Vendor\Include\ImGUI\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="Utilities\ProcVec.h" />
     <ClInclude Include="Rendering\Renderer.h" />
   </ItemGroup>

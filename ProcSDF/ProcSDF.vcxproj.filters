@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Utilities">
       <UniqueIdentifier>{d823201f-be59-4f79-8b8b-2eeaba30337b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{9aef322f-72cd-41df-bcc0-cb4b2a20f9d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -63,12 +66,18 @@
     <ClCompile Include="Rendering\Renderer.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\GUI.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rendering\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\ProcVec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
