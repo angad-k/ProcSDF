@@ -43,6 +43,7 @@ public:
 	}
 
 	void draw(float width, float height);
+
 	unsigned int get_render_texture()
 	{
 		return render_texture;

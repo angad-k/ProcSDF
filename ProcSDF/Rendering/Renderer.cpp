@@ -73,8 +73,8 @@ void Renderer::draw(float width, float height)
 
 void Renderer::assemble_shader()
 {
-	unsigned int vertexShader = compile_shader("Shaders/vertex.glsl", GL_VERTEX_SHADER);
-	unsigned int fragmentShader = compile_shader("Shaders/fragment.glsl", GL_FRAGMENT_SHADER);
+	unsigned int vertexShader = compile_shader("Assets/Shaders/vertex.glsl", GL_VERTEX_SHADER);
+	unsigned int fragmentShader = compile_shader("Assets/Shaders/fragment.glsl", GL_FRAGMENT_SHADER);
 
 	link_shader(vertexShader, fragmentShader);
 
