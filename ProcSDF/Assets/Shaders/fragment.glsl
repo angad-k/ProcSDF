@@ -6,6 +6,8 @@ uniform float focalLength;
 
 out vec4 FragColor;
 
+const bool DEBUG = false;
+
 const int SPHERE_0 = 0;
 const int SPHERE_1 = 1;
 const int SPHERE_2 = 1;
@@ -139,7 +141,11 @@ vec3 ray_march(in vec3 ro, in vec3 rd, in int depth)
         if(depth <= 0)
         {
             color *= 0.0;
-            color = vec3(1.0, 0.0, 0.0);
+            
+            if(DEBUG)
+            {
+                color = vec3(1.0, 0.0, 0.0);
+            }
             break;
         }
 
