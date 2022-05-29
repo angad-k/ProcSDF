@@ -21,6 +21,9 @@ void GUI::initialize()
 	//All new windows added to GUI need to be initialized after being created.
 	inspector = Inspector::get_singleton();
 	inspector->initialize();
+
+	nodeEditor = NodeEditor::get_singleton();
+	nodeEditor->initialize();
 }
 
 void GUI::setup_frame()
@@ -51,6 +54,10 @@ void GUI::setup_frame()
 
 		{
 			inspector->draw();
+		}
+
+		{
+			nodeEditor->draw();
 		}
 	}
 }
@@ -92,6 +99,7 @@ GLFWwindow* GUI::setup_imgui_glfw()
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImNodes::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	ImGui::StyleColorsDark();
@@ -107,6 +115,7 @@ GUI::~GUI()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+	ImNodes::DestroyContext();
 
 	glfwDestroyWindow(window);
 	glfwTerminate();

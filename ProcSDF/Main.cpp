@@ -14,6 +14,7 @@ extern "C" {
 Renderer* Renderer::renderer = 0;
 GUI* GUI::gui = 0;
 Inspector* Inspector::inspector = 0;
+NodeEditor* NodeEditor::nodeEditor = 0;
 
 int main(int, char**)
 {

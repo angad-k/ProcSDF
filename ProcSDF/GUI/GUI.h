@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <iostream>
 #include "Inspector.h"
+#include "NodeEditor.h"
 #include "Renderer.h"
 class GUI
 {
@@ -19,6 +20,7 @@ private:
 
 	Renderer* renderer;
 	Inspector* inspector;
+	NodeEditor* nodeEditor;
 
 	ImVec2 renderSceneSize;
 

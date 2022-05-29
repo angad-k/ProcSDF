@@ -69,7 +69,13 @@
     <ClCompile Include="GUI\GUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Vendor\Include\ImGUI\imnodes.cpp">
+      <Filter>Source Files\Vendor\ImGUI</Filter>
+    </ClCompile>
     <ClCompile Include="GUI\Inspector.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\NodeEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -84,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\NodeEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

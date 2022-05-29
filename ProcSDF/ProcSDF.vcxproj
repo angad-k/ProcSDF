@@ -154,6 +154,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="GUI\GUI.cpp" />
     <ClCompile Include="GUI\Inspector.cpp" />
+    <ClCompile Include="GUI\NodeEditor.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui.cpp" />
@@ -164,10 +165,12 @@
     <ClCompile Include="Vendor\Include\ImGUI\imgui_stdlib.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="Vendor\Include\ImGUI\imnodes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Inspector.h" />
+    <ClInclude Include="GUI\NodeEditor.h" />
     <ClInclude Include="Utilities\ProcVec.h" />
     <ClInclude Include="Rendering\Renderer.h" />
   </ItemGroup>
