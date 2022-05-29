@@ -1,12 +1,9 @@
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_glfw.h"
-#include "ImGui/imgui_impl_opengl3.h"
 #include <glad/glad.h>
-#include "Renderer.h"
-#include "GUI/GUI.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 #include <windows.h>
+#include "Renderer.h"
+#include "GUI/GUI.h"
 
 // This is just a one-liner I found online that increases the code's affinity to Nvidia's GPU and so, 
 // doesn't run on the integrated card by default.
@@ -16,6 +13,7 @@ extern "C" {
 
 Renderer* Renderer::renderer = 0;
 GUI* GUI::gui = 0;
+Inspector* Inspector::inspector = 0;
 
 int main(int, char**)
 {

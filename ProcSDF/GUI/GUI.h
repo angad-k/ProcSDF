@@ -7,7 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <windows.h>
 #include <iostream>
-
+#include "Inspector.h"
 #include "Renderer.h"
 class GUI
 {
@@ -18,6 +18,7 @@ private:
 	GLFWwindow* setup_imgui_glfw();
 
 	Renderer* renderer;
+	Inspector* inspector;
 
 	ImVec2 renderSceneSize;
 

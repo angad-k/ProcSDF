@@ -69,12 +69,18 @@
     <ClCompile Include="GUI\GUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Inspector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rendering\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\ProcVec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Inspector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\GUI.h">

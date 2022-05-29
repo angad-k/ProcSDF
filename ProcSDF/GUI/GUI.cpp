@@ -17,6 +17,10 @@ GUI::GUI()
 void GUI::initialize()
 {
 	renderer = Renderer::get_singleton();
+	
+	//All new windows added to GUI need to be initialized after being created.
+	inspector = Inspector::get_singleton();
+	inspector->initialize();
 }
 
 void GUI::setup_frame()
@@ -46,16 +50,7 @@ void GUI::setup_frame()
 		}
 
 		{
-			ImGui::Begin("Camera");
-
-			float origin[3] = { renderer->get_camera_origin()[0], renderer->get_camera_origin()[1], renderer->get_camera_origin()[2] };
-			ImGui::SliderFloat3("Camera Origin", origin, -10.0, 10.0);
-			renderer->set_camera_origin(origin);
-
-			//float focalLength = renderer->get_focal_length();
-			ImGui::SliderFloat("Focal Length", renderer->get_focal_length(), -10.0, 10.0);
-
-			ImGui::End();
+			inspector->draw();
 		}
 	}
 }
