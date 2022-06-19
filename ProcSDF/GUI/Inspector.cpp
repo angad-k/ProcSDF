@@ -1,4 +1,5 @@
 #include "Inspector.h"
+#include "NodeEditor.h"
 
 void Inspector::initialize()
 {
@@ -14,6 +15,9 @@ void Inspector::draw()
 	ImGui::SameLine();
 	if (ImGui::Button("Rendering Settings"))
 		openedTab = Tab::RENDERING_SETTINGS;
+	ImGui::SameLine();
+	if (ImGui::Button("Add Nodes"))
+		openedTab = Tab::ADD_NODES;
 
 	float cameraOrigin[3] = { renderer->get_camera_origin()[0], renderer->get_camera_origin()[1], renderer->get_camera_origin()[2] };
 
@@ -28,6 +32,17 @@ void Inspector::draw()
 		break;
 	case Tab::RENDERING_SETTINGS:
 		ImGui::Text("Something will come here");
+		break;
+	case Tab::ADD_NODES:
+		if (ImGui::Button("Hello Node"))
+		{
+			NodeEditor::get_singleton()->add_node(NodeTypes::HELLO_NODE);
+		}
+		if (ImGui::Button("Sphere"))
+		{
+			NodeEditor::get_singleton()->add_node(NodeTypes::SPHERE_PRIMITIVE);
+		}
+		break;
 	}
 
 	ImGui::End();

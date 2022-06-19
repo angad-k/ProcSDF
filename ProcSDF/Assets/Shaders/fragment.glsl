@@ -106,11 +106,11 @@ float smooth_union(in float p1, in float p2, in float transition)
 
 float map_the_world(in vec3 p)
 {
-    float sphere_0 = distance_from_sphere(p, vec3(-0.25, 0.0, -1.0), 0.5);
+    float sphere_0 = distance_from_sphere(p, vec3(0.0, 0.0, -1.0), 0.5);
     float sphere_2 = distance_from_sphere(p, vec3(0.25, 0.0, -1.0), 0.5);
     float sphere_1 = distance_from_sphere(p, vec3(0,-100.5,-1), 100);
-    float min_dist = smooth_union(sphere_2, sphere_0, 0.05);
-
+    //float min_dist = smooth_union(sphere_2, sphere_0, 0.05);
+    float min_dist = sphere_0;
     current_hit = SPHERE_0;
     
     return min_dist;

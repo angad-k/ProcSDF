@@ -15,6 +15,7 @@ private:
 	{
 		CAMERA_SETTINGS,
 		RENDERING_SETTINGS,
+		ADD_NODES,
 	};
 
 	Tab openedTab;
