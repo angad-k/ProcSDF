@@ -8,7 +8,7 @@ uniform float u_focal_length;
 
 out vec4 FragColor;
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 
 // END OF PREAMBLE
 
@@ -189,7 +189,7 @@ vec3 get_target_ray(vec3 position, int object_index, vec3 normal)
 
 vec3 get_color(vec3 position, int object_index)
 {
-    return vec3(0, 1.0, 0.0);
+    return vec3(1.0, 0, 0.0);
 }
 
 vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
@@ -210,6 +210,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             {
                 output_color = vec3(1.0, 0.0, 0.0);
             }
+            break;
         }
 
         for (int i = 0; i < NUMBER_OF_STEPS; ++i)
