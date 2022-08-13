@@ -114,9 +114,9 @@ void Renderer::link_shader(unsigned int vertexShader, unsigned int fragmentShade
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
 
-	cameraOrigin = glGetUniformLocation(shaderProgram, "cameraOrigin");
-	viewportSize = glGetUniformLocation(shaderProgram, "viewportSize");
-	focalLength = glGetUniformLocation(shaderProgram, "focalLength");
+	cameraOrigin = glGetUniformLocation(shaderProgram, "u_camera_origin");
+	viewportSize = glGetUniformLocation(shaderProgram, "u_viewport_size");
+	focalLength = glGetUniformLocation(shaderProgram, "u_focal_length");
 
 	int  success;
 	char infoLog[512];
