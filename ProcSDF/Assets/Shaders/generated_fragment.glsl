@@ -1,3 +1,5 @@
+
+
 // PREAMBLE
 
 #version 330 core
@@ -121,22 +123,21 @@ float object_1(vec3 position)
 
 float object_2(vec3 position)
 {
-    return 100000.0;
+    return sphere(position, vec3(0,-100.5, -1.0), 100);
 }
 
 // END OF OBJECT FNS
-
 
 closest_object_info get_closest_object_info(vec3 position)
 {
     float dist_1 = object_1(position);
     float dist_2 = object_2(position);
     
-    float min_dist = dist_1;
+    float min_dist = min(dist_1, dist_2);
 
     int object_index = 1;
 
-    /*if(dist_1 == min_dist)
+    if(dist_1 == min_dist)
     {
         object_index = 1;
     }
@@ -144,7 +145,7 @@ closest_object_info get_closest_object_info(vec3 position)
     if(dist_2 == min_dist)
     {
         object_index = 2;
-    }*/
+    }
 
     return closest_object_info(min_dist, object_index);
 }
@@ -189,7 +190,7 @@ vec3 get_target_ray(vec3 position, int object_index, vec3 normal)
 
 vec3 get_color(vec3 position, int object_index)
 {
-    return vec3(1.0, 0, 0.0);
+    return vec3(0.5, 0.5, 0.5);
 }
 
 vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)

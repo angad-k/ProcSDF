@@ -3,7 +3,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+
 #include "Renderer.h"
+#include "ShaderGenerator.h"
 #pragma once
 
 Renderer::Renderer()
@@ -73,13 +75,21 @@ void Renderer::draw(float width, float height)
 
 void Renderer::assemble_shader()
 {
+	Renderer::generate_fragment_shader();
+
 	unsigned int vertexShader = compile_shader("Assets/Shaders/vertex.glsl", GL_VERTEX_SHADER);
-	unsigned int fragmentShader = compile_shader("Assets/Shaders/fragment.glsl", GL_FRAGMENT_SHADER);
+	unsigned int fragmentShader = compile_shader("Assets/Shaders/generated_fragment.glsl", GL_FRAGMENT_SHADER);
 
 	link_shader(vertexShader, fragmentShader);
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+}
+
+// generates the shader and stores it in a file
+void Renderer::generate_fragment_shader() {
+	ShaderGenerator* shader_generator = new ShaderGenerator();
+	shader_generator->write_shader_to_file("Assets/Shaders/generated_fragment.glsl");
 }
 
 unsigned int Renderer::compile_shader(std::string shaderPath, unsigned int shaderType)

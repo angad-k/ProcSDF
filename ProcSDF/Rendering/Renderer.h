@@ -29,6 +29,7 @@ private:
 	void link_shader(unsigned int vertexShader, unsigned int fragmentShader);
 	void setup_frame_buffer();
 	void resize_render_texture(float height, float width);
+	void generate_fragment_shader();
 
 	bool renderValid = false;
 public:
