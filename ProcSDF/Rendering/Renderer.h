@@ -26,9 +26,11 @@ private:
 
 	void assemble_shader();
 	unsigned int compile_shader(std::string shaderPath, unsigned int shaderType);
+	unsigned int compile_shader(const char* shaderSrc, unsigned int shaderType);
 	void link_shader(unsigned int vertexShader, unsigned int fragmentShader);
 	void setup_frame_buffer();
 	void resize_render_texture(float height, float width);
+	//String generate_fragment_shader();
 
 	bool renderValid = false;
 public:

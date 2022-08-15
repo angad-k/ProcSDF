@@ -4,6 +4,7 @@
 #include <windows.h>
 #include "Renderer.h"
 #include "GUI/GUI.h"
+#include "Rendering/ShaderGenerator.h"
 
 // This is just a one-liner I found online that increases the code's affinity to Nvidia's GPU and so, 
 // doesn't run on the integrated card by default.
@@ -15,6 +16,8 @@ Renderer* Renderer::renderer = 0;
 GUI* GUI::gui = 0;
 Inspector* Inspector::inspector = 0;
 NodeEditor* NodeEditor::nodeEditor = 0;
+ShaderGenerator* ShaderGenerator::shader_generator = 0;
+
 
 int main(int, char**)
 {

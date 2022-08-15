@@ -84,15 +84,6 @@ vec3 random_in_hemisphere(in vec3 normal, in vec3 intersection) {
 
 // END OF UTILS
 
-// PRIMITIVES
-
-float sphere(in vec3 p, in vec3 c, float r)
-{
-    return length(p - c) - r;
-}
-
-// END OF PRIMITIVES
-
 // STRUCTS
 
 struct closest_object_info
@@ -111,6 +102,15 @@ vec3 diffuse_scatter(in vec3 intersection, in vec3 normal)
 }
 
 // END OF SCATTER FNS
+
+// PRIMITIVES
+
+float sphere(in vec3 p, in vec3 c, float r)
+{
+    return length(p - c) - r;
+}
+
+// END OF PRIMITIVES
 
 // OBJECT FNS
 

@@ -81,6 +81,9 @@
     <ClCompile Include="GUI\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Rendering\ShaderGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rendering\Renderer.h">
@@ -101,5 +104,18 @@
     <ClInclude Include="GUI\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Rendering\ShaderGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Shaders\boilerplate.glsl" />
+    <None Include="Assets\Shaders\primitive.glsl" />
+    <None Include="Assets\Shaders\main.glsl" />
+    <None Include="Assets\Shaders\ray_march.glsl" />
+    <None Include="Assets\Shaders\object_distance_functions.glsl" />
+    <None Include="Assets\Shaders\object_color.glsl" />
+    <None Include="Assets\Shaders\ray_computation.glsl" />
+    <None Include="Assets\Shaders\generated_fragment.glsl" />
   </ItemGroup>
 </Project>

@@ -3,7 +3,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+
 #include "Renderer.h"
+#include "ShaderGenerator.h"
 #pragma once
 
 Renderer::Renderer()
@@ -73,14 +75,23 @@ void Renderer::draw(float width, float height)
 
 void Renderer::assemble_shader()
 {
-	unsigned int vertexShader = compile_shader("Assets/Shaders/vertex.glsl", GL_VERTEX_SHADER);
-	unsigned int fragmentShader = compile_shader("Assets/Shaders/fragment.glsl", GL_FRAGMENT_SHADER);
+	std::string fragmentSrc = ShaderGenerator::get_singleton()->get_shader();
+
+	std::string vertexPath = "Assets/Shaders/vertex.glsl";
+	unsigned int vertexShader = compile_shader(vertexPath, GL_VERTEX_SHADER);
+	unsigned int fragmentShader = compile_shader(fragmentSrc.c_str(), GL_FRAGMENT_SHADER);
 
 	link_shader(vertexShader, fragmentShader);
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 }
+
+// generates the shader and stores it in a file
+//std::string Renderer::generate_fragment_shader() {
+//	ShaderGenerator* shader_generator = new ShaderGenerator();
+//	//shader_generator->write_shader_to_file("Assets/Shaders/generated_fragment.glsl");
+//}
 
 unsigned int Renderer::compile_shader(std::string shaderPath, unsigned int shaderType)
 {
@@ -105,6 +116,30 @@ unsigned int Renderer::compile_shader(std::string shaderPath, unsigned int shade
 	}
 	return shader;
 }
+
+unsigned int Renderer::compile_shader(const char* shaderSrc, unsigned int shaderType)
+{
+	const GLchar* shaderSource = shaderSrc;
+
+	unsigned int shader;
+	shader = glCreateShader(shaderType);
+
+	glShaderSource(shader, 1, (const GLchar**)&shaderSource, NULL);
+	glCompileShader(shader);
+
+	int  success;
+	char infoLog[512];
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "Shader : \n";
+		std::cout << shaderSrc << std::endl;
+	}
+	return shader;
+}
+
 
 void Renderer::link_shader(unsigned int vertexShader, unsigned int fragmentShader)
 {
