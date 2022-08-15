@@ -1,4 +1,3 @@
-// PREAMBLE
 
 #version 330 core
 
