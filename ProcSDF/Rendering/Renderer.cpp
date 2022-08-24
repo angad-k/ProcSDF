@@ -4,8 +4,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "Renderer.h"
-#include "ShaderGenerator.h"
+#include "Rendering/Renderer.h"
+#include "Rendering/ShaderGenerator.h"
 #pragma once
 
 Renderer::Renderer()

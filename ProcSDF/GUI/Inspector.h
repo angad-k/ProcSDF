@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 
-#include "Renderer.h"
+#include "Rendering/Renderer.h"
 class Inspector
 {
 private:

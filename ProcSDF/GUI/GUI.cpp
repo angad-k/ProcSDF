@@ -1,4 +1,5 @@
-#include "GUI.h"
+#include "GUI/GUI.h"
+#include "GUI/NodeGraph.h"
 
 static void glfw_error_callback(int error, const char* description)
 {
@@ -23,7 +24,11 @@ void GUI::initialize()
 	inspector->initialize();
 
 	nodeEditor = NodeEditor::get_singleton();
-	nodeEditor->initialize();
+	//nodeEditor->initialize();
+
+	NodeGraph* nodeGraph = NodeGraph::get_singleton();
+	nodeGraph->initialize();
+
 }
 
 void GUI::setup_frame()

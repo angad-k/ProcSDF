@@ -1,4 +1,4 @@
-#include "ShaderGenerator.h"
+#include "Rendering/ShaderGenerator.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -18,12 +18,11 @@ void ShaderGenerator::generate_and_set_shader() {
 	for (std::string shader_file : shader_files) {
 		std::string shader_component_string;
 		std::string file_path = FOLDER_PATH + shader_file + FILE_EXTENSION;
-		std::cout << "file path : " << file_path << "\n";
 		std::ifstream sourceFile(FOLDER_PATH + shader_file + FILE_EXTENSION);
 		shader_component_string.assign((std::istreambuf_iterator< char >(sourceFile)), std::istreambuf_iterator< char >());
 		shader_string.append("\n\n" + shader_component_string);
 	}
-	std::cout << "Finished creating\n"<<shader_string<<"\n";
+	//std::cout << "Finished creating\n"<<shader_string<<"\n";
 	ShaderGenerator::set_shader(shader_string);
 }
 

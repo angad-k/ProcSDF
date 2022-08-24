@@ -126,6 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)ProcSDF;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,7 +156,8 @@
     <ClCompile Include="GUI\GUI.cpp" />
     <ClCompile Include="GUI\Inspector.cpp" />
     <ClCompile Include="GUI\NodeEditor.cpp" />
-    <ClCompile Include="GUI\Node.cpp" />
+    <ClCompile Include="GUI\NodeGraph.cpp" />
+    <ClCompile Include="GUI\Nodes\Node.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\ShaderGenerator.cpp" />
@@ -173,14 +175,14 @@
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Inspector.h" />
     <ClInclude Include="GUI\NodeEditor.h" />
-    <ClInclude Include="GUI\Node.h" />
+    <ClInclude Include="GUI\NodeGraph.h" />
+    <ClInclude Include="GUI\Nodes\Node.h" />
     <ClInclude Include="Rendering\ShaderGenerator.h" />
     <ClInclude Include="Utilities\ProcVec.h" />
     <ClInclude Include="Rendering\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\boilerplate.glsl" />
-    <None Include="Assets\Shaders\generated_fragment.glsl" />
     <None Include="Assets\Shaders\main.glsl" />
     <None Include="Assets\Shaders\object_color.glsl" />
     <None Include="Assets\Shaders\object_distance_functions.glsl" />
