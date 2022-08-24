@@ -78,7 +78,7 @@
     <ClCompile Include="GUI\NodeEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Node.cpp">
+    <ClCompile Include="GUI\Nodes\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Rendering\ShaderGenerator.cpp">
@@ -101,7 +101,7 @@
     <ClInclude Include="GUI\NodeEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Node.h">
+    <ClInclude Include="GUI\Nodes\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rendering\ShaderGenerator.h">
@@ -116,6 +116,5 @@
     <None Include="Assets\Shaders\object_distance_functions.glsl" />
     <None Include="Assets\Shaders\object_color.glsl" />
     <None Include="Assets\Shaders\ray_computation.glsl" />
-    <None Include="Assets\Shaders\generated_fragment.glsl" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
-#include "Node.h"
-#include "NodeEditor.h"
+#include "GUI/Nodes/Node.h"
+#include "GUI/NodeEditor.h"
 HelloNode::HelloNode()
 {
 	NodeEditor* node_editor = NodeEditor::get_singleton();

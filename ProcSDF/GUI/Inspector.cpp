@@ -1,5 +1,5 @@
-#include "Inspector.h"
-#include "NodeEditor.h"
+#include "GUI/Inspector.h"
+#include "GUI/NodeEditor.h"
 
 void Inspector::initialize()
 {

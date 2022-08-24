@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 #include "Renderer.h"
-#include "Node.h"
+#include "GUI/Nodes/Node.h"
 class NodeEditor
 {
 private:

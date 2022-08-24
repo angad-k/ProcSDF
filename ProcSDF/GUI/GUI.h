@@ -7,9 +7,9 @@
 #include <GLFW/glfw3.h>
 #include <windows.h>
 #include <iostream>
-#include "Inspector.h"
-#include "NodeEditor.h"
-#include "Renderer.h"
+#include "GUI/Inspector.h"
+#include "GUI/NodeEditor.h"
+#include "Rendering/Renderer.h"
 class GUI
 {
 private:

@@ -1,4 +1,4 @@
-#include "GUI.h"
+#include "GUI/GUI.h"
 
 static void glfw_error_callback(int error, const char* description)
 {

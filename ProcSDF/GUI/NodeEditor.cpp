@@ -1,5 +1,5 @@
-#include "NodeEditor.h"
-#include "Node.h"
+#include "GUI/NodeEditor.h"
+#include "GUI/Nodes/Node.h"
 
 void NodeEditor::initialize()
 {
