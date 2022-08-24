@@ -6,6 +6,7 @@
 
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
+#include "Constants/constant.h"
 #pragma once
 
 Renderer::Renderer()
@@ -77,7 +78,7 @@ void Renderer::assemble_shader()
 {
 	std::string fragmentSrc = ShaderGenerator::get_singleton()->get_shader();
 
-	std::string vertexPath = "Assets/Shaders/vertex.glsl";
+	std::string vertexPath = sdf::VERTEX_SHADER_PATH;
 	unsigned int vertexShader = compile_shader(vertexPath, GL_VERTEX_SHADER);
 	unsigned int fragmentShader = compile_shader(fragmentSrc.c_str(), GL_FRAGMENT_SHADER);
 
@@ -86,12 +87,6 @@ void Renderer::assemble_shader()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 }
-
-// generates the shader and stores it in a file
-//std::string Renderer::generate_fragment_shader() {
-//	ShaderGenerator* shader_generator = new ShaderGenerator();
-//	//shader_generator->write_shader_to_file("Assets/Shaders/generated_fragment.glsl");
-//}
 
 unsigned int Renderer::compile_shader(std::string shaderPath, unsigned int shaderType)
 {

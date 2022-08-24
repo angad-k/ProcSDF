@@ -24,6 +24,5 @@ public:
 		this->shader = shader;
 	}
 
-	void write_shader_to_file(std::string);
 };
 
