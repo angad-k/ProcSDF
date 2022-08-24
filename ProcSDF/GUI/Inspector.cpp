@@ -1,5 +1,6 @@
 #include "GUI/Inspector.h"
 #include "GUI/NodeEditor.h"
+#include "GUI/NodeGraph.h"
 
 void Inspector::initialize()
 {
@@ -36,11 +37,11 @@ void Inspector::draw()
 	case Tab::ADD_NODES:
 		if (ImGui::Button("Hello Node"))
 		{
-			NodeEditor::get_singleton()->add_node(NodeTypes::HELLO_NODE);
+			NodeGraph::get_singleton()->add_node(NodeTypes::HELLO_NODE);
 		}
 		if (ImGui::Button("Sphere"))
 		{
-			NodeEditor::get_singleton()->add_node(NodeTypes::SPHERE_PRIMITIVE);
+			NodeGraph::get_singleton()->add_node(NodeTypes::SPHERE_PRIMITIVE);
 		}
 		break;
 	}

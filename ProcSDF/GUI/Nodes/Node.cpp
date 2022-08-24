@@ -1,13 +1,15 @@
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
+#include "GUI/NodeGraph.h"
+
 HelloNode::HelloNode()
 {
-	NodeEditor* node_editor = NodeEditor::get_singleton();
-	id = node_editor ->allocate_id(this);
-	input_id_1 = node_editor->allocate_id(this);
-	input_id_2 = node_editor->allocate_id(this);
-	output_id_1 = node_editor->allocate_id(this);
-	output_id_2 = node_editor->allocate_id(this);
+	NodeGraph* nodeGraph = NodeGraph::get_singleton();
+	id = nodeGraph->allocate_id(this);
+	input_id_1 = nodeGraph->allocate_id(this);
+	input_id_2 = nodeGraph->allocate_id(this);
+	output_id_1 = nodeGraph->allocate_id(this);
+	output_id_2 = nodeGraph->allocate_id(this);
 }
 
 void HelloNode::draw()
@@ -40,9 +42,9 @@ void HelloNode::draw()
 FinalNode::FinalNode()
 {
 	is_final_node = true;
-	NodeEditor* node_editor = NodeEditor::get_singleton();
-	id = node_editor->allocate_id(this);
-	input_id = node_editor->allocate_id(this);
+	NodeGraph* node_graph = NodeGraph::get_singleton();
+	id = node_graph->allocate_id(this);
+	input_id = node_graph->allocate_id(this);
 }
 
 void FinalNode::draw()
@@ -63,9 +65,9 @@ void FinalNode::draw()
 SphereNode::SphereNode()
 {
 	is_final_node = true;
-	NodeEditor* node_editor = NodeEditor::get_singleton();
-	id = node_editor->allocate_id(this);
-	output_id = node_editor->allocate_id(this);
+	NodeGraph* node_graph = NodeGraph::get_singleton();
+	id = node_graph->allocate_id(this);
+	output_id = node_graph->allocate_id(this);
 }
 
 void SphereNode::draw()
