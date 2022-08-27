@@ -12,16 +12,17 @@ void NodeEditor::draw()
 
 	NodeGraph* nodeGraph = NodeGraph::get_singleton();
 
-	for (int i = 0; i < nodeGraph->nodes.size(); i++)
-	{
-		nodeGraph->nodes[i]->draw();
+	for (auto i : nodeGraph->adjacency_list){
+		nodeGraph->allocated_ids[i.first]->draw();
 	}
 
+	for (auto i : nodeGraph->adjacency_list){
+		for (int j : i.second) {
+		
+			const std::pair<int, int> p(i.first, j);
+			ImNodes::Link(NodeGraph::get_hash(i.first, j), p.first, p.second);
 
-	for (int i = 0; i < nodeGraph->links.size(); ++i)
-	{
-		const std::pair<int, int> p = nodeGraph->links[i];
-		ImNodes::Link(i, p.first, p.second);
+		}
 	}
 
 	ImNodes::EndNodeEditor();
@@ -40,14 +41,21 @@ void NodeEditor::draw()
 	}
 
 	// since we create links with identifier being its index, we can directly use it here.
-	for (int i = 0; i < nodeGraph->links.size(); i++)
+	for (auto i : nodeGraph->adjacency_list)
 	{
-		if (ImNodes::IsLinkDestroyed(&i))
-		{
-			nodeGraph->links.erase(nodeGraph->links.begin() + i);
+		for (int j : i.second) {
+			
+			int edge_hash = NodeGraph::get_hash(i.first, j);
+
+			if (ImNodes::IsLinkDestroyed(&edge_hash)) {
+				nodeGraph->adjacency_list[i.first].erase(j);
+				if (nodeGraph->adjacency_list[i.first].size() == 0) {
+					nodeGraph->adjacency_list.erase(i.first);
+				}
+			}
+
 		}
 	}
-
 
 	ImGui::End();
 }

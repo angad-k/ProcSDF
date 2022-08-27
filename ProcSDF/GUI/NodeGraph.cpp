@@ -1,3 +1,4 @@
+#include <set>
 #include "GUI/NodeGraph.h"
 #pragma once
 
@@ -6,8 +7,12 @@ void NodeGraph::initialize()
 	// nothing needed for now - we'll add stuff as needed.
 	HelloNode* hn = new HelloNode();
 	FinalNode* fn = new FinalNode();
-	nodes.push_back(hn);
-	nodes.push_back(fn);
+	int hn_id = NodeGraph::allocate_id(hn);
+	int fn_id = NodeGraph::allocate_id(fn);
+
+	NodeGraph::adjacency_list[hn_id] = std::set<int>();
+	NodeGraph::adjacency_list[fn_id] = std::set<int>();
+
 }
 
 int NodeGraph::allocate_id(Node* p_node)
@@ -27,19 +32,22 @@ int NodeGraph::allocate_id(Node* p_node)
 void NodeGraph::add_link(int src, int dest)
 {
 	bool possible = true;
-	for (auto link : links)
+	for (auto i : adjacency_list)
 	{
-		if (link.second == dest)
-		{
-			if (!allocated_ids[link.second]->is_final_node)
+		for (int j : i.second) {
+
+			if (j == dest)
 			{
-				possible = false;
+				if (!allocated_ids[j]->is_final_node)
+				{
+					possible = false;
+				}
 			}
 		}
 	}
 	if (possible)
 	{
-		links.push_back(std::make_pair(src, dest));
+		NodeGraph::adjacency_list[src].insert(dest);
 	}
 	else
 	{
@@ -61,6 +69,7 @@ void NodeGraph::add_node(NodeTypes p_nodeType)
 	}
 	if (new_node)
 	{
-		nodes.push_back(new_node);
+		int node_hash = NodeGraph::allocate_id(new_node);
+		NodeGraph::adjacency_list[node_hash] = std::set<int>();
 	}
 }
