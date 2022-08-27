@@ -19,9 +19,7 @@ void NodeEditor::draw()
 	for (auto i : nodeGraph->adjacency_list){
 		for (int j : i.second) {
 		
-			const std::pair<int, int> p(i.first, j);
-			ImNodes::Link(NodeGraph::get_hash(i.first, j), p.first, p.second);
-
+			ImNodes::Link(NodeGraph::get_hash(i.first, j), i.first, j);
 		}
 	}
 
