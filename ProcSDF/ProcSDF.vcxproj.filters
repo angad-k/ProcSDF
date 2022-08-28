@@ -87,6 +87,9 @@
     <ClCompile Include="GUI\NodeGraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GUI\Nodes\PrimitiveNodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rendering\Renderer.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\NodeGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Nodes\PrimitiveNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

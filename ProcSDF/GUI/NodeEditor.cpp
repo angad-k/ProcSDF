@@ -25,18 +25,12 @@ void NodeEditor::draw()
 	}
 
 	ImNodes::EndNodeEditor();
-
-	for (auto i : nodeGraph->allocated_ids)
+	
+	int start_attr;
+	int end_attr;
+	if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
 	{
-		for (auto j : nodeGraph->allocated_ids)
-		{
-			int start_attr = i.first;
-			int end_attr = j.first;
-			if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
-			{
-				nodeGraph->add_link(start_attr, end_attr);
-			}
-		}
+		nodeGraph->add_link(start_attr, end_attr);
 	}
 
 	// since we create links with identifier being its index, we can directly use it here.

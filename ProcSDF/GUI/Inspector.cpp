@@ -35,10 +35,6 @@ void Inspector::draw()
 		ImGui::Text("Something will come here");
 		break;
 	case Tab::ADD_NODES:
-		if (ImGui::Button("Hello Node"))
-		{
-			NodeGraph::get_singleton()->add_node(NodeTypes::HELLO_NODE);
-		}
 		if (ImGui::Button("Sphere"))
 		{
 			NodeGraph::get_singleton()->add_node(NodeTypes::SPHERE_PRIMITIVE);
