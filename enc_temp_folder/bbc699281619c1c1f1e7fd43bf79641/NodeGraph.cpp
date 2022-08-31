@@ -124,6 +124,7 @@ std::pair<bool, std::vector<int>> NodeGraph::get_topological_sorting() {
 
 	for (auto it : NodeGraph::adjacency_list) {
 		for (int i : it.second) {
+			std::cout << it.first << " " << node_index_in_topological_sorting[it.first] << " " << i << " " << node_index_in_topological_sorting[i] << "\n";
 			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[i]) {
 				contains_cycle = true;
 				break;

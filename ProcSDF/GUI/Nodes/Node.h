@@ -12,6 +12,7 @@ public:
 enum class NodeTypes {
 	FINAL_NODE,
 	SPHERE_PRIMITIVE,
+	INTERSECTION_OPERATION
 };
 
 // TO DO : find a better way to do this
@@ -23,6 +24,9 @@ static std::string get_node_type(enum class NodeTypes node_type) {
 		break;
 	case NodeTypes::SPHERE_PRIMITIVE:
 		return "Sphere Node";
+		break;
+	case NodeTypes::INTERSECTION_OPERATION:
+		return "Intersection Node";
 		break;
 	}
 }
