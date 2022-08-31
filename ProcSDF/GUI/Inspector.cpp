@@ -39,6 +39,10 @@ void Inspector::draw()
 		{
 			NodeGraph::get_singleton()->add_node(NodeTypes::SPHERE_PRIMITIVE);
 		}
+		if (ImGui::Button("Intersection"))
+		{
+			NodeGraph::get_singleton()->add_node(NodeTypes::INTERSECTION_OPERATION);
+		}
 		break;
 	}
 

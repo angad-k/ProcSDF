@@ -14,7 +14,9 @@ public:
 	void initialize();
 	int allocate_id(Node* p_node);
 	void add_node(NodeTypes p_nodeType);
-	std::map<int, std::set<int>> get_adjacency_list();
+	void set_adjacency_list();
+	std::pair<bool, std::vector<int>> get_topological_sorting();
+	void depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting);
 
 	static NodeGraph* get_singleton() {
 		if (!nodeGraph)
@@ -23,6 +25,7 @@ public:
 		}
 		return nodeGraph;
 	}
+	std::map<int, std::set<int>> adjacency_list;
 	std::vector <Node*> nodes;
 	std::vector<std::pair<int, int>> links;
 	std::map <int, Node*> allocated_ids;
