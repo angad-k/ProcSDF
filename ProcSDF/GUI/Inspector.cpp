@@ -1,10 +1,19 @@
 #include "GUI/Inspector.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
+#include "GUI/Nodes/OperationNodes.h"
+#include "GUI/Nodes/PrimitiveNodes.h"
 
 void Inspector::initialize()
 {
 	renderer = Renderer::get_singleton();
+}
+
+template<typename p_nodeType>
+inline void Inspector::add_node()
+{
+	Node* new_node = new p_nodeType();
+	NodeGraph::get_singleton()->add_node(new_node);
 }
 
 void Inspector::draw()
@@ -37,11 +46,11 @@ void Inspector::draw()
 	case Tab::ADD_NODES:
 		if (ImGui::Button("Sphere"))
 		{
-			NodeGraph::get_singleton()->add_node(NodeTypes::SPHERE_PRIMITIVE);
+			add_node<SphereNode>();
 		}
 		if (ImGui::Button("Intersection"))
 		{
-			NodeGraph::get_singleton()->add_node(NodeTypes::INTERSECTION_OPERATION);
+			add_node<IntersectionNode>();
 		}
 		break;
 	}

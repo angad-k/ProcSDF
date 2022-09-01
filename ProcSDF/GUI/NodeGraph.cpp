@@ -49,22 +49,11 @@ void NodeGraph::add_link(int src, int dest)
 	}
 }
 
-void NodeGraph::add_node(NodeTypes p_nodeType)
+void NodeGraph::add_node(Node* p_new_node)
 {
-	Node* new_node = NULL;
-	switch (p_nodeType)
+	if (p_new_node)
 	{
-	case NodeTypes::SPHERE_PRIMITIVE:
-		new_node = new SphereNode();
-		break;
-
-	case NodeTypes::INTERSECTION_OPERATION:
-		new_node = new IntersectionNode();
-		break;
-	}
-	if (new_node)
-	{
-		nodes.push_back(new_node);
+		nodes.push_back(p_new_node);
 	}
 	print_node_graph();
 	std::pair<bool, std::vector<int>> pr = NodeGraph::get_topological_sorting();

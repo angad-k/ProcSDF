@@ -30,6 +30,6 @@ public:
 		}
 		return inspector;
 	}
-
+	template <typename p_nodeType> void add_node();
 	void draw();
 };

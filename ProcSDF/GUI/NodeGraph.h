@@ -13,7 +13,7 @@ private:
 public:
 	void initialize();
 	int allocate_id(Node* p_node);
-	void add_node(NodeTypes p_nodeType);
+	void add_node(Node* p_new_node);
 	void set_adjacency_list();
 	std::pair<bool, std::vector<int>> get_topological_sorting();
 	void depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting);
