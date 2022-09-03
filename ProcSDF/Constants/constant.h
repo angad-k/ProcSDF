@@ -12,4 +12,7 @@ namespace imgui_colors {
 	const int RED = IM_COL32(255, 50, 50, 255);
 	const int GREEN = IM_COL32(80, 190, 50, 255);
 	const int BLUE = IM_COL32(50, 50, 255, 255);
+	const int PRIMITIVE = RED;
+	const int FINAL = GREEN;
+	const int OPERATION = BLUE;
 }

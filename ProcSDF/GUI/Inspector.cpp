@@ -20,16 +20,44 @@ void Inspector::draw()
 {
 	ImGui::Begin("Inspector");
 
+	Tab oldTab = openedTab;
+
+	if (oldTab == Tab::CAMERA_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
 	if (ImGui::Button("Camera Settings"))
 		openedTab = Tab::CAMERA_SETTINGS;
 	ImGui::SameLine();
+	if (oldTab == Tab::CAMERA_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
+
+	if (oldTab == Tab::RENDERING_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
 	if (ImGui::Button("Rendering Settings"))
 		openedTab = Tab::RENDERING_SETTINGS;
 	ImGui::SameLine();
+	if (oldTab == Tab::RENDERING_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
+
+	if (oldTab == Tab::NODEGRAPH_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
 	if (ImGui::Button("Node graph settings"))
 		openedTab = Tab::NODEGRAPH_SETTINGS;
+	if (oldTab == Tab::NODEGRAPH_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
 
-	
+	ImGui::Separator();
 
 	switch (openedTab)
 	{
@@ -62,12 +90,38 @@ void Inspector::draw_rendering_settings()
 
 void Inspector::draw_node_graph_settings()
 {
-	if (ImGui::Button("Sphere"))
+	if (ImGui::TreeNode("Add nodes"))
 	{
-		add_node<SphereNode>();
+		ImGui::Indent();
+		
+		if (ImGui::TreeNode("Primitives"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::PRIMITIVE);
+			if (ImGui::Button("Sphere"))
+			{
+				add_node<SphereNode>();
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+		
+		if (ImGui::TreeNode("Operations"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OPERATION);
+			if (ImGui::Button("Intersection"))
+			{
+				add_node<IntersectionNode>();
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		ImGui::Unindent();
+		ImGui::TreePop();
 	}
-	if (ImGui::Button("Intersection"))
-	{
-		add_node<IntersectionNode>();
-	}
+	
 }
