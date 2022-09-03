@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
@@ -6,26 +8,18 @@ void Node::init()
 {
 	NodeGraph* node_graph = NodeGraph::get_singleton();
 	id = node_graph->allocate_id(this);
-	for (unsigned int i = 0; i < input_pins.size(); i++)
-	{
-		input_ids.push_back(node_graph->allocate_id(this));
-	}
 
-	for (unsigned int i = 0; i < output_pins.size(); i++)
-	{
-		output_ids.push_back(node_graph->allocate_id(this));
-	}
+	input_ids = std::vector<int>(input_pins.size());
+	output_ids = std::vector<int>(output_pins.size());
 
-	for (unsigned int i = 0; i < input_float3_labels.size(); i++)
-	{
-		std::vector <float> append_float_arr = std::vector <float> (3, 0.0);
-		input_float3.push_back(append_float_arr);
-	}
+	std::transform(input_ids.begin(), input_ids.end(), input_ids.begin(), [node_graph, this](int i) { return node_graph->allocate_id(this); });
 
-	for (unsigned int i = 0; i < input_float_labels.size(); i++)
-	{
-		input_floats.push_back(0.0);
-	}
+	std::transform(output_ids.begin(), output_ids.end(), output_ids.begin(), [node_graph, this](int i) { return node_graph->allocate_id(this); });
+
+	input_float3 = std::vector<std::vector<float>>(input_float3_labels.size(), std::vector<float>(3, 0.0));
+
+	input_floats = std::vector<float>(input_float_labels.size(), 0.0);
+
 }
 
 void Node::draw()
