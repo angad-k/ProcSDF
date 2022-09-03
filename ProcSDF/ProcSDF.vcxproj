@@ -158,8 +158,6 @@
     <ClCompile Include="GUI\NodeEditor.cpp" />
     <ClCompile Include="GUI\NodeGraph.cpp" />
     <ClCompile Include="GUI\Nodes\Node.cpp" />
-    <ClCompile Include="GUI\Nodes\OperationNodes.cpp" />
-    <ClCompile Include="GUI\Nodes\PrimitiveNodes.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\ShaderGenerator.cpp" />

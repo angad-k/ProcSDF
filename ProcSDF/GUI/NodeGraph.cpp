@@ -128,13 +128,13 @@ void NodeGraph::print_node_graph()
 	std::cout << "Nodes are :\n";
 	for (auto it : NodeGraph::allocated_ids)
 	{
-		std::cout << "id : " << it.first << " | type : " << get_node_type(it.second->node_type) << std::endl;
+		std::cout << "id : " << it.first << " | type : " << it.second->node_name << std::endl;
 	}
 
 	std::cout << "Links are :\n";
 	for (auto it : links)
 	{
-		std::cout << get_node_type(NodeGraph::allocated_ids[it.first]->node_type) << " ( "<< NodeGraph::allocated_ids[it.first]->id << " ) -> " << get_node_type(NodeGraph::allocated_ids[it.second]->node_type) << " ( " << NodeGraph::allocated_ids[it.second]->id << " ) " << std::endl;
+		std::cout << NodeGraph::allocated_ids[it.first]->node_name << " ( "<< NodeGraph::allocated_ids[it.first]->id << " ) -> " << NodeGraph::allocated_ids[it.second]->node_name << " ( " << NodeGraph::allocated_ids[it.second]->id << " ) " << std::endl;
 	}
 
 	NodeGraph::set_adjacency_list();
@@ -142,9 +142,9 @@ void NodeGraph::print_node_graph()
 
 	std::cout << " Adjacency list :\n";
 	for (auto it : adjacency_list) {
-		std::cout << get_node_type(NodeGraph::allocated_ids[it.first]->node_type) <<" ( "<<it.first<<" ) "<< " : ";
+		std::cout << NodeGraph::allocated_ids[it.first]->node_name <<" ( "<<it.first<<" ) "<< " : ";
 		for(int j : it.second) {
-			std::cout << get_node_type(NodeGraph::allocated_ids[j]->node_type) << " ( " << j << " ) " << " , ";
+			std::cout << NodeGraph::allocated_ids[j]->node_name << " ( " << j << " ) " << " , ";
 		}
 		std::cout << "\n";
 	}

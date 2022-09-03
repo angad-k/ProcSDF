@@ -1,48 +1,29 @@
 #pragma once
 #include <string>
+#include <vector>
 class Node {
 public:
 	int id;
 	bool is_final_node = false;
-	virtual void draw() = 0;
+	void draw();
 	virtual std::string get_string() = 0;
-	enum class NodeTypes node_type;
-};
-
-enum class NodeTypes {
-	FINAL_NODE,
-	SPHERE_PRIMITIVE,
-	INTERSECTION_OPERATION
-};
-
-// TO DO : find a better way to do this
-static std::string get_node_type(enum class NodeTypes node_type) {
-	switch (node_type)
-	{
-	case NodeTypes::FINAL_NODE:
-		return "Final Node";
-		break;
-	case NodeTypes::SPHERE_PRIMITIVE:
-		return "Sphere Node";
-		break;
-	case NodeTypes::INTERSECTION_OPERATION:
-		return "Intersection Node";
-		break;
-	}
-}
-
-enum class NodeClass {
-	PRIMITIVE,
-	OPERATION,
-	FINAL_OBJECT,
-	FINAL
+	std::vector <std::string> input_pins;
+	std::vector <int> input_ids;
+	std::vector <std::string> output_pins;
+	std::vector <int> output_ids;
+	std::string node_name;
+	void init();
 };
 
 class FinalNode : public Node {
-private:
-	int input_id;
 public:
-	void draw();
-	FinalNode();
 	std::string get_string() { return ""; }
+	FinalNode()
+	{
+		node_name = "Final node";
+		input_pins = { "Final Output" };
+		output_pins = {};
+		is_final_node = true;
+		init();
+	}
 };
