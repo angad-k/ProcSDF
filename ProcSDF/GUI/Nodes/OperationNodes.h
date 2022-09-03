@@ -1,7 +1,14 @@
 #pragma once
 #include "GUI/Nodes/Node.h"
 #include <string>
-class IntersectionNode : public Node {
+class OperationNode : public Node {
+public:
+	OperationNode()
+	{
+		title_color = imgui_colors::BLUE;
+	}
+};
+class IntersectionNode : public OperationNode {
 public:
 	std::string get_string() { return ""; }
 	IntersectionNode()

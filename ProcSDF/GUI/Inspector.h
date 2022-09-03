@@ -15,7 +15,7 @@ private:
 	{
 		CAMERA_SETTINGS,
 		RENDERING_SETTINGS,
-		ADD_NODES,
+		NODEGRAPH_SETTINGS,
 	};
 
 	Tab openedTab;
@@ -32,4 +32,7 @@ public:
 	}
 	template <typename p_nodeType> void add_node();
 	void draw();
+	void draw_camera_settings();
+	void draw_rendering_settings();
+	void draw_node_graph_settings();
 };
