@@ -36,12 +36,16 @@ void Node::draw()
 	ImGui::TextUnformatted(node_name.c_str());
 	ImNodes::EndNodeTitleBar();
 
+	assert(input_ids.size() == input_pins.size());
+
 	for (unsigned int i = 0; i < input_pins.size(); i++)
 	{
 		ImNodes::BeginInputAttribute(input_ids[i]);
 		ImGui::Text(input_pins[i].c_str());
 		ImNodes::EndInputAttribute();
 	}
+
+	assert(output_ids.size() == output_pins.size());
 
 	for (unsigned int i = 0; i < output_pins.size(); i++)
 	{
@@ -50,13 +54,16 @@ void Node::draw()
 		ImNodes::EndOutputAttribute();
 	}
 	
+	ImGui::PushItemWidth(200);
+
 	if (input_float3_labels.size() != 0 || input_float_labels.size() != 0)
 	{
-		ImGui::Separator();
+		ImGui::Text(std::string(45,'_').c_str()); // TO DO : add this to utilities as a separator
 		ImGui::Text("Parameters");
 	}
 
-	ImGui::PushItemWidth(200);
+	assert(input_float3.size() == input_float3_labels.size());
+
 	for (unsigned int i = 0; i < input_float3_labels.size(); i++)
 	{
 		float input_arr[3] = { input_float3[i][0], input_float3[i][1], input_float3[i][2] };
@@ -65,6 +72,9 @@ void Node::draw()
 		input_float3[i][1] = input_arr[1];
 		input_float3[i][2] = input_arr[2];
 	}
+
+	assert(input_floats.size() == input_float_labels.size());
+
 	for (unsigned int i = 0; i < input_float_labels.size(); i++)
 	{
 		ImGui::InputFloat(input_float_labels[i].c_str(), &input_floats[i]);

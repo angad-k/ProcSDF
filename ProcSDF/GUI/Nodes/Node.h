@@ -23,17 +23,3 @@ public:
 	int title_color = imgui_colors::BLUE;
 	void init();
 };
-
-class FinalNode : public Node {
-public:
-	std::string get_string() { return ""; }
-	FinalNode()
-	{
-		node_name = "Final node";
-		input_pins = { "Final Output" };
-		output_pins = {};
-		is_final_node = true;
-		title_color = imgui_colors::GREEN;
-		init();
-	}
-};

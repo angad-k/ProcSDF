@@ -176,6 +176,7 @@
     <ClInclude Include="GUI\Inspector.h" />
     <ClInclude Include="GUI\NodeEditor.h" />
     <ClInclude Include="GUI\NodeGraph.h" />
+    <ClInclude Include="GUI\Nodes\FinalNode.h" />
     <ClInclude Include="GUI\Nodes\Node.h" />
     <ClInclude Include="GUI\Nodes\OperationNodes.h" />
     <ClInclude Include="GUI\Nodes\PrimitiveNodes.h" />

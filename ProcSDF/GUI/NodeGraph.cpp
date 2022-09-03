@@ -1,6 +1,7 @@
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
+#include "GUI/Nodes/FinalNode.h"
 #pragma once
 
 void NodeGraph::initialize()
