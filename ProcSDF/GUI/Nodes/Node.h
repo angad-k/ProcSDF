@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "Constants/constant.h"
 class Node {
 public:
 	int id;
@@ -12,6 +13,7 @@ public:
 	std::vector <std::string> output_pins;
 	std::vector <int> output_ids;
 	std::string node_name;
+	int title_color = imgui_colors::BLUE;
 	void init();
 };
 
@@ -24,6 +26,7 @@ public:
 		input_pins = { "Final Output" };
 		output_pins = {};
 		is_final_node = true;
+		title_color = imgui_colors::GREEN;
 		init();
 	}
 };

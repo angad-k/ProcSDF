@@ -10,6 +10,7 @@ public:
 		input_pins = {};
 		output_pins = { "Output" };
 		is_final_node = false;
+		title_color = imgui_colors::RED;
 		init();
 	}
 };
