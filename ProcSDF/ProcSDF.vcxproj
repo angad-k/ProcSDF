@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="GUI\GUI.cpp" />
+    <ClCompile Include="GUI\GuiUtilities.h" />
     <ClCompile Include="GUI\Inspector.cpp" />
     <ClCompile Include="GUI\NodeEditor.cpp" />
     <ClCompile Include="GUI\NodeGraph.cpp" />

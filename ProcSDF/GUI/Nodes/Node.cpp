@@ -1,5 +1,5 @@
 #include <algorithm>
-
+#include "GUI/GuiUtilities.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
@@ -31,6 +31,7 @@ void Node::draw()
 		ImNodesCol_TitleBarSelected, title_color);
 
 	ImNodes::BeginNode(id);
+	ImGui::BeginGroup();
 
 	ImNodes::BeginNodeTitleBar();
 	ImGui::TextUnformatted(node_name.c_str());
@@ -54,35 +55,51 @@ void Node::draw()
 		ImNodes::EndOutputAttribute();
 	}
 	
-	ImGui::PushItemWidth(200);
+	ImGui::PushItemWidth(80);
 
 	if (input_float3_labels.size() != 0 || input_float_labels.size() != 0)
 	{
-		ImGui::Text(std::string(45,'_').c_str()); // TO DO : add this to utilities as a separator
-		ImGui::Text("Parameters");
+		GUI_Utilities::horizontal_seperator(15);
 	}
 
 	assert(input_float3.size() == input_float3_labels.size());
 
 	for (unsigned int i = 0; i < input_float3_labels.size(); i++)
 	{
-		float input_arr[3] = { input_float3[i][0], input_float3[i][1], input_float3[i][2] };
+		/*float input_arr[3] = {input_float3[i][0], input_float3[i][1], input_float3[i][2]};
 		ImGui::InputFloat3(input_float3_labels[i].c_str(), input_arr);
 		input_float3[i][0] = input_arr[0];
 		input_float3[i][1] = input_arr[1];
-		input_float3[i][2] = input_arr[2];
+		input_float3[i][2] = input_arr[2];*/
+		ImGui::Text(input_float3_labels[i].c_str());
+		ImGui::InputFloat("x", &input_float3[i][0]);
+		ImGui::InputFloat("y", &input_float3[i][1]);
+		ImGui::InputFloat("z", &input_float3[i][2]);
+		if (i != input_float3_labels.size() - 1)
+		{
+			GUI_Utilities::horizontal_seperator(15);
+		}
+	}
+
+	if (input_float_labels.size() != 0 && input_float3_labels.size() != 0)
+	{
+		GUI_Utilities::horizontal_seperator(15);
 	}
 
 	assert(input_floats.size() == input_float_labels.size());
 
 	for (unsigned int i = 0; i < input_float_labels.size(); i++)
 	{
-		ImGui::InputFloat(input_float_labels[i].c_str(), &input_floats[i]);
+		ImGui::Text(input_float_labels[i].c_str());
+		ImGui::InputFloat("", &input_floats[i]);
 	}
 	ImGui::PopItemWidth();
 
+	ImGui::EndGroup();
 	ImNodes::EndNode();
 
 	ImNodes::PopColorStyle();
 	ImNodes::PopColorStyle();
+
+
 }
