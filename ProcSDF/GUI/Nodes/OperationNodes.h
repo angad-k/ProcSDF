@@ -1,14 +1,22 @@
 #pragma once
 #include "GUI/Nodes/Node.h"
 #include <string>
-class IntersectionNode : public Node {
-private:
-	int output_id;
-	int input_id_1;
-	int input_id_2;
-
+class OperationNode : public Node {
 public:
-	void draw();
-	IntersectionNode();
+	OperationNode()
+	{
+		title_color = imgui_colors::BLUE;
+	}
+};
+class IntersectionNode : public OperationNode {
+public:
 	std::string get_string() { return ""; }
+	IntersectionNode()
+	{
+		node_name = "Intersection node";
+		input_pins = { "Input 1", "Input 2" };
+		output_pins = { "Output" };
+		is_final_node = false;
+		init();
+	}
 };

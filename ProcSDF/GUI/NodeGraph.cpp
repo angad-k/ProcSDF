@@ -1,6 +1,8 @@
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
+#include "GUI/Nodes/FinalNode.h"
+#include "Utilities/logger.cpp"
 #pragma once
 
 void NodeGraph::initialize()
@@ -57,12 +59,12 @@ void NodeGraph::add_node(Node* p_new_node)
 	}
 	print_node_graph();
 	std::pair<bool, std::vector<int>> pr = NodeGraph::get_topological_sorting();
-	std::cout << "Cycle : " << pr.first << "\n";
-	std::cout << "Topo sorting : \n";
+	logger::log("Cycle" + pr.first);
+	logger::log("Topo sorting : \n");
 	for (int i : pr.second) {
-		std::cout << i << " ";
+		logger::log(i + " ");
 	}
-	std::cout << "\n";
+	logger::log("\n");
 }
 
 void NodeGraph::set_adjacency_list() {
@@ -125,28 +127,30 @@ std::pair<bool, std::vector<int>> NodeGraph::get_topological_sorting() {
 
 void NodeGraph::print_node_graph()
 {
-	std::cout << "Nodes are :\n";
+	logger::log("Nodes are :\n");
 	for (auto it : NodeGraph::allocated_ids)
 	{
-		std::cout << "id : " << it.first << " | type : " << get_node_type(it.second->node_type) << std::endl;
+		std::cout << "id : " << it.first << " | type : " << it.second->node_name << std::endl;
 	}
 
-	std::cout << "Links are :\n";
+	logger::log("Links are :\n");
 	for (auto it : links)
 	{
-		std::cout << get_node_type(NodeGraph::allocated_ids[it.first]->node_type) << " ( "<< NodeGraph::allocated_ids[it.first]->id << " ) -> " << get_node_type(NodeGraph::allocated_ids[it.second]->node_type) << " ( " << NodeGraph::allocated_ids[it.second]->id << " ) " << std::endl;
+		//fix with log after adding string formatting utility
+		std::cout << NodeGraph::allocated_ids[it.first]->node_name << " ( "<< NodeGraph::allocated_ids[it.first]->id << " ) -> " << NodeGraph::allocated_ids[it.second]->node_name << " ( " << NodeGraph::allocated_ids[it.second]->id << " ) " << std::endl;
 	}
 
 	NodeGraph::set_adjacency_list();
 	auto adjacency_list = NodeGraph::adjacency_list;
 
-	std::cout << " Adjacency list :\n";
+	logger::log(" Adjacency list :\n");
 	for (auto it : adjacency_list) {
-		std::cout << get_node_type(NodeGraph::allocated_ids[it.first]->node_type) <<" ( "<<it.first<<" ) "<< " : ";
+		//fix with log after adding string formatting utility
+		std::cout << NodeGraph::allocated_ids[it.first]->node_name <<" ( "<<it.first<<" ) "<< " : ";
 		for(int j : it.second) {
-			std::cout << get_node_type(NodeGraph::allocated_ids[j]->node_type) << " ( " << j << " ) " << " , ";
+			std::cout << NodeGraph::allocated_ids[j]->node_name << " ( " << j << " ) " << " , ";
 		}
-		std::cout << "\n";
+		logger::log("\n");
 	}
 
 

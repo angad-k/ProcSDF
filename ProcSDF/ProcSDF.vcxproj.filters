@@ -87,10 +87,10 @@
     <ClCompile Include="GUI\NodeGraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Nodes\PrimitiveNodes.cpp">
+    <ClCompile Include="GUI\GuiUtilities.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Nodes\OperationNodes.cpp">
+    <ClCompile Include="Utilities\logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Nodes\OperationNodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Nodes\FinalNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

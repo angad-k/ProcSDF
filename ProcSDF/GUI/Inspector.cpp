@@ -20,40 +20,108 @@ void Inspector::draw()
 {
 	ImGui::Begin("Inspector");
 
+	Tab oldTab = openedTab;
+
+	if (oldTab == Tab::CAMERA_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
 	if (ImGui::Button("Camera Settings"))
 		openedTab = Tab::CAMERA_SETTINGS;
 	ImGui::SameLine();
+	if (oldTab == Tab::CAMERA_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
+
+	if (oldTab == Tab::RENDERING_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
 	if (ImGui::Button("Rendering Settings"))
 		openedTab = Tab::RENDERING_SETTINGS;
 	ImGui::SameLine();
-	if (ImGui::Button("Add Nodes"))
-		openedTab = Tab::ADD_NODES;
+	if (oldTab == Tab::RENDERING_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
 
-	float cameraOrigin[3] = { renderer->get_camera_origin()[0], renderer->get_camera_origin()[1], renderer->get_camera_origin()[2] };
+	if (oldTab == Tab::NODEGRAPH_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
+	if (ImGui::Button("Node graph settings"))
+		openedTab = Tab::NODEGRAPH_SETTINGS;
+	if (oldTab == Tab::NODEGRAPH_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
+
+	ImGui::Separator();
 
 	switch (openedTab)
 	{
 	case Tab::CAMERA_SETTINGS:
-		ImGui::InputFloat3("Camera Origin", cameraOrigin);
-		renderer->set_camera_origin(cameraOrigin);
-
-		//float focalLength = renderer->get_focal_length();
-		ImGui::InputFloat("Focal Length", renderer->get_focal_length());
+		draw_camera_settings();
 		break;
 	case Tab::RENDERING_SETTINGS:
-		ImGui::Text("Something will come here");
+		draw_rendering_settings();
 		break;
-	case Tab::ADD_NODES:
-		if (ImGui::Button("Sphere"))
-		{
-			add_node<SphereNode>();
-		}
-		if (ImGui::Button("Intersection"))
-		{
-			add_node<IntersectionNode>();
-		}
+	case Tab::NODEGRAPH_SETTINGS:
+		draw_node_graph_settings();
 		break;
 	}
 
 	ImGui::End();
+}
+
+void Inspector::draw_camera_settings()
+{
+	float cameraOrigin[3] = { renderer->get_camera_origin()[0], renderer->get_camera_origin()[1], renderer->get_camera_origin()[2] };
+	ImGui::InputFloat3("Camera Origin", cameraOrigin);
+	renderer->set_camera_origin(cameraOrigin);
+	ImGui::InputFloat("Focal Length", renderer->get_focal_length());
+}
+
+void Inspector::draw_rendering_settings()
+{
+	ImGui::Text("Something will come here");
+}
+
+void Inspector::draw_node_graph_settings()
+{
+	if (ImGui::TreeNode("Add nodes"))
+	{
+		ImGui::Indent();
+		
+		if (ImGui::TreeNode("Primitives"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::PRIMITIVE);
+			if (ImGui::Button("Sphere"))
+			{
+				add_node<SphereNode>();
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+		
+		if (ImGui::TreeNode("Operations"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OPERATION);
+			if (ImGui::Button("Intersection"))
+			{
+				add_node<IntersectionNode>();
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		ImGui::Unindent();
+		ImGui::TreePop();
+	}
+	
 }
