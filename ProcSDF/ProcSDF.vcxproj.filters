@@ -90,6 +90,9 @@
     <ClCompile Include="GUI\GuiUtilities.h">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Utilities\logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rendering\Renderer.h">

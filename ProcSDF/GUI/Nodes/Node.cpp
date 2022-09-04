@@ -66,11 +66,6 @@ void Node::draw()
 
 	for (unsigned int i = 0; i < input_float3_labels.size(); i++)
 	{
-		/*float input_arr[3] = {input_float3[i][0], input_float3[i][1], input_float3[i][2]};
-		ImGui::InputFloat3(input_float3_labels[i].c_str(), input_arr);
-		input_float3[i][0] = input_arr[0];
-		input_float3[i][1] = input_arr[1];
-		input_float3[i][2] = input_arr[2];*/
 		ImGui::Text(input_float3_labels[i].c_str());
 		ImGui::InputFloat("x", &input_float3[i][0]);
 		ImGui::InputFloat("y", &input_float3[i][1]);
