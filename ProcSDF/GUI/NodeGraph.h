@@ -13,10 +13,14 @@ private:
 public:
 	void initialize();
 	int allocate_id(Node* p_node);
+	Node* get_node(int id);
 	void add_node(Node* p_new_node);
 	void set_adjacency_list();
 	std::pair<bool, std::vector<int>> get_topological_sorting();
 	void depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting);
+
+	Node* get_source_node(int dest_id);
+	int get_source_id(int dest_id);
 
 	static NodeGraph* get_singleton() {
 		if (!nodeGraph)

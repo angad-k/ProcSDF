@@ -1,6 +1,7 @@
 #pragma once
 #include "GUI/Nodes/Node.h"
 #include <string>
+#include <unordered_map>
 class PrimitiveNode : public Node {
 public:
 	PrimitiveNode()
@@ -11,9 +12,16 @@ public:
 class SphereNode : public PrimitiveNode {
 public:
 	std::string get_string() { return ""; }
+	static std::unordered_map<int, bool> allocated_variable_ids;
 	SphereNode()
 	{
-		node_name = "Sphere node";
+		node_name = "Sphere";
+		int i = 0;
+		while (!allocated_variable_ids[i])
+		{
+			i++;
+		}
+		variable_name = "sphere_" + i;
 		input_pins = {};
 		output_pins = { "Output" };
 		is_final_node = false;

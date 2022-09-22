@@ -7,7 +7,7 @@ public:
 	int id;
 	bool is_final_node = false;
 	void draw();
-	virtual std::string get_string() = 0;
+	std::string get_string();
 
 	std::vector <std::string> input_pins;
 	std::vector <int> input_ids;
@@ -20,6 +20,12 @@ public:
 	std::vector <float> input_floats;
 
 	std::string node_name;
+	std::string variable_name;
 	int title_color = imgui_colors::BLUE;
+
+	std::string get_variable_name()
+	{
+		return variable_name;
+	}
 	void init();
 };

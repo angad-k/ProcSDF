@@ -28,6 +28,11 @@ int NodeGraph::allocate_id(Node* p_node)
 	// TO DO : handle too many allocations
 }
 
+Node* NodeGraph::get_node(int id)
+{
+	return allocated_ids[id];
+}
+
 void NodeGraph::add_link(int src, int dest)
 {
 	bool possible = true;
@@ -57,6 +62,8 @@ void NodeGraph::add_node(Node* p_new_node)
 	{
 		nodes.push_back(p_new_node);
 	}
+
+	// FOLLOWING CODE IS JUST FOR TESTING, REMOVE WHEN NOT NEEDED
 	print_node_graph();
 	std::pair<bool, std::vector<int>> pr = NodeGraph::get_topological_sorting();
 	logger::log("Cycle" + pr.first);
@@ -87,6 +94,28 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	}
 
 	topological_sorting.push_back(src);
+}
+
+Node* NodeGraph::get_source_node(int dest_id)
+{
+	int src_id = get_source_id(dest_id);
+	if (src_id == -1)
+	{
+		return nullptr;
+	}
+	return allocated_ids[src_id];
+}
+
+int NodeGraph::get_source_id(int dest_id)
+{
+	for (auto it : links)
+	{
+		if (it.second == dest_id)
+		{
+			return it.first;
+		}
+	}
+	return -1;
 }
 
 std::pair<bool, std::vector<int>> NodeGraph::get_topological_sorting() {
