@@ -17,7 +17,7 @@ public:
 	{
 		node_name = "Sphere";
 		int i = 0;
-		while (!allocated_variable_ids[i])
+		while (allocated_variable_ids.find(i) != allocated_variable_ids.end() || allocated_variable_ids[i] == true)
 		{
 			i++;
 		}
