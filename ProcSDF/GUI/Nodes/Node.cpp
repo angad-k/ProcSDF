@@ -133,7 +133,7 @@ std::string Node::get_string()
 			{
 				nodestr += ", ";
 			}
-			nodestr += input_float3[i][j];
+			nodestr += std::to_string(input_float3[i][j]);
 			comma_needed = true;
 		}
 	}
@@ -144,7 +144,7 @@ std::string Node::get_string()
 		{
 			nodestr += ", ";
 		}
-		nodestr += input_floats[i];
+		nodestr += std::to_string(input_floats[i]);
 	}
 
 	nodestr += ");";

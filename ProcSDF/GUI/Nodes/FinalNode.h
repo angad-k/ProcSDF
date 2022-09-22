@@ -6,6 +6,7 @@ public:
 	std::string get_string() { return ""; }
 	FinalNode()
 	{
+		variable_name = "final";
 		node_name = "Final node";
 		input_pins = { "Final Output" };
 		output_pins = {};

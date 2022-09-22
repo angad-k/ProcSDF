@@ -21,7 +21,7 @@ public:
 		{
 			i++;
 		}
-		variable_name = "sphere_" + i;
+		variable_name = "sphere_" + std::to_string(i);
 		input_pins = {};
 		output_pins = { "Output" };
 		is_final_node = false;

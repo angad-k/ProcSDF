@@ -21,7 +21,7 @@ public:
 		{
 			i++;
 		}
-		variable_name = "intersection_" + i;
+		variable_name = "intersection_" + std::to_string(i);
 		input_pins = { "Input 1", "Input 2" };
 		output_pins = { "Output" };
 		is_final_node = false;
