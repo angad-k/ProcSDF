@@ -16,7 +16,7 @@ public:
 	std::string get_string() { return ""; }
 	IntersectionNode()
 	{
-		node_name = "Intersection node";
+		node_name = "Intersection Node";
 		init();
 	}
 };

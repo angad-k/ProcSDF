@@ -102,6 +102,10 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<SphereNode>();
 			}
+			else if (ImGui::Button("Box"))
+			{
+				add_node<BoxNode>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();

@@ -16,9 +16,20 @@ public:
 	std::string get_string() { return ""; }
 	SphereNode()
 	{
-		node_name = "Sphere node";
+		node_name = "Sphere Node";
 		input_float3_labels = { "Centre Position" };
 		input_float_labels = { "Radius" };
+		init();
+	}
+};
+
+class BoxNode : public PrimitiveNode {
+public:
+	std::string get_string() { return ""; }
+	BoxNode() 
+	{
+		node_name = "Box Node";
+		input_float3_labels = { "Centre Position", "Dimension" };
 		init();
 	}
 };
