@@ -16,12 +16,6 @@ public:
 	IntersectionNode()
 	{
 		node_name = "Intersection";
-		int i = 0;
-		while (allocated_variable_ids.find(i) != allocated_variable_ids.end() || allocated_variable_ids[i] == true)
-		{
-			i++;
-		}
-		variable_name = "intersection_" + std::to_string(i);
 		input_pins = { "Input 1", "Input 2" };
 		output_pins = { "Output" };
 		is_final_node = false;

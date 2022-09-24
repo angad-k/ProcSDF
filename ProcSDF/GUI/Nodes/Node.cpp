@@ -12,7 +12,7 @@ void Node::init()
 {
 	NodeGraph* node_graph = NodeGraph::get_singleton();
 	id = node_graph->allocate_id(this);
-
+	variable_name = node_name + "_" + std::to_string(id);
 	input_ids = std::vector<int>(input_pins.size());
 	output_ids = std::vector<int>(output_pins.size());
 
@@ -105,7 +105,8 @@ std::string Node::get_string()
 {
 	std::string nodestr = variable_name;
 	nodestr += " = ";
-	nodestr += node_name + "(";
+	nodestr += node_name;
+	nodestr += "(";
 	bool comma_needed = false;
 	for (unsigned int i = 0; i < input_ids.size(); i++)
 	{
@@ -116,12 +117,12 @@ std::string Node::get_string()
 			// set a global error variable here to show that graph cannot be computed.
 			return "ERR";
 		}
-		std::string arg_name = source_node->get_variable_name();
+		std::string input_arg_name = source_node->get_variable_name();
 		if (comma_needed)
 		{
 			nodestr += ", ";
 		}
-		nodestr += arg_name;
+		nodestr += input_arg_name;
 		comma_needed = true;
 	}
 

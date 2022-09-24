@@ -17,11 +17,6 @@ public:
 	{
 		node_name = "Sphere";
 		int i = 0;
-		while (allocated_variable_ids.find(i) != allocated_variable_ids.end() || allocated_variable_ids[i] == true)
-		{
-			i++;
-		}
-		variable_name = "sphere_" + std::to_string(i);
 		input_pins = {};
 		output_pins = { "Output" };
 		is_final_node = false;

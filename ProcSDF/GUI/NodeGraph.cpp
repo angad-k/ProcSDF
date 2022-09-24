@@ -70,8 +70,9 @@ void NodeGraph::add_node(Node* p_new_node)
 	logger::log("Topo sorting : \n");
 	for (int i : pr.second) {
 		Node* topo_node = allocated_ids[i];
+		std::string topo_string = topo_node->get_string();
 		logger::log(std::to_string(i) + " -> ");
-		logger::log(topo_node->get_string());
+		logger::log(topo_string);
 		logger::log("\n");
 	}
 	logger::log("\n");
