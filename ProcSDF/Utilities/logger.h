@@ -15,12 +15,18 @@ namespace logger
 	static void log_warning(std::string message)
 	{
 		std::string output = "WARNING: " + message + "\n";
+		std::cout.clear();
+		std::cout << "\033[93m";
 		std::cout << output;
+		std::cout << "\033[0m";
 	}
 	static void log_error(std::string message)
 	{
 		std::string output = "ERROR: " + message + "\n";
+		std::cout.clear();
+		std::cout << "\033[91m";
 		std::cout << output;
+		std::cout << "\033[0m";
 	}
 }
 

@@ -90,7 +90,7 @@
     <ClCompile Include="GUI\GuiUtilities.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\logger.cpp">
+    <ClCompile Include="Utilities\logger.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
-#include "Utilities/logger.cpp"
+#include "Utilities/logger.h"
 #include <unordered_map>
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"

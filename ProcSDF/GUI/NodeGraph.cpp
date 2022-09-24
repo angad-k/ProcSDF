@@ -2,7 +2,7 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/FinalNode.h"
-#include "Utilities/logger.cpp"
+#include "Utilities/logger.h"
 #pragma once
 
 void NodeGraph::initialize()
