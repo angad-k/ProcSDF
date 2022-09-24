@@ -115,7 +115,7 @@ std::string Node::get_string()
 		{
 			std::string compilation_error = "Input is undefined for " + variable_name;
 			NodeGraph::get_singleton()->set_compilation_error(compilation_error);
-			logger::log_warning(compilation_error);
+			ERR(compilation_error);
 			// set a global error variable here to show that graph cannot be computed.
 			return "ERR";
 		}

@@ -143,7 +143,7 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 	{
 		std::string compilation_error = "Node Graph contains cycle";
 		set_compilation_error(compilation_error);
-		logger::log_warning(compilation_error);
+		ERR(compilation_error);
 	}
 
 	return topological_sorting;
