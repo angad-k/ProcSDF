@@ -35,4 +35,5 @@ public:
 	std::map <int, Node*> allocated_ids;
 	void add_link(int src, int dest);
 	void print_node_graph();
+	void recompile_node_graph();
 };

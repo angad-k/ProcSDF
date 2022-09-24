@@ -5,7 +5,10 @@
 void NodeEditor::draw()
 {
 	ImGui::Begin("Nodes workspace");
-
+	if (ImGui::Button("Recompile"))
+	{
+		NodeGraph::get_singleton()->recompile_node_graph();
+	}
 	ImNodes::BeginNodeEditor();
 
 	ImNodes::GetIO().LinkDetachWithModifierClick.Modifier = &ImGui::GetIO().KeyCtrl;

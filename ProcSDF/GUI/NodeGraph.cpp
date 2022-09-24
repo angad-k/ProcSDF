@@ -62,20 +62,6 @@ void NodeGraph::add_node(Node* p_new_node)
 	{
 		nodes.push_back(p_new_node);
 	}
-
-	// FOLLOWING CODE IS JUST FOR TESTING, REMOVE WHEN NOT NEEDED
-	print_node_graph();
-	std::pair<bool, std::vector<int>> pr = NodeGraph::get_topological_sorting();
-	logger::log("Cycle" + pr.first);
-	logger::log("Topo sorting : \n");
-	for (int i : pr.second) {
-		Node* topo_node = allocated_ids[i];
-		std::string topo_string = topo_node->get_string();
-		logger::log(std::to_string(i) + " -> ");
-		logger::log(topo_string);
-		logger::log("\n");
-	}
-	logger::log("\n");
 }
 
 void NodeGraph::set_adjacency_list() {
@@ -187,4 +173,20 @@ void NodeGraph::print_node_graph()
 	}
 
 
+}
+
+void NodeGraph::recompile_node_graph()
+{
+	print_node_graph();
+	std::pair<bool, std::vector<int>> pr = NodeGraph::get_topological_sorting();
+	logger::log("Cycle" + pr.first);
+	logger::log("Topo sorting : \n");
+	for (int i : pr.second) {
+		Node* topo_node = allocated_ids[i];
+		std::string topo_string = topo_node->get_string();
+		logger::log(std::to_string(i) + " -> ");
+		logger::log(topo_string);
+		logger::log("\n");
+	}
+	logger::log("\n");
 }
