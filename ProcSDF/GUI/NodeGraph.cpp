@@ -177,6 +177,7 @@ void NodeGraph::print_node_graph()
 
 void NodeGraph::recompile_node_graph()
 {
+	NodeGraph::clear_compilation_error();
 	print_node_graph();
 	std::pair<bool, std::vector<int>> pr = NodeGraph::get_topological_sorting();
 	logger::log("Cycle" + pr.first);
@@ -184,6 +185,10 @@ void NodeGraph::recompile_node_graph()
 	for (int i : pr.second) {
 		Node* topo_node = allocated_ids[i];
 		std::string topo_string = topo_node->get_string();
+		if (check_compilation_error())
+		{
+			return;
+		}
 		logger::log(std::to_string(i) + " -> ");
 		logger::log(topo_string);
 		logger::log("\n");

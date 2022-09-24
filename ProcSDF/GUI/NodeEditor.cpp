@@ -9,6 +9,12 @@ void NodeEditor::draw()
 	{
 		NodeGraph::get_singleton()->recompile_node_graph();
 	}
+	ImGui::SameLine();
+	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+	ImGui::Text(NodeGraph::get_singleton()->get_compilation_error().c_str());
+	ImGui::PopStyleColor();
+	// ImNodes workspace starts from here.
+
 	ImNodes::BeginNodeEditor();
 
 	ImNodes::GetIO().LinkDetachWithModifierClick.Modifier = &ImGui::GetIO().KeyCtrl;

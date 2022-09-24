@@ -17,7 +17,28 @@ public:
 	void add_node(Node* p_new_node);
 	void set_adjacency_list();
 	std::pair<bool, std::vector<int>> get_topological_sorting();
+
+	bool error_in_compilation = false;
+	std::string compilation_error = "";
 	void depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting);
+	std::string get_compilation_error()
+	{
+		return compilation_error;
+	}
+	void set_compilation_error(std::string p_compilation_error)
+	{
+		compilation_error = p_compilation_error;
+		error_in_compilation = true;
+	}
+	void clear_compilation_error()
+	{
+		compilation_error = "";
+		error_in_compilation = false;
+	}
+	bool check_compilation_error()
+	{
+		return error_in_compilation;
+	}
 
 	Node* get_source_node(int dest_id);
 	int get_source_id(int dest_id);

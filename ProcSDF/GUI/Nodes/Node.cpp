@@ -113,7 +113,9 @@ std::string Node::get_string()
 		Node* source_node = NodeGraph::get_singleton()->get_source_node(input_ids[i]);
 		if (source_node == nullptr)
 		{
-			logger::log_warning("Input is undefined for " + variable_name);
+			std::string compilation_error = "Input is undefined for " + variable_name;
+			NodeGraph::get_singleton()->set_compilation_error(compilation_error);
+			logger::log_warning(compilation_error);
 			// set a global error variable here to show that graph cannot be computed.
 			return "ERR";
 		}
