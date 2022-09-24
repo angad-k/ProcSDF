@@ -16,7 +16,7 @@ public:
 	Node* get_node(int id);
 	void add_node(Node* p_new_node);
 	void set_adjacency_list();
-	std::pair<bool, std::vector<int>> get_topological_sorting();
+	std::vector<int> get_topological_sorting();
 
 	bool error_in_compilation = false;
 	std::string compilation_error = "";
