@@ -39,6 +39,10 @@ void Node::draw()
 
 	ImNodes::BeginNodeTitleBar();
 	ImGui::TextUnformatted(node_name.c_str());
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+	{
+		ImGui::SetTooltip(variable_name.c_str());
+	}
 	ImNodes::EndNodeTitleBar();
 
 	assert(input_ids.size() == input_pins.size());
@@ -152,6 +156,3 @@ std::string Node::get_string()
 	nodestr += ");";
 	return nodestr;
 }
-
-std::unordered_map<int, bool> SphereNode::allocated_variable_ids;
-std::unordered_map<int, bool> IntersectionNode::allocated_variable_ids;
