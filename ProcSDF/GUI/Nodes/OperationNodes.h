@@ -10,10 +10,9 @@ public:
 };
 class IntersectionNode : public OperationNode {
 public:
-	std::string get_string() { return ""; }
 	IntersectionNode()
 	{
-		node_name = "Intersection node";
+		node_name = "Intersection";
 		input_pins = { "Input 1", "Input 2" };
 		output_pins = { "Output" };
 		is_final_node = false;

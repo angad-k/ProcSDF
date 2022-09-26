@@ -3,12 +3,16 @@
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
+#include "Utilities/logger.h"
+#include <unordered_map>
+#include "GUI/Nodes/PrimitiveNodes.h"
+#include "GUI/Nodes/OperationNodes.h"
 
 void Node::init()
 {
 	NodeGraph* node_graph = NodeGraph::get_singleton();
 	id = node_graph->allocate_id(this);
-
+	variable_name = node_name + "_" + std::to_string(id);
 	input_ids = std::vector<int>(input_pins.size());
 	output_ids = std::vector<int>(output_pins.size());
 
@@ -35,6 +39,10 @@ void Node::draw()
 
 	ImNodes::BeginNodeTitleBar();
 	ImGui::TextUnformatted(node_name.c_str());
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+	{
+		ImGui::SetTooltip(variable_name.c_str());
+	}
 	ImNodes::EndNodeTitleBar();
 
 	assert(input_ids.size() == input_pins.size());
@@ -95,6 +103,56 @@ void Node::draw()
 
 	ImNodes::PopColorStyle();
 	ImNodes::PopColorStyle();
+}
 
+std::string Node::get_string()
+{
+	std::string nodestr = variable_name;
+	nodestr += " = ";
+	nodestr += node_name;
+	nodestr += "(";
+	bool comma_needed = false;
+	for (unsigned int i = 0; i < input_ids.size(); i++)
+	{
+		Node* source_node = NodeGraph::get_singleton()->get_source_node(input_ids[i]);
+		if (source_node == nullptr)
+		{
+			std::string compilation_error = "Input is undefined for " + variable_name;
+			NodeGraph::get_singleton()->set_compilation_error(compilation_error);
+			ERR(compilation_error);
+			return "ERR";
+		}
+		std::string input_arg_name = source_node->get_variable_name();
+		if (comma_needed)
+		{
+			nodestr += ", ";
+		}
+		nodestr += input_arg_name;
+		comma_needed = true;
+	}
 
+	for (unsigned int i = 0; i < input_float3.size(); i++)
+	{
+		for (unsigned int j = 0; j < input_float3[i].size(); j++)
+		{
+			if (comma_needed)
+			{
+				nodestr += ", ";
+			}
+			nodestr += std::to_string(input_float3[i][j]);
+			comma_needed = true;
+		}
+	}
+
+	for (unsigned int i = 0; i < input_floats.size(); i++)
+	{
+		if (comma_needed)
+		{
+			nodestr += ", ";
+		}
+		nodestr += std::to_string(input_floats[i]);
+	}
+
+	nodestr += ");";
+	return nodestr;
 }

@@ -2,12 +2,12 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/FinalNode.h"
-#include "Utilities/logger.cpp"
+#include "Utilities/logger.h"
 #pragma once
 
 void NodeGraph::initialize()
 {
-	// nothing needed for now - we'll add stuff as needed.
+	error_in_compilation = false;
 	SphereNode* sn = new SphereNode();
 	FinalNode* fn = new FinalNode();
 	nodes.push_back(sn);
@@ -26,6 +26,11 @@ int NodeGraph::allocate_id(Node* p_node)
 	}
 
 	// TO DO : handle too many allocations
+}
+
+Node* NodeGraph::get_node(int id)
+{
+	return allocated_ids[id];
 }
 
 void NodeGraph::add_link(int src, int dest)
@@ -57,14 +62,6 @@ void NodeGraph::add_node(Node* p_new_node)
 	{
 		nodes.push_back(p_new_node);
 	}
-	print_node_graph();
-	std::pair<bool, std::vector<int>> pr = NodeGraph::get_topological_sorting();
-	logger::log("Cycle" + pr.first);
-	logger::log("Topo sorting : \n");
-	for (int i : pr.second) {
-		logger::log(i + " ");
-	}
-	logger::log("\n");
 }
 
 void NodeGraph::set_adjacency_list() {
@@ -89,10 +86,29 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	topological_sorting.push_back(src);
 }
 
-std::pair<bool, std::vector<int>> NodeGraph::get_topological_sorting() {
-	
-	bool contains_cycle = false;
+Node* NodeGraph::get_source_node(int dest_id)
+{
+	int src_id = get_source_id(dest_id);
+	if (src_id == -1)
+	{
+		return nullptr;
+	}
+	return allocated_ids[src_id];
+}
 
+int NodeGraph::get_source_id(int dest_id)
+{
+	for (auto it : links)
+	{
+		if (it.second == dest_id)
+		{
+			return it.first;
+		}
+	}
+	return -1;
+}
+
+std::vector<int> NodeGraph::get_topological_sorting() {
 	std::map<int, bool> visited;
 	std::vector<int> topological_sorting;
 	for (auto i : NodeGraph::adjacency_list) {
@@ -113,6 +129,7 @@ std::pair<bool, std::vector<int>> NodeGraph::get_topological_sorting() {
 		node_index_in_topological_sorting[topological_sorting[i]] = i;
 	}
 
+	bool contains_cycle = false;
 	for (auto it : NodeGraph::adjacency_list) {
 		for (int i : it.second) {
 			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[i]) {
@@ -122,7 +139,14 @@ std::pair<bool, std::vector<int>> NodeGraph::get_topological_sorting() {
 		}
 	}
 
-	return std::make_pair(contains_cycle, topological_sorting);
+	if (contains_cycle)
+	{
+		std::string compilation_error = "Node Graph contains cycle";
+		set_compilation_error(compilation_error);
+		ERR(compilation_error);
+	}
+
+	return topological_sorting;
 }
 
 void NodeGraph::print_node_graph()
@@ -154,4 +178,28 @@ void NodeGraph::print_node_graph()
 	}
 
 
+}
+
+void NodeGraph::recompile_node_graph()
+{
+	NodeGraph::clear_compilation_error();
+	print_node_graph();
+	std::vector<int> topologically_sorted_nodes = NodeGraph::get_topological_sorting();
+	if (check_compilation_error())
+	{
+		return;
+	}
+	logger::log("Topo sorting : \n");
+	for (int i : topologically_sorted_nodes) {
+		Node* topo_node = allocated_ids[i];
+		std::string topo_string = topo_node->get_string();
+		if (check_compilation_error())
+		{
+			return;
+		}
+		logger::log(std::to_string(i) + " -> ");
+		logger::log(topo_string);
+		logger::log("\n");
+	}
+	logger::log("\n");
 }
