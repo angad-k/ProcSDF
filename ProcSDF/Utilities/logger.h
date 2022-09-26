@@ -12,10 +12,6 @@ namespace logger
 	{
 		printf(message.c_str());
 	}
-	static void log(std::string message, bool is_debug)
-	{
-		printf(message.c_str());
-	}
 	static void log_warning(std::string message)
 	{
 		std::string output = "WARNING: " + message + "\n";
