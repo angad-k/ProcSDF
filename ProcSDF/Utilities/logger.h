@@ -2,6 +2,10 @@
 #include<string>
 #include<iostream>
 
+#define YELLOW_ANSI "\033[93m"
+#define WHITE_ANSI "\033[0m"
+#define RED_ANSI "\033[91m"
+
 namespace logger
 {
 	static void log(std::string message)
@@ -16,17 +20,17 @@ namespace logger
 	{
 		std::string output = "WARNING: " + message + "\n";
 		std::cout.clear();
-		std::cout << "\033[93m";
+		std::cout << YELLOW_ANSI;
 		std::cout << output;
-		std::cout << "\033[0m";
+		std::cout << WHITE_ANSI;
 	}
 	static void log_error(std::string message)
 	{
 		std::string output = "ERROR: " + message + "\n";
 		std::cout.clear();
-		std::cout << "\033[91m";
+		std::cout << RED_ANSI;
 		std::cout << output;
-		std::cout << "\033[0m";
+		std::cout << WHITE_ANSI;
 	}
 }
 

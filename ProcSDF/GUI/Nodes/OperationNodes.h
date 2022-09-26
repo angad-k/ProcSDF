@@ -1,7 +1,6 @@
 #pragma once
 #include "GUI/Nodes/Node.h"
 #include <string>
-#include <unordered_map>
 class OperationNode : public Node {
 public:
 	OperationNode()
@@ -11,8 +10,6 @@ public:
 };
 class IntersectionNode : public OperationNode {
 public:
-	std::string get_string() { return ""; }
-	static std::unordered_map<int, bool> allocated_variable_ids;
 	IntersectionNode()
 	{
 		node_name = "Intersection";

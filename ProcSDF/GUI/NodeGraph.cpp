@@ -7,7 +7,7 @@
 
 void NodeGraph::initialize()
 {
-	// nothing needed for now - we'll add stuff as needed.
+	error_in_compilation = false;
 	SphereNode* sn = new SphereNode();
 	FinalNode* fn = new FinalNode();
 	nodes.push_back(sn);

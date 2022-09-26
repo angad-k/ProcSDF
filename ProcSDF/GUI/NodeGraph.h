@@ -18,8 +18,8 @@ public:
 	void set_adjacency_list();
 	std::vector<int> get_topological_sorting();
 
-	bool error_in_compilation = false;
-	std::string compilation_error = "";
+	bool error_in_compilation;
+	std::string compilation_error;
 	void depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting);
 	std::string get_compilation_error()
 	{
@@ -32,7 +32,7 @@ public:
 	}
 	void clear_compilation_error()
 	{
-		compilation_error = "";
+		compilation_error.clear();
 		error_in_compilation = false;
 	}
 	bool check_compilation_error()

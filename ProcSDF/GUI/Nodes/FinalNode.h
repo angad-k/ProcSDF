@@ -3,7 +3,6 @@
 
 class FinalNode : public Node {
 public:
-	std::string get_string() { return ""; }
 	FinalNode()
 	{
 		variable_name = "final";
