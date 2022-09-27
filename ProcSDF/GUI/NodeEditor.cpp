@@ -21,15 +21,20 @@ void NodeEditor::draw()
 
 	NodeGraph* nodeGraph = NodeGraph::get_singleton();
 
+	std::cout << "add node in\n";
 	for (int i = 0; i < nodeGraph->nodes.size(); i++)
 	{
+		std::cout << nodeGraph->nodes[i]->id << " ";
 		nodeGraph->nodes[i]->draw();
 	}
+	std::cout << "\n";
 
-
+	
 	for (int i = 0; i < nodeGraph->links.size(); ++i)
 	{
+		std::cout << "add link in\n";
 		const std::pair<int, int> p = nodeGraph->links[i];
+		std::cout << p.first << " " << p.second << "\n";
 		ImNodes::Link(i, p.first, p.second);
 	}
 

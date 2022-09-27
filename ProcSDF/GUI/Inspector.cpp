@@ -3,6 +3,7 @@
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
+#include "GUI/Nodes/ObjectNode.h"
 
 void Inspector::initialize()
 {
@@ -10,10 +11,14 @@ void Inspector::initialize()
 }
 
 template<typename p_nodeType>
-inline void Inspector::add_node()
+inline int Inspector::add_node()
 {
+	std::cout << "enter add node\n";
 	Node* new_node = new p_nodeType();
+	std::cout << "create node\n";
 	NodeGraph::get_singleton()->add_node(new_node);
+	std::cout << "add node\n";
+	return new_node->id;
 }
 
 void Inspector::draw()
@@ -114,6 +119,23 @@ void Inspector::draw_node_graph_settings()
 			if (ImGui::Button("Intersection"))
 			{
 				add_node<IntersectionNode>();
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Object"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OBJECT);
+			if (ImGui::Button("Object"))
+			{
+				std::cout << "enter object call\n";
+				int node_id = add_node<ObjectNode>();
+				std::cout << "return node "<<node_id<<" "<<NodeGraph::get_singleton()->final_node->id<<"\n";
+				int final_node_id = NodeGraph::get_singleton()->final_node->id;
+				NodeGraph::get_singleton()->add_link(node_id, final_node_id);
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

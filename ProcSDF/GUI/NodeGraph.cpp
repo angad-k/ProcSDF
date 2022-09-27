@@ -10,6 +10,7 @@ void NodeGraph::initialize()
 	error_in_compilation = false;
 	SphereNode* sn = new SphereNode();
 	FinalNode* fn = new FinalNode();
+	final_node = fn;
 	nodes.push_back(sn);
 	nodes.push_back(fn);
 }
@@ -35,6 +36,7 @@ Node* NodeGraph::get_node(int id)
 
 void NodeGraph::add_link(int src, int dest)
 {
+	std::cout<<"Enter\n";
 	bool possible = true;
 	for (auto link : links)
 	{
@@ -49,6 +51,7 @@ void NodeGraph::add_link(int src, int dest)
 	if (possible)
 	{
 		links.push_back(std::make_pair(src, dest));
+		std::cout << "Added and left\n";
 	}
 	else
 	{

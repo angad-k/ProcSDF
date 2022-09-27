@@ -180,6 +180,7 @@
     <ClInclude Include="GUI\NodeGraph.h" />
     <ClInclude Include="GUI\Nodes\FinalNode.h" />
     <ClInclude Include="GUI\Nodes\Node.h" />
+    <ClInclude Include="GUI\Nodes\ObjectNode.h" />
     <ClInclude Include="GUI\Nodes\OperationNodes.h" />
     <ClInclude Include="GUI\Nodes\PrimitiveNodes.h" />
     <ClInclude Include="Rendering\ShaderGenerator.h" />

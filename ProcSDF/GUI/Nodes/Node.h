@@ -6,6 +6,7 @@ class Node {
 public:
 	int id;
 	bool is_final_node = false;
+	bool is_object_node = false;
 	void draw();
 	std::string get_string();
 
