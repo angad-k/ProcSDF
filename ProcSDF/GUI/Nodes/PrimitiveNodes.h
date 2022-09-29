@@ -21,6 +21,7 @@ public:
 		init();
 	}
 };
+
 class BoxNode : public PrimitiveNode {
 public:
 	BoxNode()
@@ -31,6 +32,7 @@ public:
 		init();
 	}
 };
+
 class TorusNode : public PrimitiveNode {
 public:
 	TorusNode()
@@ -41,3 +43,15 @@ public:
 		init();
 	}
 };
+
+class BoxFrameNode : public PrimitiveNode {
+public:
+	BoxFrameNode()
+	{
+		node_name = "BoxFrame";
+		input_float3_labels = { "Box Dimension" };
+		input_float_labels = { "Frame Thickness" };
+		init();
+	}
+};
+

@@ -112,6 +112,10 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<TorusNode>();
 			}
+			else if (ImGui::Button("Box Frame"))
+			{
+				add_node<BoxFrameNode>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
