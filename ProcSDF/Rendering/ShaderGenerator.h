@@ -7,6 +7,9 @@ private:
 	int object_count;
 	static ShaderGenerator* shader_generator;
 	void generate_and_set_shader();
+	static std::string fetch_file_content(std::string file_name);
+	std::string generate_object_functions();
+	void compute_and_set_object_count();
 public:
 	static ShaderGenerator* get_singleton() {
 		if (!shader_generator)
