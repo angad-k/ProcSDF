@@ -1,11 +1,18 @@
 #pragma once
 #include <string>
+#include<vector>
+
 #include "ImGui/imgui.h"
 
 namespace sdf {
 	const std::string SHADER_FOLDER_PATH = "Assets/Shaders/";
 	const std::string SHADER_FILE_EXTENSION = ".glsl";
 	const std::string VERTEX_SHADER_PATH = "Assets/Shaders/vertex.glsl";
+}
+
+namespace shader_generation {
+	// change the order of files according to the order of insertion in the generated fragment shader file.
+	const std::vector<std::string> shader_files{ "header", "primitive", "footer" };
 }
 
 namespace imgui_colors {

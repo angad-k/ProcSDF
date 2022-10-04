@@ -2,7 +2,7 @@
 
 float object_1(vec3 position)
 {
-    return Torus(position, vec2(3.0,1.0));
+    return BoxFrame(position, vec3(2.0,2.0,2.0), 0.2);
 }
 
 float object_2(vec3 position)

@@ -4,6 +4,7 @@ class ShaderGenerator
 {
 private:
 	std::string shader;
+	int object_count;
 	static ShaderGenerator* shader_generator;
 	void generate_and_set_shader();
 public:
@@ -22,6 +23,14 @@ public:
 
 	void set_shader(std::string shader) {
 		this->shader = shader;
+	}
+
+	int get_object_count() {
+		return object_count;
+	}
+
+	void set_object_count(int object_count) {
+		this->object_count = object_count;
 	}
 
 };
