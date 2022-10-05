@@ -3,6 +3,7 @@
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/FinalNode.h"
 #include "Utilities/logger.h"
+#include "Rendering/ShaderGenerator.h"
 #pragma once
 
 void NodeGraph::initialize()
@@ -119,6 +120,7 @@ std::tuple<std::vector<int>, std::map<int, int>, std::map<int, int>> NodeGraph::
 	std::vector<int> topological_sorting;
 	std::map<int, int> timer_in;
 	std::map<int, int> timer_out;
+	NodeGraph::dfs_timer = 0;
 	std::tuple<std::vector<int>, std::map<int, int>, std::map<int, int>> graph_info_wrapper;
 
 	for (auto i : NodeGraph::adjacency_list) {
@@ -213,5 +215,10 @@ void NodeGraph::recompile_node_graph()
 		logger::log(topo_string);
 		logger::log("\n");
 	}
+	logger::log("\n");
+
+	logger::log("Shader generated:\n");
+	ShaderGenerator shader_generator;
+	logger::log(shader_generator.get_shader());
 	logger::log("\n");
 }

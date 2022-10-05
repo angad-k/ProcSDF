@@ -14,6 +14,8 @@ namespace shader_generation {
 	// change the order of files according to the order of insertion in the generated fragment shader file.
 	const std::vector<std::string> shader_files{ "header", "primitive", "footer" };
 	const std::string POSITION = "position";
+	const std::string OBJECT_FUNCTION_TEMPLATE = "\nfloat object_$(vec3 position)\n{\n#\n}\n";
+	const std::string RETURN = "return $;\n";
 }
 
 namespace imgui_colors {
