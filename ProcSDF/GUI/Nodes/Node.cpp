@@ -1,12 +1,14 @@
 #include <algorithm>
+#include <unordered_map>
+
+#include "Constants/constant.h"
 #include "GUI/GuiUtilities.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
-#include "Utilities/logger.h"
-#include <unordered_map>
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
+#include "Utilities/logger.h"
 
 void Node::init()
 {
@@ -131,6 +133,11 @@ std::string Node::get_string()
 		comma_needed = true;
 	}
 
+	if (input_ids.size() == 0) {
+		nodestr += shader_generation::POSITION;
+		comma_needed = true;
+	}
+
 	for (unsigned int i = 0; i < input_float3.size(); i++)
 	{
 		for (unsigned int j = 0; j < input_float3[i].size(); j++)
@@ -140,7 +147,6 @@ std::string Node::get_string()
 				nodestr += ", ";
 			}
 			nodestr += std::to_string(input_float3[i][j]);
-			comma_needed = true;
 		}
 	}
 

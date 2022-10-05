@@ -1,11 +1,16 @@
 #pragma once
 #include<string>
+
+#include "GUI/NodeGraph.h"
 class ShaderGenerator
 {
 private:
 	std::string shader;
 	int object_count;
 	static ShaderGenerator* shader_generator;
+	NodeGraph* node_graph;
+	std::vector<std::pair<int, Node*>> object_id_to_node_pair;
+
 	void generate_and_set_shader();
 	static std::string fetch_file_content(std::string file_name);
 	std::string generate_object_functions();
@@ -32,8 +37,8 @@ public:
 		return object_count;
 	}
 
-	void set_object_count(int object_count) {
-		this->object_count = object_count;
+	void set_object_count(int count) {
+		object_count = count;
 	}
 
 };

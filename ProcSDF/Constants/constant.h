@@ -13,6 +13,7 @@ namespace sdf {
 namespace shader_generation {
 	// change the order of files according to the order of insertion in the generated fragment shader file.
 	const std::vector<std::string> shader_files{ "header", "primitive", "footer" };
+	const std::string POSITION = "position";
 }
 
 namespace imgui_colors {

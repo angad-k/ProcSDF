@@ -7,6 +7,7 @@
 
 void NodeGraph::initialize()
 {
+	dfs_timer = 0;
 	error_in_compilation = false;
 	SphereNode* sn = new SphereNode();
 	FinalNode* fn = new FinalNode();
@@ -36,7 +37,6 @@ Node* NodeGraph::get_node(int id)
 
 void NodeGraph::add_link(int src, int dest)
 {
-	std::cout<<"Enter\n";
 	bool possible = true;
 	for (auto link : links)
 	{
@@ -51,7 +51,6 @@ void NodeGraph::add_link(int src, int dest)
 	if (possible)
 	{
 		links.push_back(std::make_pair(src, dest));
-		std::cout << "Added and left\n";
 	}
 	else
 	{
@@ -77,15 +76,19 @@ void NodeGraph::set_adjacency_list() {
 	NodeGraph::adjacency_list = adjacency_list;
 }
 
-void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting) {
+void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting, 
+	std::map<int, int>& timer_in, std::map<int, int>& timer_out) {
 
+	timer_in[src] = NodeGraph::dfs_timer++;
 	visited[src] = true;
+
 	for (int i : NodeGraph::adjacency_list[src]) {
 		if (!visited[i]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting);
+			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting, timer_in, timer_out);
 		}
 	}
 
+	timer_out[src] = NodeGraph::dfs_timer++;
 	topological_sorting.push_back(src);
 }
 
@@ -111,16 +114,20 @@ int NodeGraph::get_source_id(int dest_id)
 	return -1;
 }
 
-std::vector<int> NodeGraph::get_topological_sorting() {
+std::tuple<std::vector<int>, std::map<int, int>, std::map<int, int>> NodeGraph::get_topological_sorting() {
 	std::map<int, bool> visited;
 	std::vector<int> topological_sorting;
+	std::map<int, int> timer_in;
+	std::map<int, int> timer_out;
+	std::tuple<std::vector<int>, std::map<int, int>, std::map<int, int>> graph_info_wrapper;
+
 	for (auto i : NodeGraph::adjacency_list) {
 		visited[i.first] = false;
 	}
 
 	for (auto i : NodeGraph::adjacency_list) {
 		if (!visited[i.first]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting);
+			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting, timer_in, timer_out);
 		}
 	}
 
@@ -149,7 +156,9 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 		ERR(compilation_error);
 	}
 
-	return topological_sorting;
+	graph_info_wrapper = std::make_tuple(topological_sorting, timer_in, timer_out);
+
+	return graph_info_wrapper;
 }
 
 void NodeGraph::print_node_graph()
@@ -187,7 +196,7 @@ void NodeGraph::recompile_node_graph()
 {
 	NodeGraph::clear_compilation_error();
 	print_node_graph();
-	std::vector<int> topologically_sorted_nodes = NodeGraph::get_topological_sorting();
+	std::vector<int> topologically_sorted_nodes = std::get<0>(NodeGraph::get_topological_sorting());
 	if (check_compilation_error())
 	{
 		return;
