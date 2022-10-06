@@ -32,6 +32,10 @@ namespace shader_generation {
 		const int FREQUENCY = 7;
 	}
 	
+	namespace target_ray {
+		const std::string FUNCTION_TEMPLATE = "\nvec3 get_target_ray(vec3 position, int object_index, vec3 normal)\n{\nvec3 target = vec3(0.0, 0.0, 0.0);\n$\nreturn target;\n}\n";
+		const std::string CASE_STATEMENT = "\ncase $:\ntarget = diffuse_scatter(position, normal);\nbreak;\n";
+	}
 }
 
 namespace imgui_colors {

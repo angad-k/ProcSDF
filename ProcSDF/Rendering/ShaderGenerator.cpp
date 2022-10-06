@@ -40,6 +40,9 @@ void ShaderGenerator::generate_and_set_shader() {
 
 	shader_string.append(ShaderGenerator::generate_calculate_normal_function());
 
+	shader_string.append(ShaderGenerator::generate_get_target_ray_function());
+
+	shader_string.append(ShaderGenerator::fetch_file_content(shader_generation::shader_files[index++]));
 
 	//shader_string = ShaderGenerator::fetch_file_content("shader_reference");
 	ShaderGenerator::set_shader(shader_string);
@@ -54,7 +57,29 @@ std::string ShaderGenerator::fetch_file_content(std::string file_name) {
 	return file_content;
 }
 
+std::string ShaderGenerator::generate_get_target_ray_function() {
+	
+	std::string target_ray_function = "\n";
+	target_ray_function.append(shader_generation::target_ray::FUNCTION_TEMPLATE);
+	target_ray_function.append("\n");
+
+	std::string switch_statement = shader_generation::SWITCH_STATEMENT, switch_content, case_statement;
+
+	for (int i = 1; i <= ShaderGenerator::object_count; i++) {
+		case_statement = shader_generation::target_ray::CASE_STATEMENT;
+		case_statement.replace(case_statement.find('$'), 1, std::to_string(i));
+		switch_content.append(case_statement);
+	}
+
+	switch_statement.replace(switch_statement.find('$'), 1, switch_content);
+	target_ray_function.replace(target_ray_function.find('$'), 1, switch_statement);
+
+	return target_ray_function;
+
+}
+
 std::string ShaderGenerator::generate_calculate_normal_function() {
+	
 	std::string calculate_normal_function = "\n";
 	calculate_normal_function.append(shader_generation::calculate_normal::FUNCTION_TEMPLATE);
 	calculate_normal_function.append("\n");
