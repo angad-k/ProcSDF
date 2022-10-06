@@ -13,16 +13,14 @@ class NodeGraph
 {
 private:
 	static NodeGraph* nodeGraph;
-	int dfs_timer;
-	void depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited, std::vector<int>& topological_sorting,
-		std::map<int, int>& timer_in, std::map<int, int>& timer_out);
+	void depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited, std::vector<int>& topological_sorting);
 public:
 	void initialize();
 	int allocate_id(Node* p_node);
 	Node* get_node(int id);
 	void add_node(Node* p_new_node);
 	void set_adjacency_list();
-	std::tuple<std::vector<int>, std::map<int, int>, std::map<int, int>> get_topological_sorting();
+	std::vector<int> get_topological_sorting();
 	Node* get_source_node(int dest_id);
 	int get_source_id(int dest_id);
 	
@@ -37,6 +35,7 @@ public:
 	std::vector <Node*> nodes;
 	std::vector<std::pair<int, int>> links;
 	std::map <int, Node*> allocated_ids;
+	std::map <int, std::set<int>> reachable_objects;
 	
 	std::string get_compilation_error()
 	{

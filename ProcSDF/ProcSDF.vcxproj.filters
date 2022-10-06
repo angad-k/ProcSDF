@@ -131,6 +131,9 @@
     <ClInclude Include="GUI\Nodes\ObjectNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Constants\constant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\boilerplate.glsl" />

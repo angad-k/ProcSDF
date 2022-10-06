@@ -109,7 +109,8 @@ void Node::draw()
 
 std::string Node::get_string()
 {
-	std::string nodestr = variable_name;
+	std::string nodestr = shader_generation::FLOAT;
+	nodestr += variable_name;
 	nodestr += " = ";
 	nodestr += node_name;
 	nodestr += "(";

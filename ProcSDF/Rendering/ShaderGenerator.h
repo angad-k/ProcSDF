@@ -9,7 +9,7 @@ private:
 	int object_count;
 	static ShaderGenerator* shader_generator;
 	NodeGraph* node_graph;
-	std::vector<std::pair<int, Node*>> object_id_to_node_pair;
+	std::map<int, int> node_id_to_object_id_map;
 
 	void generate_and_set_shader();
 	static std::string fetch_file_content(std::string file_name);

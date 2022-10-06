@@ -16,6 +16,7 @@ namespace shader_generation {
 	const std::string POSITION = "position";
 	const std::string OBJECT_FUNCTION_TEMPLATE = "\nfloat object_$(vec3 position)\n{\n#\n}\n";
 	const std::string RETURN = "return $;\n";
+	const std::string FLOAT = "float ";
 }
 
 namespace imgui_colors {
