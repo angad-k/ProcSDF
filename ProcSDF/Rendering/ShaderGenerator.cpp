@@ -38,6 +38,8 @@ void ShaderGenerator::generate_and_set_shader() {
 
 	shader_string.append(ShaderGenerator::generate_closest_object_info_function());
 
+	shader_string.append(ShaderGenerator::generate_calculate_normal_function());
+
 
 	//shader_string = ShaderGenerator::fetch_file_content("shader_reference");
 	ShaderGenerator::set_shader(shader_string);
@@ -50,6 +52,28 @@ std::string ShaderGenerator::fetch_file_content(std::string file_name) {
 	file_content.append((std::istreambuf_iterator< char >(sourceFile)), std::istreambuf_iterator< char >());
 	file_content.append("\n");
 	return file_content;
+}
+
+std::string ShaderGenerator::generate_calculate_normal_function() {
+	std::string calculate_normal_function = "\n";
+	calculate_normal_function.append(shader_generation::calculate_normal::FUNCTION_TEMPLATE);
+	calculate_normal_function.append("\n");
+
+	std::string switch_statement = shader_generation::SWITCH_STATEMENT, switch_content, case_statement;
+
+	for (int i = 1; i <= ShaderGenerator::object_count; i++) {
+		case_statement = shader_generation::calculate_normal::CASE_STATEMENT;
+		for (int j = 0; j < shader_generation::calculate_normal::FREQUENCY; j++) {
+			case_statement.replace(case_statement.find('$'), 1, std::to_string(i));
+		}
+
+		switch_content.append(case_statement);
+	}
+
+	switch_statement.replace(switch_statement.find('$'), 1, switch_content);
+	calculate_normal_function.replace(calculate_normal_function.find('$'), 1, switch_statement);
+
+	return calculate_normal_function;
 }
 
 std::string ShaderGenerator::generate_closest_object_info_function() {

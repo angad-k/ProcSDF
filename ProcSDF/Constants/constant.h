@@ -16,6 +16,7 @@ namespace shader_generation {
 	const std::string POSITION = "position";
 	const std::string OBJECT_FUNCTION_TEMPLATE = "\nfloat object_$(vec3 position)\n{\n#\n}\n";
 	const std::string RETURN = "return $;\n";
+	const std::string SWITCH_STATEMENT = "\nswitch(object_index)\n{\n$\n}\n";
 	const std::string FLOAT = "float ";
 	namespace closest_object_info {
 		const std::string FUNCTION_TEMPLATE = "\nclosest_object_info get_closest_object_info(vec3 position)\n{\n$\nreturn closest_object_info(min_dist, object_index);\n}\n";
@@ -23,6 +24,12 @@ namespace shader_generation {
 		const std::string VARIABLE_INITIALIZATION = "\nfloat min_dist = 3e+38;\nint object_index = 1;\n";
 		const std::string MIN_DIST_COMPUTATION = "\nmin_dist = min(min_dist, dist_$);\n";
 		const std::string CONDITIONAL_OBJECT_INDEX_COMPUTATION = "\nif(dist_$ == min_dist)\n{\nobject_index = $;\n}\n";
+	}
+
+	namespace calculate_normal {
+		const std::string FUNCTION_TEMPLATE = "\nvec3 calculate_normal(vec3 position, int object_index)\n{\nconst vec3 small_step = vec3(0.001, 0.0, 0.0);\nvec3 normal = vec3(1.0, 1.0, 1.0);\nfloat g_x, g_y, g_z;\n$\nreturn normal;\n}\n";
+		const std::string CASE_STATEMENT = "case $:\ng_x = object_$(position + small_step.xyy) - object_$(position - small_step.xyy);\ng_y = object_$(position + small_step.yxy) - object_$(position - small_step.yxy);\ng_z = object_$(position + small_step.yyx) - object_$(position - small_step.yyx);\nnormal = normalize(vec3(g_x, g_y, g_z));\nbreak;\n";
+		const int FREQUENCY = 7;
 	}
 	
 }
