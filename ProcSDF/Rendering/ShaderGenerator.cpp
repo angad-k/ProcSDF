@@ -36,9 +36,10 @@ void ShaderGenerator::generate_and_set_shader() {
 
 	shader_string.append(ShaderGenerator::generate_object_functions());
 
+	shader_string.append(ShaderGenerator::generate_closest_object_info_function());
+
 
 	//shader_string = ShaderGenerator::fetch_file_content("shader_reference");
-	std::cout << shader_string;
 	ShaderGenerator::set_shader(shader_string);
 }
 
@@ -49,6 +50,41 @@ std::string ShaderGenerator::fetch_file_content(std::string file_name) {
 	file_content.append((std::istreambuf_iterator< char >(sourceFile)), std::istreambuf_iterator< char >());
 	file_content.append("\n");
 	return file_content;
+}
+
+std::string ShaderGenerator::generate_closest_object_info_function() {
+	
+	std::string closest_object_function = "\n";
+	closest_object_function.append(shader_generation::closest_object_info::FUNCTION_TEMPLATE);
+	closest_object_function.append("\n");
+
+	std::string function_content,helper_string;
+
+	for (int i = 1; i <= ShaderGenerator::object_count; i++) {
+		helper_string = shader_generation::closest_object_info::DISTANCE_COMPUTATION;
+		helper_string.replace(helper_string.find('$'), 1, std::to_string(i));
+		helper_string.replace(helper_string.find('$'), 1, std::to_string(i));
+		function_content.append(helper_string);
+	}
+
+	function_content.append(shader_generation::closest_object_info::VARIABLE_INITIALIZATION);
+
+	for (int i = 1; i <= ShaderGenerator::object_count; i++) {
+		helper_string = shader_generation::closest_object_info::MIN_DIST_COMPUTATION;
+		helper_string.replace(helper_string.find('$'), 1, std::to_string(i));
+		function_content.append(helper_string);
+	}
+
+	for (int i = 1; i <= ShaderGenerator::object_count; i++) {
+		helper_string = shader_generation::closest_object_info::CONDITIONAL_OBJECT_INDEX_COMPUTATION;
+		helper_string.replace(helper_string.find('$'), 1, std::to_string(i));
+		helper_string.replace(helper_string.find('$'), 1, std::to_string(i));
+		function_content.append(helper_string);
+	}
+
+	closest_object_function.replace(closest_object_function.find('$'), 1, function_content);
+
+	return closest_object_function;
 }
 
 std::string ShaderGenerator::generate_object_functions() {

@@ -132,11 +132,11 @@ closest_object_info get_closest_object_info(vec3 position)
     float dist_1 = object_1(position);
     float dist_2 = object_2(position);
     
-    float min_dist = dist_1;
+    float min_dist = min(dist_1, dist_2);
 
     int object_index = 1;
 
-    /*if(dist_1 == min_dist)
+    if(dist_1 == min_dist)
     {
         object_index = 1;
     }
@@ -144,7 +144,7 @@ closest_object_info get_closest_object_info(vec3 position)
     if(dist_2 == min_dist)
     {
         object_index = 2;
-    }*/
+    }
 
     return closest_object_info(min_dist, object_index);
 }

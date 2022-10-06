@@ -14,6 +14,7 @@ private:
 	void generate_and_set_shader();
 	static std::string fetch_file_content(std::string file_name);
 	std::string generate_object_functions();
+	std::string generate_closest_object_info_function();
 	void compute_and_set_object_count();
 public:
 	static ShaderGenerator* get_singleton() {
