@@ -48,7 +48,7 @@ void NodeEditor::draw()
 		{
 			nodeGraph->links.erase(nodeGraph->links.begin() + i);
 		}
-	};
+	}
 
 	ImGui::End();
 }
