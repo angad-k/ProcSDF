@@ -13,6 +13,7 @@ void NodeGraph::initialize()
 {
 	error_in_compilation = false;
 	SphereNode* sn = new SphereNode();
+	sn->input_floats[0] = 2.0;
 	FinalNode* fn = new FinalNode();
 	ObjectNode* on = new ObjectNode();
 	NodeGraph::add_link(sn->output_ids[0], on->input_ids[0]);
@@ -225,8 +226,8 @@ void NodeGraph::recompile_node_graph()
 	}
 	logger::log("\n");
 
-	logger::log("Shader generated:\n");
+	/*logger::log("Shader generated:\n");
 	ShaderGenerator shader_generator;
 	logger::log(shader_generator.get_shader());
-	logger::log("\n");
+	logger::log("\n");*/
 }
