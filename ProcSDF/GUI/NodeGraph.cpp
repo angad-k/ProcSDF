@@ -4,6 +4,7 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/FinalNode.h"
+#include "GUI/Nodes/ObjectNode.h"
 #include "Utilities/logger.h"
 #include "Rendering/ShaderGenerator.h"
 #pragma once
@@ -13,9 +14,13 @@ void NodeGraph::initialize()
 	error_in_compilation = false;
 	SphereNode* sn = new SphereNode();
 	FinalNode* fn = new FinalNode();
+	ObjectNode* on = new ObjectNode();
+	NodeGraph::add_link(sn->output_ids[0], on->input_ids[0]);
+	NodeGraph::add_link(on->output_ids[0], fn->input_ids[0]);
 	final_node = fn;
 	nodes.push_back(sn);
 	nodes.push_back(fn);
+	nodes.push_back(on);
 }
 
 int NodeGraph::allocate_id(Node* p_node)

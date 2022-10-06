@@ -142,8 +142,8 @@ void Inspector::draw_node_graph_settings()
 			{
 				int node_id = add_node<ObjectNode>();
 				int final_node_id = NodeGraph::get_singleton()->final_node->id;
-				//NodeGraph::get_singleton()->add_link(node_id, final_node_id);
-				// skipping for now because of some error
+				NodeGraph::get_singleton()->add_link(NodeGraph::get_singleton()->allocated_ids[node_id]->output_ids[0], 
+					NodeGraph::get_singleton()->allocated_ids[final_node_id]->input_ids[0]);
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
