@@ -8,10 +8,10 @@ private:
 	std::string shader;
 	int object_count;
 	static ShaderGenerator* shader_generator;
-	NodeGraph* node_graph;
 	std::map<int, int> node_id_to_object_id_map;
 
-	void generate_and_set_shader();
+	
+	bool shader_modified = true;
 	static std::string fetch_file_content(std::string file_name);
 	std::string generate_object_functions();
 	std::string generate_closest_object_info_function();
@@ -26,10 +26,19 @@ public:
 		}
 		return shader_generator;
 	}
-	ShaderGenerator();
 
 	std::string get_shader() {
 		return shader;
+	}
+
+	bool is_shader_modified()
+	{
+		return shader_modified;
+	}
+
+	void set_shader_modification_handled()
+	{
+		shader_modified = false;
 	}
 
 	void set_shader(std::string shader) {
@@ -44,5 +53,6 @@ public:
 		object_count = count;
 	}
 
+	void generate_and_set_shader();
 };
 

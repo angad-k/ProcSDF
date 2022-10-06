@@ -15,7 +15,7 @@ class SphereNode : public PrimitiveNode {
 public:
 	SphereNode()
 	{
-		node_name = "sphere";
+		node_name = "Sphere";
 		input_float3_labels = { "Centre Position" };
 		input_float_labels = { "Radius" };
 		init();

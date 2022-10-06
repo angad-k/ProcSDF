@@ -3,21 +3,14 @@
 #include <string>
 #include <vector>
 
+#include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
 #include "Constants/constant.h"
 #include "GUI/NodeGraph.h"
-
-
-ShaderGenerator::ShaderGenerator() {
-	ShaderGenerator::node_graph = NodeGraph::get_singleton();
-	ShaderGenerator::compute_and_set_object_count();
-	ShaderGenerator::generate_and_set_shader();
-}
-
 void ShaderGenerator::compute_and_set_object_count() {
 	
 	int object_count = 0;
-	for (Node* node : ShaderGenerator::node_graph->nodes) {
+	for (Node* node : NodeGraph::get_singleton()->nodes) {
 		if (node->is_object_node) {
 			object_count++;
 			ShaderGenerator::node_id_to_object_id_map[node->id] = object_count;
@@ -28,6 +21,9 @@ void ShaderGenerator::compute_and_set_object_count() {
 }
 
 void ShaderGenerator::generate_and_set_shader() {
+
+	compute_and_set_object_count();
+
 	std::string shader_string;
 	int index = 0;
 	
@@ -46,6 +42,8 @@ void ShaderGenerator::generate_and_set_shader() {
 
 	//shader_string = ShaderGenerator::fetch_file_content("shader_reference");
 	ShaderGenerator::set_shader(shader_string);
+
+	shader_modified = true;
 }
 
 std::string ShaderGenerator::fetch_file_content(std::string file_name) {
@@ -138,12 +136,12 @@ std::string ShaderGenerator::generate_closest_object_info_function() {
 
 std::string ShaderGenerator::generate_object_functions() {
 
-	std::vector<int> topological_sorting = ShaderGenerator::node_graph->get_topological_sorting();
+	std::vector<int> topological_sorting = NodeGraph::get_singleton()->get_topological_sorting();
 	std::vector<std::vector<int>> object_info = std::vector<std::vector<int>>(ShaderGenerator::object_count, std::vector<int>());
 	std::string object_functions = "\n";
 
 	for (int node : topological_sorting) {
-		for (int object_id : node_graph->reachable_objects[node]) {
+		for (int object_id : NodeGraph::get_singleton()->reachable_objects[node]) {
 			if (node != object_id) {
 				object_info[ShaderGenerator::node_id_to_object_id_map[object_id] - 1].push_back(node);
 			}
@@ -160,7 +158,7 @@ std::string ShaderGenerator::generate_object_functions() {
 
 		for (int j = 0; j < object_info[i].size(); j++) {
 
-			Node* nd = node_graph->allocated_ids[object_info[i][j]];
+			Node* nd = NodeGraph::get_singleton()->allocated_ids[object_info[i][j]];
 			function_content.append(nd->get_string());
 			function_content.append("\n");
 			return_variable_name = nd->variable_name;

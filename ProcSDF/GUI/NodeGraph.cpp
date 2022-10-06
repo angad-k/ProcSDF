@@ -226,6 +226,8 @@ void NodeGraph::recompile_node_graph()
 	}
 	logger::log("\n");
 
+	ShaderGenerator::get_singleton()->generate_and_set_shader();
+
 	/*logger::log("Shader generated:\n");
 	ShaderGenerator shader_generator;
 	logger::log(shader_generator.get_shader());
