@@ -21,7 +21,7 @@ private:
 	int viewportSize;
 	int lightPosition;
 
-	float cameraOriginValue[3] = { 0.0, 0.0, 0.0 };
+	float cameraOriginValue[3] = { 0.0, 0.0, 5.0 };
 	float focalLengthValue = 1.0;
 
 	void assemble_shader();
