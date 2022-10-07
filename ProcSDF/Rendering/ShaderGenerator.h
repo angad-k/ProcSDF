@@ -15,6 +15,7 @@ private:
 	
 	bool shader_modified = true;
 	static std::string fetch_file_content(std::string file_name);
+	std::string generate_uniform_declarations();
 	std::string generate_object_functions();
 	std::string generate_closest_object_info_function();
 	std::string generate_calculate_normal_function();

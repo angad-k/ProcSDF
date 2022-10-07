@@ -61,6 +61,8 @@ void ShaderGenerator::generate_and_set_shader() {
 	
 	// Appends the shader header which includes a number of utility functions.
 	shader_string.append(ShaderGenerator::fetch_file_content(shader_generation::shader_files[index++]));
+	// Appends all the uniform declarations.
+	shader_string.append(ShaderGenerator::generate_uniform_declarations());
 	// Appends all the primitive functions.
 	shader_string.append(ShaderGenerator::fetch_file_content(shader_generation::shader_files[index++]));
 	// Generates and appends the object distance functions.
@@ -86,6 +88,26 @@ std::string ShaderGenerator::fetch_file_content(std::string file_name) {
 	file_content.append((std::istreambuf_iterator< char >(sourceFile)), std::istreambuf_iterator< char >());
 	file_content.append("\n");
 	return file_content;
+}
+
+std::string ShaderGenerator::generate_uniform_declarations()
+{
+	std::string uniform_declarations = "";
+	for (std::string uniform_float : uniform_floats)
+	{
+		std::string float_template = shader_generation::uniform::UNIFORM_FLOAT;
+		float_template.replace(float_template.find('$'), 1, uniform_float);
+		uniform_declarations.append(float_template);
+	}
+
+	for (std::string vec3 : uniform_vec3)
+	{
+		std::string vec3_template = shader_generation::uniform::UNIFORM_VEC3;
+		vec3_template.replace(vec3_template.find('$'), 1, vec3);
+		uniform_declarations.append(vec3_template);
+	}
+	
+	return uniform_declarations;
 }
 
 std::string ShaderGenerator::generate_get_target_ray_function() {
