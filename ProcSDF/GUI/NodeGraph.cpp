@@ -1,17 +1,27 @@
+#include <algorithm>
+
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/FinalNode.h"
+#include "GUI/Nodes/ObjectNode.h"
 #include "Utilities/logger.h"
+#include "Rendering/ShaderGenerator.h"
 #pragma once
 
 void NodeGraph::initialize()
 {
 	error_in_compilation = false;
 	SphereNode* sn = new SphereNode();
+	sn->input_floats[0] = 2.0;
 	FinalNode* fn = new FinalNode();
+	ObjectNode* on = new ObjectNode();
+	NodeGraph::add_link(sn->output_ids[0], on->input_ids[0]);
+	NodeGraph::add_link(on->output_ids[0], fn->input_ids[0]);
+	final_node = fn;
 	nodes.push_back(sn);
 	nodes.push_back(fn);
+	nodes.push_back(on);
 }
 
 int NodeGraph::allocate_id(Node* p_node)
@@ -76,14 +86,26 @@ void NodeGraph::set_adjacency_list() {
 
 void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting) {
 
+	std::set<int> child_object_nodes, object_nodes_subset;
+	std::vector<int> merge_output;
 	visited[src] = true;
+
 	for (int i : NodeGraph::adjacency_list[src]) {
 		if (!visited[i]) {
 			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting);
 		}
+
+		object_nodes_subset = NodeGraph::reachable_objects[i];
+		std::merge(child_object_nodes.begin(), child_object_nodes.end(), object_nodes_subset.begin(), object_nodes_subset.end(), std::back_inserter(merge_output));
+		child_object_nodes = std::set<int>(merge_output.begin(), merge_output.end());
+	}
+
+	if (NodeGraph::allocated_ids[src]->is_object_node) {
+		child_object_nodes.insert(src);
 	}
 
 	topological_sorting.push_back(src);
+	NodeGraph::reachable_objects[src] = child_object_nodes;
 }
 
 Node* NodeGraph::get_source_node(int dest_id)
@@ -111,6 +133,7 @@ int NodeGraph::get_source_id(int dest_id)
 std::vector<int> NodeGraph::get_topological_sorting() {
 	std::map<int, bool> visited;
 	std::vector<int> topological_sorting;
+
 	for (auto i : NodeGraph::adjacency_list) {
 		visited[i.first] = false;
 	}
@@ -202,4 +225,11 @@ void NodeGraph::recompile_node_graph()
 		logger::log("\n");
 	}
 	logger::log("\n");
+
+	ShaderGenerator::get_singleton()->generate_and_set_shader();
+
+	/*logger::log("Shader generated:\n");
+	ShaderGenerator shader_generator;
+	logger::log(shader_generator.get_shader());
+	logger::log("\n");*/
 }

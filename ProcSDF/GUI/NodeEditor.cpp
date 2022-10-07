@@ -26,7 +26,6 @@ void NodeEditor::draw()
 		nodeGraph->nodes[i]->draw();
 	}
 
-
 	for (int i = 0; i < nodeGraph->links.size(); ++i)
 	{
 		const std::pair<int, int> p = nodeGraph->links[i];
@@ -34,7 +33,7 @@ void NodeEditor::draw()
 	}
 
 	ImNodes::EndNodeEditor();
-	
+
 	int start_attr;
 	int end_attr;
 	if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
@@ -50,7 +49,6 @@ void NodeEditor::draw()
 			nodeGraph->links.erase(nodeGraph->links.begin() + i);
 		}
 	}
-
 
 	ImGui::End();
 }

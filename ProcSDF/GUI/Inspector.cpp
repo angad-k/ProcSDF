@@ -3,6 +3,7 @@
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
+#include "GUI/Nodes/ObjectNode.h"
 
 void Inspector::initialize()
 {
@@ -10,10 +11,11 @@ void Inspector::initialize()
 }
 
 template<typename p_nodeType>
-inline void Inspector::add_node()
+inline int Inspector::add_node()
 {
 	Node* new_node = new p_nodeType();
 	NodeGraph::get_singleton()->add_node(new_node);
+	return new_node->id;
 }
 
 void Inspector::draw()
@@ -102,6 +104,18 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<SphereNode>();
 			}
+			else if (ImGui::Button("Box"))
+			{
+				add_node<BoxNode>();
+			}
+			else if (ImGui::Button("Torus"))
+			{
+				add_node<TorusNode>();
+			}
+			else if (ImGui::Button("Box Frame"))
+			{
+				add_node<BoxFrameNode>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
@@ -114,6 +128,22 @@ void Inspector::draw_node_graph_settings()
 			if (ImGui::Button("Intersection"))
 			{
 				add_node<IntersectionNode>();
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Object"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OBJECT);
+			if (ImGui::Button("Object"))
+			{
+				int node_id = add_node<ObjectNode>();
+				int final_node_id = NodeGraph::get_singleton()->final_node->id;
+				NodeGraph::get_singleton()->add_link(NodeGraph::get_singleton()->allocated_ids[node_id]->output_ids[0], 
+					NodeGraph::get_singleton()->allocated_ids[final_node_id]->input_ids[0]);
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

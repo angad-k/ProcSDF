@@ -30,7 +30,7 @@ public:
 		}
 		return inspector;
 	}
-	template <typename p_nodeType> void add_node();
+	template <typename p_nodeType> int add_node();
 	void draw();
 	void draw_camera_settings();
 	void draw_rendering_settings();

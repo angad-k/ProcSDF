@@ -2,12 +2,12 @@
 
 float object_1(vec3 position)
 {
-    return sphere(position, vec3(0.0, 0.0, -1.0), 0.5);
+    return BoxFrame(position, vec3(2.0,2.0,2.0), 0.2);
 }
 
 float object_2(vec3 position)
 {
-    return sphere(position, vec3(0,-100.5, -1.0), 100);
+    return Sphere(position, vec3(0,-100.5, -1.0), 100);
 }
 
 // END OF OBJECT FNS

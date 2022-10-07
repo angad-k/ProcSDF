@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ProcSDF;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ProcSDF;$(SolutionDir)ProcSDF\Vendor\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -174,12 +174,14 @@
     <ClCompile Include="Vendor\Include\ImGUI\imnodes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants\constant.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Inspector.h" />
     <ClInclude Include="GUI\NodeEditor.h" />
     <ClInclude Include="GUI\NodeGraph.h" />
     <ClInclude Include="GUI\Nodes\FinalNode.h" />
     <ClInclude Include="GUI\Nodes\Node.h" />
+    <ClInclude Include="GUI\Nodes\ObjectNode.h" />
     <ClInclude Include="GUI\Nodes\OperationNodes.h" />
     <ClInclude Include="GUI\Nodes\PrimitiveNodes.h" />
     <ClInclude Include="Rendering\ShaderGenerator.h" />
@@ -188,12 +190,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\boilerplate.glsl" />
+    <None Include="Assets\Shaders\footer.glsl" />
+    <None Include="Assets\Shaders\fragment.glsl" />
+    <None Include="Assets\Shaders\header.glsl" />
     <None Include="Assets\Shaders\main.glsl" />
     <None Include="Assets\Shaders\object_color.glsl" />
     <None Include="Assets\Shaders\object_distance_functions.glsl" />
     <None Include="Assets\Shaders\primitive.glsl" />
     <None Include="Assets\Shaders\ray_computation.glsl" />
     <None Include="Assets\Shaders\ray_march.glsl" />
+    <None Include="Assets\Shaders\shader_reference.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

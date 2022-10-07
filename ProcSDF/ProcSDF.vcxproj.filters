@@ -128,6 +128,12 @@
     <ClInclude Include="GUI\Nodes\FinalNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\Nodes\ObjectNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants\constant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\boilerplate.glsl" />
@@ -137,5 +143,9 @@
     <None Include="Assets\Shaders\object_distance_functions.glsl" />
     <None Include="Assets\Shaders\object_color.glsl" />
     <None Include="Assets\Shaders\ray_computation.glsl" />
+    <None Include="Assets\Shaders\header.glsl" />
+    <None Include="Assets\Shaders\footer.glsl" />
+    <None Include="Assets\Shaders\fragment.glsl" />
+    <None Include="Assets\Shaders\shader_reference.glsl" />
   </ItemGroup>
 </Project>

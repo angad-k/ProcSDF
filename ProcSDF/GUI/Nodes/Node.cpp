@@ -1,12 +1,14 @@
 #include <algorithm>
+#include <unordered_map>
+
+#include "Constants/constant.h"
 #include "GUI/GuiUtilities.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
-#include "Utilities/logger.h"
-#include <unordered_map>
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
+#include "Utilities/logger.h"
 
 void Node::init()
 {
@@ -45,6 +47,8 @@ void Node::draw()
 	}
 	ImNodes::EndNodeTitleBar();
 
+	int id_counter = 0;
+
 	assert(input_ids.size() == input_pins.size());
 
 	for (unsigned int i = 0; i < input_pins.size(); i++)
@@ -75,9 +79,11 @@ void Node::draw()
 	for (unsigned int i = 0; i < input_float3_labels.size(); i++)
 	{
 		ImGui::Text(input_float3_labels[i].c_str());
+		ImGui::PushID(id_counter++);
 		ImGui::InputFloat("x", &input_float3[i][0]);
 		ImGui::InputFloat("y", &input_float3[i][1]);
 		ImGui::InputFloat("z", &input_float3[i][2]);
+		ImGui::PopID();
 		if (i != input_float3_labels.size() - 1)
 		{
 			GUI_Utilities::horizontal_seperator(15);
@@ -94,7 +100,9 @@ void Node::draw()
 	for (unsigned int i = 0; i < input_float_labels.size(); i++)
 	{
 		ImGui::Text(input_float_labels[i].c_str());
+		ImGui::PushID(id_counter++);
 		ImGui::InputFloat("", &input_floats[i]);
+		ImGui::PopID();
 	}
 	ImGui::PopItemWidth();
 
@@ -107,7 +115,8 @@ void Node::draw()
 
 std::string Node::get_string()
 {
-	std::string nodestr = variable_name;
+	std::string nodestr = shader_generation::FLOAT;
+	nodestr += variable_name;
 	nodestr += " = ";
 	nodestr += node_name;
 	nodestr += "(";
@@ -131,6 +140,11 @@ std::string Node::get_string()
 		comma_needed = true;
 	}
 
+	if (input_ids.size() == 0) {
+		nodestr += shader_generation::POSITION;
+		comma_needed = true;
+	}
+
 	for (unsigned int i = 0; i < input_float3.size(); i++)
 	{
 		for (unsigned int j = 0; j < input_float3[i].size(); j++)
@@ -140,7 +154,6 @@ std::string Node::get_string()
 				nodestr += ", ";
 			}
 			nodestr += std::to_string(input_float3[i][j]);
-			comma_needed = true;
 		}
 	}
 

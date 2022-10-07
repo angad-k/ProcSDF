@@ -28,7 +28,7 @@ Renderer::Renderer()
 	unsigned int EBO;
 	glGenBuffers(1, &EBO);
 
-	assemble_shader();
+	//assemble_shader();
 
 	setup_frame_buffer();
 
@@ -48,12 +48,12 @@ void Renderer::draw(float width, float height)
 	if (cachedWidth != width || cachedHeight != height)
 	{
 		resize_render_texture(width, height);
-		renderValid = false;
 	}
 
-	if (renderValid)
+	if (ShaderGenerator::get_singleton()->is_shader_modified())
 	{
-		return;
+		assemble_shader();
+		ShaderGenerator::get_singleton()->set_shader_modification_handled();
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -70,8 +70,6 @@ void Renderer::draw(float width, float height)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	renderValid = true;
 }
 
 void Renderer::assemble_shader()
