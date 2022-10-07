@@ -13,6 +13,13 @@ void NodeEditor::draw()
 	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
 	ImGui::Text(NodeGraph::get_singleton()->get_compilation_error().c_str());
 	ImGui::PopStyleColor();
+	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(222, 107, 31, 255));
+	if ((!NodeGraph::get_singleton()->check_compilation_error()) && NodeGraph::get_singleton()->is_dirty())
+	{
+		ImGui::SameLine();
+		ImGui::Text("Node Graph modified, recompile for changes to take effect.");
+	}
+	ImGui::PopStyleColor();
 	// ImNodes workspace starts from here.
 
 	ImNodes::BeginNodeEditor();
@@ -47,6 +54,7 @@ void NodeEditor::draw()
 		if (ImNodes::IsLinkDestroyed(&i))
 		{
 			nodeGraph->links.erase(nodeGraph->links.begin() + i);
+			nodeGraph->inform_modification();
 		}
 	}
 

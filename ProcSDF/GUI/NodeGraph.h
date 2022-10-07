@@ -15,6 +15,7 @@ private:
 	static NodeGraph* nodeGraph;
 	void depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited, std::vector<int>& topological_sorting);
 	std::map <int, Node*> allocated_ids;
+	bool dirty = false;
 public:
 	void initialize();
 	int allocate_id(Node* p_node);
@@ -54,6 +55,14 @@ public:
 	bool check_compilation_error()
 	{
 		return error_in_compilation;
+	}
+	bool is_dirty()
+	{
+		return dirty;
+	}
+	void inform_modification()
+	{
+		dirty = true;
 	}
 
 	static NodeGraph* get_singleton() {

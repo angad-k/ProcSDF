@@ -34,8 +34,8 @@ void Node::draw()
 	ImNodes::PushColorStyle(
 		ImNodesCol_TitleBar, title_color);
 
-	ImNodes::PushColorStyle(
-		ImNodesCol_TitleBarSelected, title_color);
+	//ImNodes::PushColorStyle(
+	//	ImNodesCol_TitleBarSelected, title_color);
 
 	ImNodes::BeginNode(id);
 	ImGui::BeginGroup();
@@ -119,7 +119,7 @@ void Node::draw()
 	ImGui::EndGroup();
 	ImNodes::EndNode();
 
-	ImNodes::PopColorStyle();
+	//ImNodes::PopColorStyle();
 	ImNodes::PopColorStyle();
 }
 

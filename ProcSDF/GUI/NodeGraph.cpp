@@ -59,6 +59,7 @@ void NodeGraph::add_link(int src, int dest)
 	if (possible)
 	{
 		links.push_back(std::make_pair(src, dest));
+		dirty = true;
 	}
 	else
 	{
@@ -71,6 +72,7 @@ void NodeGraph::add_node(Node* p_new_node)
 	if (p_new_node)
 	{
 		nodes.push_back(p_new_node);
+		dirty = true;
 	}
 }
 
@@ -205,6 +207,7 @@ void NodeGraph::print_node_graph()
 
 void NodeGraph::recompile_node_graph()
 {
+	dirty = false;
 	NodeGraph::clear_compilation_error();
 	print_node_graph();
 	std::vector<int> topologically_sorted_nodes = NodeGraph::get_topological_sorting();
