@@ -2,7 +2,7 @@
 #include "ImGui/imgui.h"
 #include <stdio.h>
 #include <iostream>
-
+#include "GUI/Nodes/Node.h"
 #include "Rendering/Renderer.h"
 class Inspector
 {
@@ -30,7 +30,7 @@ public:
 		}
 		return inspector;
 	}
-	template <typename p_nodeType> int add_node();
+	template <typename p_nodeType> Node* add_node();
 	void draw();
 	void draw_camera_settings();
 	void draw_rendering_settings();

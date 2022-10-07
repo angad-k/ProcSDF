@@ -116,10 +116,10 @@ void Node::draw()
 std::string Node::get_string()
 {
 	std::string nodestr = shader_generation::FLOAT;
-	nodestr += variable_name;
-	nodestr += " = ";
-	nodestr += node_name;
-	nodestr += "(";
+	nodestr.append(variable_name);
+	nodestr.append(" = ");
+	nodestr.append(node_name);
+	nodestr.append("(");
 	bool comma_needed = false;
 	for (unsigned int i = 0; i < input_ids.size(); i++)
 	{
@@ -134,14 +134,14 @@ std::string Node::get_string()
 		std::string input_arg_name = source_node->get_variable_name();
 		if (comma_needed)
 		{
-			nodestr += ", ";
+			nodestr.append(", ");
 		}
-		nodestr += input_arg_name;
+		nodestr.append(input_arg_name);
 		comma_needed = true;
 	}
 
 	if (input_ids.size() == 0) {
-		nodestr += shader_generation::POSITION;
+		nodestr.append(shader_generation::POSITION);
 		comma_needed = true;
 	}
 
@@ -151,9 +151,9 @@ std::string Node::get_string()
 		{
 			if (comma_needed)
 			{
-				nodestr += ", ";
+				nodestr.append(", ");
 			}
-			nodestr += std::to_string(input_float3[i][j]);
+			nodestr.append(std::to_string(input_float3[i][j]));
 		}
 	}
 
@@ -161,11 +161,11 @@ std::string Node::get_string()
 	{
 		if (comma_needed)
 		{
-			nodestr += ", ";
+			nodestr.append(", ");
 		}
-		nodestr += std::to_string(input_floats[i]);
+		nodestr.append(std::to_string(input_floats[i]));
 	}
 
-	nodestr += ");";
+	nodestr.append(");");
 	return nodestr;
 }

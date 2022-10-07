@@ -11,11 +11,11 @@ void Inspector::initialize()
 }
 
 template<typename p_nodeType>
-inline int Inspector::add_node()
+inline Node* Inspector::add_node()
 {
 	Node* new_node = new p_nodeType();
 	NodeGraph::get_singleton()->add_node(new_node);
-	return new_node->id;
+	return new_node;
 }
 
 void Inspector::draw()
@@ -140,10 +140,11 @@ void Inspector::draw_node_graph_settings()
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OBJECT);
 			if (ImGui::Button("Object"))
 			{
-				int node_id = add_node<ObjectNode>();
+				//int node_id = add_node<ObjectNode>();
+				Node* object_node = add_node<ObjectNode>();
 				int final_node_id = NodeGraph::get_singleton()->final_node->id;
-				NodeGraph::get_singleton()->add_link(NodeGraph::get_singleton()->allocated_ids[node_id]->output_ids[0], 
-					NodeGraph::get_singleton()->allocated_ids[final_node_id]->input_ids[0]);
+				NodeGraph::get_singleton()->add_link(object_node->output_ids[0], 
+					NodeGraph::get_singleton()->final_node->input_ids[0]);
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
