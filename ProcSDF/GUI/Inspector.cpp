@@ -4,6 +4,7 @@
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/ObjectNode.h"
+#include "GUI/Nodes/TransformNodes.h"
 
 void Inspector::initialize()
 {
@@ -145,6 +146,19 @@ void Inspector::draw_node_graph_settings()
 				int final_node_id = NodeGraph::get_singleton()->final_node->id;
 				NodeGraph::get_singleton()->add_link(object_node->output_ids[0], 
 					NodeGraph::get_singleton()->final_node->input_ids[0]);
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Transform"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::TRANFSFORM);
+			if (ImGui::Button("Translation"))
+			{
+				add_node<TranslationNode>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
