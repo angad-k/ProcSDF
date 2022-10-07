@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <algorithm>
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
 #include "Constants/constant.h"
@@ -20,9 +20,41 @@ void ShaderGenerator::compute_and_set_object_count() {
 	ShaderGenerator::set_object_count(object_count);
 }
 
+void ShaderGenerator::compute_uniforms()
+{
+	uniform_vec3.clear();
+	uniform_floats.clear();
+	for (Node* node : NodeGraph::get_singleton()->nodes) {
+		std::string variable_name = node->get_variable_name();
+		for (std::string vec3_label : node->input_float3_labels)
+		{
+			uniform_vec3.push_back(get_uniform_string_from_label(variable_name, vec3_label));
+		}
+		for (std::string float_label : node->input_float_labels)
+		{
+			uniform_floats.push_back(get_uniform_string_from_label(variable_name, float_label));
+		}
+	}
+	
+	// REMOVE BEFORE MERGING :
+	std::cout << "vec3 : \n";
+	for (auto x : uniform_vec3)
+	{
+		std::cout << x << "\n";
+	}
+
+	std::cout << "floats : \n";
+	for (auto x : uniform_floats)
+	{
+		std::cout << x << "\n";
+	}
+
+}
+
 void ShaderGenerator::generate_and_set_shader() {
 
 	compute_and_set_object_count();
+	compute_uniforms();
 
 	std::string shader_string;
 	int index = 0;
@@ -177,6 +209,19 @@ std::string ShaderGenerator::generate_object_functions() {
 	object_functions.append("\n");
 
 	return object_functions;
+}
+
+std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variable_name, std::string p_label)
+{
+	std::string uniform_string = "u_";
+	uniform_string.append(p_variable_name);
+	uniform_string.append("_");
+	uniform_string.append(p_label);
+	while (uniform_string.find(' ') != std::string::npos)
+	{
+		uniform_string.replace(uniform_string.find(' '), 1, "_");
+	}
+	return uniform_string;
 }
 
 
