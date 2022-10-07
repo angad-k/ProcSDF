@@ -27,20 +27,21 @@ void ShaderGenerator::generate_and_set_shader() {
 	std::string shader_string;
 	int index = 0;
 	
+	// Appends the shader header which includes a number of utility functions.
 	shader_string.append(ShaderGenerator::fetch_file_content(shader_generation::shader_files[index++]));
+	// Appends all the primitive functions.
 	shader_string.append(ShaderGenerator::fetch_file_content(shader_generation::shader_files[index++]));
-
+	// Generates and appends the object distance functions.
 	shader_string.append(ShaderGenerator::generate_object_functions());
-
+	// Generates and appends the closest object info function.
 	shader_string.append(ShaderGenerator::generate_closest_object_info_function());
-
+	// Generates and appends the calculate normal function.
 	shader_string.append(ShaderGenerator::generate_calculate_normal_function());
-
+	// Generates and appends the get target ray function.
 	shader_string.append(ShaderGenerator::generate_get_target_ray_function());
-
+	// Appends the raymarch and main function.
 	shader_string.append(ShaderGenerator::fetch_file_content(shader_generation::shader_files[index++]));
 
-	//shader_string = ShaderGenerator::fetch_file_content("shader_reference");
 	ShaderGenerator::set_shader(shader_string);
 
 	shader_modified = true;
@@ -158,7 +159,7 @@ std::string ShaderGenerator::generate_object_functions() {
 
 		for (int j = 0; j < object_info[i].size(); j++) {
 
-			Node* nd = NodeGraph::get_singleton()->allocated_ids[object_info[i][j]];
+			Node* nd = NodeGraph::get_singleton()->get_node(object_info[i][j]);
 			function_content.append(nd->get_string());
 			function_content.append("\n");
 			return_variable_name = nd->variable_name;

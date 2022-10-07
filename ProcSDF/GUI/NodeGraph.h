@@ -14,6 +14,7 @@ class NodeGraph
 private:
 	static NodeGraph* nodeGraph;
 	void depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited, std::vector<int>& topological_sorting);
+	std::map <int, Node*> allocated_ids;
 public:
 	void initialize();
 	int allocate_id(Node* p_node);
@@ -34,7 +35,6 @@ public:
 	std::map<int, std::set<int>> adjacency_list;
 	std::vector <Node*> nodes;
 	std::vector<std::pair<int, int>> links;
-	std::map <int, Node*> allocated_ids;
 	std::map <int, std::set<int>> reachable_objects;
 	
 	std::string get_compilation_error()
