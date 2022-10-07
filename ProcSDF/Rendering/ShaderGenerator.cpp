@@ -143,7 +143,7 @@ std::string ShaderGenerator::generate_object_functions() {
 	for (int node : topological_sorting) {
 		for (int object_id : NodeGraph::get_singleton()->reachable_objects[node]) {
 			if (node != object_id) {
-				object_info[ShaderGenerator::node_id_to_object_id_map[object_id] - 1].push_back(node);
+				object_info[static_cast<int64_t>(ShaderGenerator::node_id_to_object_id_map[object_id]) - 1].push_back(node);
 			}
 		}
 	}
