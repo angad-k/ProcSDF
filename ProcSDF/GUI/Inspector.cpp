@@ -96,6 +96,8 @@ void Inspector::draw_node_graph_settings()
 	{
 		ImGui::Indent();
 		
+		const int approximate_button_size = 85;
+
 		if (ImGui::TreeNode("Primitives"))
 		{
 			ImGui::Indent();
@@ -104,18 +106,22 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<SphereNode>();
 			}
-			else if (ImGui::Button("Box"))
+			append_to_same_line_if_applicable(approximate_button_size);
+			if (ImGui::Button("Box"))
 			{
 				add_node<BoxNode>();
 			}
-			else if (ImGui::Button("Torus"))
+			append_to_same_line_if_applicable(approximate_button_size);
+			if (ImGui::Button("Torus"))
 			{
 				add_node<TorusNode>();
 			}
-			else if (ImGui::Button("Box Frame"))
+			append_to_same_line_if_applicable(approximate_button_size);
+			if (ImGui::Button("Box Frame"))
 			{
 				add_node<BoxFrameNode>();
 			}
+
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
