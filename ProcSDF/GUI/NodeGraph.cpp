@@ -60,18 +60,20 @@ void NodeGraph::add_link(int src, int dest)
 		{
 			if (!allocated_ids[link.second]->is_final_node)
 			{
+				ERR("All input pins(except for final) can have only one input.")
 				possible = false;
 			}
+		}
+		if (allocated_ids[link.first]->is_object_node)
+		{
+			ERR("Object Node can only be connected to Final Node.");
+			possible = false;
 		}
 	}
 	if (possible)
 	{
 		links.push_back(std::make_pair(src, dest));
 		dirty = true;
-	}
-	else
-	{
-		// TO DO : Toasting mechanism needed here.
 	}
 }
 
