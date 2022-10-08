@@ -1,6 +1,7 @@
 #include "GUI/NodeEditor.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeGraph.h"
+#include "Constants/constant.h"
 
 void NodeEditor::draw()
 {
@@ -10,10 +11,31 @@ void NodeEditor::draw()
 		NodeGraph::get_singleton()->recompile_node_graph();
 	}
 	ImGui::SameLine();
-	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
+
+	if (selected_nodes.size() == 0)
+	{
+		ImGui::BeginDisabled();
+	}
+	ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::RED);
+	if (ImGui::Button("Delete selected nodes"))
+	{
+		for (int sel_id : selected_nodes)
+		{
+			NodeGraph::get_singleton()->delete_node(sel_id);
+		}
+	}
+	ImGui::PopStyleColor();
+	ImGui::SameLine();
+	if (selected_nodes.size() == 0)
+	{
+		ImGui::EndDisabled();
+	}
+	selected_nodes.clear();
+
+	ImGui::PushStyleColor(ImGuiCol_Text, imgui_colors::RED);
 	ImGui::Text(NodeGraph::get_singleton()->get_compilation_error().c_str());
 	ImGui::PopStyleColor();
-	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(222, 107, 31, 255));
+	ImGui::PushStyleColor(ImGuiCol_Text, imgui_colors::ORANGE);
 	if ((!NodeGraph::get_singleton()->check_compilation_error()) && NodeGraph::get_singleton()->is_dirty())
 	{
 		ImGui::SameLine();
@@ -56,6 +78,13 @@ void NodeEditor::draw()
 			nodeGraph->links.erase(nodeGraph->links.begin() + i);
 			nodeGraph->inform_modification();
 		}
+	}
+	
+	const int num_selected_nodes = ImNodes::NumSelectedNodes();
+	selected_nodes.resize(num_selected_nodes);
+	if (num_selected_nodes > 0)
+	{
+		ImNodes::GetSelectedNodes(selected_nodes.data());
 	}
 
 	ImGui::End();

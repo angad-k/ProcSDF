@@ -1,5 +1,5 @@
 #include <algorithm>
-
+#include <ranges>
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
@@ -38,6 +38,14 @@ int NodeGraph::allocate_id(Node* p_node)
 	// TO DO : handle too many allocations
 }
 
+void NodeGraph::deallocate_id(int id)
+{
+	if (allocated_ids.find(id) == allocated_ids.end())
+	{
+		allocated_ids.erase(id);
+	}
+}
+
 Node* NodeGraph::get_node(int id)
 {
 	return allocated_ids[id];
@@ -67,6 +75,33 @@ void NodeGraph::add_link(int src, int dest)
 	}
 }
 
+void NodeGraph::remove_link_with_endpoint(int p_endpoint)
+{
+	std::vector<std::pair<int, int>>filtered_links;
+	for (std::pair<int, int> link : links)
+	{
+		if (link.first != p_endpoint && link.second != p_endpoint)
+		{
+			filtered_links.push_back(link);
+		}
+	}
+	links = filtered_links;
+}
+
+void NodeGraph::remove_link_with_endpoints(std::vector<int> p_endpoints)
+{
+	std::vector<std::pair<int, int>>filtered_links;
+	for (std::pair<int, int> link : links)
+	{
+		if (std::find(p_endpoints.begin(), p_endpoints.end(), link.first) == p_endpoints.end() &&
+			std::find(p_endpoints.begin(), p_endpoints.end(), link.second) == p_endpoints.end())
+		{
+			filtered_links.push_back(link);
+		}
+	}
+	links = filtered_links;
+}
+
 void NodeGraph::add_node(Node* p_new_node)
 {
 	if (p_new_node)
@@ -74,6 +109,14 @@ void NodeGraph::add_node(Node* p_new_node)
 		nodes.push_back(p_new_node);
 		dirty = true;
 	}
+}
+
+void NodeGraph::delete_node(int p_id)
+{
+	Node* node = allocated_ids[p_id];
+	nodes.erase(std::find(nodes.begin(), nodes.end(), node));
+	delete(node);
+	dirty = true;
 }
 
 void NodeGraph::set_adjacency_list() {

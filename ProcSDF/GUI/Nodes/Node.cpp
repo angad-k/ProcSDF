@@ -29,6 +29,24 @@ void Node::init()
 
 }
 
+Node::~Node()
+{
+	NodeGraph* node_graph = NodeGraph::get_singleton();
+	node_graph->deallocate_id(id);
+
+	for (int input_id : input_ids)
+	{
+		node_graph->deallocate_id(input_id);
+	}
+	node_graph->remove_link_with_endpoints(input_ids);
+
+	for (int output_id : output_ids)
+	{
+		node_graph->deallocate_id(output_id);
+	}
+	node_graph->remove_link_with_endpoints(output_ids);
+}
+
 void Node::draw()
 {
 	ImNodes::PushColorStyle(
