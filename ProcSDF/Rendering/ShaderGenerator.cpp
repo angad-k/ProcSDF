@@ -35,20 +35,6 @@ void ShaderGenerator::compute_uniforms()
 			uniform_floats.push_back(get_uniform_string_from_label(variable_name, float_label));
 		}
 	}
-	
-	// REMOVE BEFORE MERGING :
-	std::cout << "vec3 : \n";
-	for (auto x : uniform_vec3)
-	{
-		std::cout << x << "\n";
-	}
-
-	std::cout << "floats : \n";
-	for (auto x : uniform_floats)
-	{
-		std::cout << x << "\n";
-	}
-
 }
 
 void ShaderGenerator::generate_and_set_shader() {
