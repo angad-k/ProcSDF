@@ -130,6 +130,10 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<IntersectionNode>();
 			}
+			if (ImGui::Button("Union"))
+			{
+				add_node<UnionNode>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();

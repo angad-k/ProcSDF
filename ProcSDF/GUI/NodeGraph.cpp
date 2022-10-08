@@ -86,6 +86,7 @@ void NodeGraph::set_adjacency_list() {
 
 void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting) {
 
+	Node* src_node = NodeGraph::get_node(src);
 	std::set<int> child_object_nodes, object_nodes_subset;
 	std::vector<int> merge_output;
 	visited[src] = true;
@@ -98,6 +99,10 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 		object_nodes_subset = NodeGraph::reachable_objects[i];
 		std::merge(child_object_nodes.begin(), child_object_nodes.end(), object_nodes_subset.begin(), object_nodes_subset.end(), std::back_inserter(merge_output));
 		child_object_nodes = std::set<int>(merge_output.begin(), merge_output.end());
+	}
+
+	if (NodeGraph::get_node(src)->node_name == sdf::TRANSLATION_NODE) {
+
 	}
 
 	if (NodeGraph::allocated_ids[src]->is_object_node) {

@@ -89,6 +89,20 @@ vec3 get_color(vec3 position, int object_index)
 
 // END OF UTILS
 
+// OPERATIONS
+
+float Intersection(float dist1, float dist2) 
+{
+    return max(dist1, dist2);
+}
+
+float Union(float dist1, float dist2)
+{
+    return min(dist1, dist2);
+}
+
+// END OF OPERATIONS
+
 // STRUCTS
 
 struct closest_object_info

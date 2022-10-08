@@ -17,6 +17,7 @@ void Node::init()
 	variable_name = node_name + "_" + std::to_string(id);
 	input_ids = std::vector<int>(input_pins.size());
 	output_ids = std::vector<int>(output_pins.size());
+	coordinate_offset = std::make_tuple(0.0, 0.0, 0.0);
 
 	std::transform(input_ids.begin(), input_ids.end(), input_ids.begin(), [node_graph, this](int i) { return node_graph->allocate_id(this); });
 

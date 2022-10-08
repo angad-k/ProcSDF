@@ -15,7 +15,7 @@ public:
 	std::vector <int> input_ids;
 	std::vector <std::string> output_pins;
 	std::vector <int> output_ids;
-	std::tuple <int, int, int> coordinate_offset;
+	std::tuple <float, float, float> coordinate_offset;
 
 	std::vector <std::string> input_float3_labels;
 	std::vector <std::vector<float>> input_float3;

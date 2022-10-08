@@ -19,3 +19,15 @@ public:
 		init();
 	}
 };
+
+class UnionNode : public OperationNode {
+public:
+	UnionNode()
+	{
+		node_name = "Union";
+		input_pins = { "Input 1", "Input 2" };
+		output_pins = { "Output" };
+		is_final_node = false;
+		init();
+	}
+};
