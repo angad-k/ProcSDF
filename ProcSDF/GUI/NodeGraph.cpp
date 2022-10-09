@@ -160,6 +160,7 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 
 	for (auto i : NodeGraph::adjacency_list) {
 		visited[i.first] = false;
+		NodeGraph::get_node(i.first)->coordinate_offset_for_objects.clear();
 	}
 
 	for (auto i : NodeGraph::adjacency_list) {
