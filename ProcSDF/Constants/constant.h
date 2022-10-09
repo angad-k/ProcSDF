@@ -15,10 +15,18 @@ namespace shader_generation {
 	// change the order of files according to the order of insertion in the generated fragment shader file.
 	const std::vector<std::string> shader_files{ "header", "primitive", "footer" };
 	const std::string POSITION = "position";
-	const std::string OBJECT_FUNCTION_TEMPLATE = "\nfloat object_$(vec3 position)\n{\n#\n}\n";
+	const std::string POSITION_OPERATION = "position_operation";
 	const std::string RETURN = "return $;\n";
 	const std::string SWITCH_STATEMENT = "\nswitch(object_index)\n{\n$\n}\n";
 	const std::string FLOAT = "float ";
+	namespace object_function {
+		const std::string FUNCTION_TEMPLATE = "\nfloat object_$(vec3 position)\n{\n#\n}\n";
+		const std::string INITIALIZATION = "\nmat4 translation_transform = mat4(1.0);\nmat4 rotation_transform;\nvec4 position_operation = vec4(position, 1.0);\n";
+		const std::string TRANSLATION_INIT = "\ntranslation_transform[3][0] = $;\ntranslation_transform[3][1] = $;\ntranslation_transform[3][2] = $;\n";
+		const std::string TRANSFORM_APPLICATION = "\nvec4 position_$ = translation_transform * position_operation;\n";
+		const std::string TRANSLATION = "translation_transform";
+		const std::string ROTATION = "rotation_transform";
+	}
 	namespace closest_object_info {
 		const std::string FUNCTION_TEMPLATE = "\nclosest_object_info get_closest_object_info(vec3 position)\n{\n$\nreturn closest_object_info(min_dist, object_index);\n}\n";
 		const std::string DISTANCE_COMPUTATION = "\nfloat dist_$ = object_$(position);\n";

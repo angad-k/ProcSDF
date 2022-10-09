@@ -96,16 +96,35 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting);
 		}
 
+		Node* child_node = NodeGraph::get_node(i);
+		for (auto it : child_node->coordinate_offset_for_objects) {
+			
+			if (src_node->coordinate_offset_for_objects.find(it.first) == src_node->coordinate_offset_for_objects.end()) {
+				src_node->coordinate_offset_for_objects[it.first] = std::make_tuple(0.0, 0.0, 0.0);
+			}
+
+			std::get<0>(src_node->coordinate_offset_for_objects[it.first]) += std::get<0>(it.second);
+			std::get<1>(src_node->coordinate_offset_for_objects[it.first]) += std::get<1>(it.second);
+			std::get<2>(src_node->coordinate_offset_for_objects[it.first]) += std::get<2>(it.second);
+		}
+
 		object_nodes_subset = NodeGraph::reachable_objects[i];
 		std::merge(child_object_nodes.begin(), child_object_nodes.end(), object_nodes_subset.begin(), object_nodes_subset.end(), std::back_inserter(merge_output));
 		child_object_nodes = std::set<int>(merge_output.begin(), merge_output.end());
 	}
 
-	if (NodeGraph::get_node(src)->node_name == sdf::TRANSLATION_NODE) {
-
+	if (src_node->node_name == sdf::TRANSLATION_NODE) {
+		for (auto it : child_object_nodes) {
+			if (src_node->coordinate_offset_for_objects.find(it) == src_node->coordinate_offset_for_objects.end()) {
+				src_node->coordinate_offset_for_objects[it] = std::make_tuple(0.0, 0.0, 0.0);
+			}
+			std::get<0>(src_node->coordinate_offset_for_objects[it]) += src_node->input_float3[0][0];
+			std::get<1>(src_node->coordinate_offset_for_objects[it]) += src_node->input_float3[0][1];
+			std::get<2>(src_node->coordinate_offset_for_objects[it]) += src_node->input_float3[0][2];
+		}
 	}
 
-	if (NodeGraph::allocated_ids[src]->is_object_node) {
+	if (src_node->is_object_node) {
 		child_object_nodes.insert(src);
 	}
 

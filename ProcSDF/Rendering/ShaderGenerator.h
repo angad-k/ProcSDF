@@ -9,6 +9,7 @@ private:
 	int object_count;
 	static ShaderGenerator* shader_generator;
 	std::map<int, int> node_id_to_object_id_map;
+	std::map<int, int> object_id_to_node_id_map;
 
 	
 	bool shader_modified = true;

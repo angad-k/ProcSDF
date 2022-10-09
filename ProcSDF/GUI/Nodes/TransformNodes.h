@@ -6,6 +6,7 @@ class TransformNode : public Node {
 public:
 	TransformNode()
 	{
+		is_tranform_node = true;
 		input_pins = { "Input" };
 		output_pins = { "Output" };
 		title_color = imgui_colors::ORANGE;

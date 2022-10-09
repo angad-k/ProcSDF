@@ -14,6 +14,7 @@ void ShaderGenerator::compute_and_set_object_count() {
 		if (node->is_object_node) {
 			object_count++;
 			ShaderGenerator::node_id_to_object_id_map[node->id] = object_count;
+			ShaderGenerator::object_id_to_node_id_map[object_count] = node->id;
 		}
 	}
 
@@ -151,8 +152,9 @@ std::string ShaderGenerator::generate_object_functions() {
 
 	for (int i = 0; i < object_info.size(); i++) {
 		int object_id = i+1;
-		std::string object = shader_generation::OBJECT_FUNCTION_TEMPLATE;
-		std::string function_content;
+		int node_id = ShaderGenerator::object_id_to_node_id_map[object_id];
+		std::string object = shader_generation::object_function::FUNCTION_TEMPLATE;
+		std::string function_content = shader_generation::object_function::INITIALIZATION;
 		std::string return_variable_name;
 		std::string return_statement;
 		object.replace(object.find('$'), 1, std::to_string(object_id));
@@ -160,6 +162,25 @@ std::string ShaderGenerator::generate_object_functions() {
 		for (int j = 0; j < object_info[i].size(); j++) {
 
 			Node* nd = NodeGraph::get_singleton()->get_node(object_info[i][j]);
+			if (nd->is_tranform_node) {
+				continue;
+			}
+			
+			std::tuple<float, float, float> translation_offset = std::make_tuple(0.0, 0.0, 0.0);
+			if (nd->coordinate_offset_for_objects.find(node_id) != nd->coordinate_offset_for_objects.end()) {
+				translation_offset = nd->coordinate_offset_for_objects[node_id];
+			}
+			
+			std::string translation_tranform = shader_generation::object_function::TRANSLATION_INIT;
+			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<0>(translation_offset)));
+			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<1>(translation_offset)));
+			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<2>(translation_offset)));
+
+			std::string translation_application = shader_generation::object_function::TRANSFORM_APPLICATION;
+			translation_application.replace(translation_application.find('$'), 1, std::to_string(nd->id));
+			translation_tranform.append(translation_application);
+
+			function_content.append(translation_tranform);
 			function_content.append(nd->get_string());
 			function_content.append("\n");
 			return_variable_name = nd->variable_name;
