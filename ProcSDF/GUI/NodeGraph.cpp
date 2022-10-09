@@ -116,6 +116,11 @@ void NodeGraph::add_node(Node* p_new_node)
 void NodeGraph::delete_node(int p_id)
 {
 	Node* node = allocated_ids[p_id];
+	if (node->is_final_node)
+	{
+		ERR("Cannot delete final node.")
+		return;
+	}
 	nodes.erase(std::find(nodes.begin(), nodes.end(), node));
 	delete(node);
 	dirty = true;
