@@ -11,6 +11,7 @@ class NodeEditor
 {
 private:
 	static NodeEditor* nodeEditor;
+	std::vector<int> selected_nodes;
 public:
 	//void initialize();
 	static NodeEditor* get_singleton() {
@@ -19,6 +20,11 @@ public:
 			nodeEditor = new NodeEditor();
 		}
 		return nodeEditor;
+	}
+
+	std::vector<int> get_selected_nodes()
+	{
+		return selected_nodes;
 	}
 
 	void draw();

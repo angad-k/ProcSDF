@@ -15,17 +15,21 @@ private:
 	static NodeGraph* nodeGraph;
 	void depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited, std::vector<int>& topological_sorting);
 	std::map <int, Node*> allocated_ids;
+	bool dirty = false;
 public:
 	void initialize();
 	int allocate_id(Node* p_node);
+	void deallocate_id(int id);
 	Node* get_node(int id);
+	void delete_node(int p_id);
 	void add_node(Node* p_new_node);
 	void set_adjacency_list();
 	std::vector<int> get_topological_sorting();
 	Node* get_source_node(int dest_id);
 	int get_source_id(int dest_id);
-	
 	void add_link(int src, int dest);
+	void remove_link_with_endpoint(int p_endpoint);
+	void remove_link_with_endpoints(std::vector<int> p_endpoints);
 	void print_node_graph();
 	void recompile_node_graph();
 
@@ -54,6 +58,14 @@ public:
 	bool check_compilation_error()
 	{
 		return error_in_compilation;
+	}
+	bool is_dirty()
+	{
+		return dirty;
+	}
+	void inform_modification()
+	{
+		dirty = true;
 	}
 
 	static NodeGraph* get_singleton() {

@@ -189,3 +189,21 @@ void Renderer::resize_render_texture(float width, float height)
 	cachedWidth = width;
 	cachedHeight = height;
 }
+
+void Renderer::set_uniform_float(std::string p_uniform_name, float p_val)
+{
+	unsigned int uniform_location = glGetUniformLocation(shaderProgram, p_uniform_name.c_str());
+	glUniform1f(uniform_location, p_val);
+}
+
+void Renderer::set_uniform_float2(std::string p_uniform_name, float p_x, float p_y)
+{
+	unsigned int uniform_location = glGetUniformLocation(shaderProgram, p_uniform_name.c_str());
+	glUniform2f(uniform_location, p_x, p_y);
+}
+
+void Renderer::set_uniform_float3(std::string p_uniform_name, float p_x, float p_y, float p_z)
+{
+	unsigned int uniform_location = glGetUniformLocation(shaderProgram, p_uniform_name.c_str());
+	glUniform3f(uniform_location, p_x, p_y, p_z);
+}

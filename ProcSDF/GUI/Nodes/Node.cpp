@@ -9,6 +9,7 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
 #include "Utilities/logger.h"
+#include "Rendering/ShaderGenerator.h"
 
 void Node::init()
 {
@@ -28,13 +29,31 @@ void Node::init()
 
 }
 
+Node::~Node()
+{
+	NodeGraph* node_graph = NodeGraph::get_singleton();
+	node_graph->deallocate_id(id);
+
+	for (int input_id : input_ids)
+	{
+		node_graph->deallocate_id(input_id);
+	}
+	node_graph->remove_link_with_endpoints(input_ids);
+
+	for (int output_id : output_ids)
+	{
+		node_graph->deallocate_id(output_id);
+	}
+	node_graph->remove_link_with_endpoints(output_ids);
+}
+
 void Node::draw()
 {
 	ImNodes::PushColorStyle(
 		ImNodesCol_TitleBar, title_color);
 
-	ImNodes::PushColorStyle(
-		ImNodesCol_TitleBarSelected, title_color);
+	//ImNodes::PushColorStyle(
+	//	ImNodesCol_TitleBarSelected, title_color);
 
 	ImNodes::BeginNode(id);
 	ImGui::BeginGroup();
@@ -88,6 +107,11 @@ void Node::draw()
 		{
 			GUI_Utilities::horizontal_seperator(15);
 		}
+		Renderer::get_singleton()->set_uniform_float3(
+			ShaderGenerator::get_uniform_string_from_label(variable_name, input_float3_labels[i]),
+			input_float3[i][0],
+			input_float3[i][1],
+			input_float3[i][2]);
 	}
 
 	if (input_float_labels.size() != 0 && input_float3_labels.size() != 0)
@@ -103,13 +127,17 @@ void Node::draw()
 		ImGui::PushID(id_counter++);
 		ImGui::InputFloat("", &input_floats[i]);
 		ImGui::PopID();
+		Renderer::get_singleton()->set_uniform_float(
+			ShaderGenerator::get_uniform_string_from_label(variable_name, input_float_labels[i]),
+			input_floats[i]
+		);
 	}
 	ImGui::PopItemWidth();
 
 	ImGui::EndGroup();
 	ImNodes::EndNode();
 
-	ImNodes::PopColorStyle();
+	//ImNodes::PopColorStyle();
 	ImNodes::PopColorStyle();
 }
 
@@ -145,25 +173,28 @@ std::string Node::get_string()
 		comma_needed = true;
 	}
 
-	for (unsigned int i = 0; i < input_float3.size(); i++)
-	{
-		for (unsigned int j = 0; j < input_float3[i].size(); j++)
-		{
-			if (comma_needed)
-			{
-				nodestr.append(", ");
-			}
-			nodestr.append(std::to_string(input_float3[i][j]));
-		}
-	}
-
-	for (unsigned int i = 0; i < input_floats.size(); i++)
+	for (std::string float3_label : input_float3_labels)
 	{
 		if (comma_needed)
 		{
 			nodestr.append(", ");
 		}
-		nodestr.append(std::to_string(input_floats[i]));
+		std::string uniform_label = ShaderGenerator::get_uniform_string_from_label(variable_name, float3_label);
+		nodestr.append(uniform_label + ".x");
+		nodestr.append(", ");
+		nodestr.append(uniform_label + ".y");
+		nodestr.append(", ");
+		nodestr.append(uniform_label + ".z");
+	}
+
+	for (std::string float_label : input_float_labels)
+	{
+		if (comma_needed)
+		{
+			nodestr.append(", ");
+		}
+		std::string uniform_label = ShaderGenerator::get_uniform_string_from_label(variable_name, float_label);
+		nodestr.append(uniform_label);
 	}
 
 	nodestr.append(");");

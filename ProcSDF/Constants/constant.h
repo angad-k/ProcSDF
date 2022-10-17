@@ -26,6 +26,12 @@ namespace shader_generation {
 		const std::string CONDITIONAL_OBJECT_INDEX_COMPUTATION = "\nif(dist_$ == min_dist)\n{\nobject_index = $;\n}\n";
 	}
 
+	namespace uniform {
+		const std::string UNIFORM_FLOAT = "\nuniform float $;\n";
+		const std::string UNIFORM_VEC3 = "\nuniform vec3 $;\n";
+		const std::string UNIFORM_VEC2 = "\nuniform vec2 $;\n";
+	}
+
 	namespace calculate_normal {
 		const std::string FUNCTION_TEMPLATE = "\nvec3 calculate_normal(vec3 position, int object_index)\n{\nconst vec3 small_step = vec3(0.001, 0.0, 0.0);\nvec3 normal = vec3(1.0, 1.0, 1.0);\nfloat g_x, g_y, g_z;\n$\nreturn normal;\n}\n";
 		const std::string CASE_STATEMENT = "case $:\ng_x = object_$(position + small_step.xyy) - object_$(position - small_step.xyy);\ng_y = object_$(position + small_step.yxy) - object_$(position - small_step.yxy);\ng_z = object_$(position + small_step.yyx) - object_$(position - small_step.yyx);\nnormal = normalize(vec3(g_x, g_y, g_z));\nbreak;\n";
@@ -43,6 +49,7 @@ namespace imgui_colors {
 	const int GREEN = IM_COL32(80, 190, 50, 255);
 	const int BLUE = IM_COL32(50, 50, 255, 255);
 	const int PURPLE = IM_COL32(160, 32, 240, 255);
+	const int ORANGE = IM_COL32(222, 107, 31, 255);
 	const int PRIMITIVE = RED;
 	const int FINAL = GREEN;
 	const int OPERATION = BLUE;
