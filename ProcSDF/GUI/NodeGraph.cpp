@@ -136,16 +136,22 @@ void NodeGraph::set_adjacency_list() {
 	NodeGraph::adjacency_list = adjacency_list;
 }
 
-void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting) {
+void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting, Node* previous_non_tranform_node) {
 
 	Node* src_node = NodeGraph::get_node(src);
 	std::set<int> child_object_nodes, object_nodes_subset;
 	std::vector<int> merge_output;
 	visited[src] = true;
 
+	if (!src_node->is_tranform_node) {
+		previous_non_tranform_node = src_node;
+	}
+
+	src_node->previous_non_transform_node = previous_non_tranform_node;
+
 	for (int i : NodeGraph::adjacency_list[src]) {
 		if (!visited[i]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting);
+			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting, previous_non_tranform_node);
 		}
 
 		Node* child_node = NodeGraph::get_node(i);
@@ -217,7 +223,7 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 
 	for (auto i : NodeGraph::adjacency_list) {
 		if (!visited[i.first]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting);
+			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting, NULL);
 		}
 	}
 

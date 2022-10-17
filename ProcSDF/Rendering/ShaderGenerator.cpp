@@ -216,7 +216,7 @@ std::string ShaderGenerator::generate_object_functions() {
 			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<1>(translation_offset)));
 			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<2>(translation_offset)));
 
-			std::string translation_application = shader_generation::object_function::TRANSFORM_APPLICATION;
+			std::string translation_application = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
 			translation_application.replace(translation_application.find('$'), 1, std::to_string(nd->id));
 			translation_tranform.append(translation_application);
 

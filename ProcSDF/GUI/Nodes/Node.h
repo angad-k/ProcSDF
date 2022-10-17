@@ -26,6 +26,7 @@ public:
 
 	std::string node_name;
 	std::string variable_name;
+	Node* previous_non_transform_node;
 	int title_color = imgui_colors::BLUE;
 
 	std::string get_variable_name()
