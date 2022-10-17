@@ -64,7 +64,7 @@ void NodeGraph::add_link(int src, int dest)
 				possible = false;
 			}
 		}
-		if (allocated_ids[link.first]->is_object_node)
+		if (allocated_ids[link.first]->is_object_node && !allocated_ids[link.second]->is_final_node)
 		{
 			ERR("Object Node can only be connected to Final Node.");
 			possible = false;
