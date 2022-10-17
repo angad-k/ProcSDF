@@ -33,4 +33,6 @@ public:
 		return variable_name;
 	}
 	void init();
+
+	~Node();
 };

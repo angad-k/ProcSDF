@@ -25,6 +25,10 @@ int main(int, char**)
 	//GUI needs to be created before renderer since it also sets up OpenGL
 	GUI* gui = GUI::get_singleton();
 	Renderer* renderer = Renderer::get_singleton();
+	ShaderGenerator::get_singleton();
+	NodeGraph::get_singleton();
+	Inspector::get_singleton();
+	NodeEditor::get_singleton();
 
 	//This lets the GUI query for Renderer's singleton object.
 	gui->initialize();
@@ -32,6 +36,8 @@ int main(int, char**)
 	GLFWwindow* window = gui->get_window();
 	unsigned int render_texture = renderer->get_render_texture();
 	
+	NodeGraph::get_singleton()->recompile_node_graph();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		gui->setup_frame();

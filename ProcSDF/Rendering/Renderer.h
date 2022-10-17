@@ -21,7 +21,7 @@ private:
 	int viewportSize;
 	int lightPosition;
 
-	float cameraOriginValue[3] = { 0.0, 0.0, 0.0 };
+	float cameraOriginValue[3] = { 0.0, 0.0, 5.0 };
 	float focalLengthValue = 1.0;
 
 	void assemble_shader();
@@ -70,4 +70,8 @@ public:
 	{
 		return &focalLengthValue;
 	}
+
+	void set_uniform_float(std::string p_uniform_name, float p_val);
+	void set_uniform_float2(std::string p_uniform_name, float p_x, float p_y);
+	void set_uniform_float3(std::string p_uniform_name, float p_x, float p_y, float p_z);
 };
