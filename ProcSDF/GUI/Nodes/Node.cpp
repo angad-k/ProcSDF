@@ -172,7 +172,6 @@ std::string Node::get_string()
 		nodestr.append(shader_generation::POSITION);
 		nodestr.append("_");
 		nodestr.append(std::to_string(Node::id));
-		nodestr.append(".xyz");
 		comma_needed = true;
 	}
 

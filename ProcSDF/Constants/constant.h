@@ -21,9 +21,8 @@ namespace shader_generation {
 	const std::string FLOAT = "float ";
 	namespace object_function {
 		const std::string FUNCTION_TEMPLATE = "\nfloat object_$(vec3 position)\n{\n#\n}\n";
-		const std::string INITIALIZATION = "\nmat4 translation_transform = mat4(1.0);\nmat4 rotation_transform;\nvec4 position_operation = vec4(position, 1.0);\n";
-		const std::string TRANSLATION_INIT = "\ntranslation_transform[3][0] = $;\ntranslation_transform[3][1] = $;\ntranslation_transform[3][2] = $;\n";
-		const std::string TRANSLATION_TRANSFORM_APPLICATION = "\nvec4 position_$ = translation_transform * position_operation;\n";
+		const std::string INITIALIZATION = "\nmat3 rotation_transform_x;\nmat3 rotation_transform_y;\nmat3 rotation_transform_z;\nvec3 position_operation;\n";
+		const std::string TRANSLATION_TRANSFORM_APPLICATION = "\nvec3 position_$ = position - vec3($, $, $);\n";
 		const std::string TRANSLATION = "translation_transform";
 		const std::string ROTATION = "rotation_transform";
 	}

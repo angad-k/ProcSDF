@@ -211,14 +211,11 @@ std::string ShaderGenerator::generate_object_functions() {
 				translation_offset = nd->coordinate_offset_for_objects[node_id];
 			}
 			
-			std::string translation_tranform = shader_generation::object_function::TRANSLATION_INIT;
-			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<0>(translation_offset)));
-			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<1>(translation_offset)));
-			translation_tranform.replace(translation_tranform.find('$'), 1, "-" + std::to_string(std::get<2>(translation_offset)));
-
-			std::string translation_application = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
-			translation_application.replace(translation_application.find('$'), 1, std::to_string(nd->id));
-			translation_tranform.append(translation_application);
+			std::string translation_tranform = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
+			translation_tranform.replace(translation_tranform.find('$'), 1, std::to_string(nd->id));
+			translation_tranform.replace(translation_tranform.find('$'), 1, std::to_string(std::get<0>(translation_offset)));
+			translation_tranform.replace(translation_tranform.find('$'), 1, std::to_string(std::get<1>(translation_offset)));
+			translation_tranform.replace(translation_tranform.find('$'), 1, std::to_string(std::get<2>(translation_offset)));
 
 			function_content.append(translation_tranform);
 			function_content.append(nd->get_string());
