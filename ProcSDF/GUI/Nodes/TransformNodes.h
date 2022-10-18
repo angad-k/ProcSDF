@@ -22,3 +22,33 @@ public:
 		init();
 	}
 };
+
+class RotationNodeX : public TransformNode {
+public:
+	RotationNodeX()
+	{
+		node_name = "Rotation Around X-Axis";
+		input_float_labels = { "Theta" };
+		init();
+	}
+};
+
+class RotationNodeY : public TransformNode {
+public:
+	RotationNodeY()
+	{
+		node_name = "Rotation Around Y-Axis";
+		input_float_labels = { "Theta" };
+		init();
+	}
+};
+
+class RotationNodeZ : public TransformNode {
+public:
+	RotationNodeZ()
+	{
+		node_name = "Rotation Around Z-Axis";
+		input_float_labels = { "Theta" };
+		init();
+	}
+};

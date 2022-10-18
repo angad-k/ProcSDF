@@ -22,6 +22,7 @@ private:
 	std::string generate_closest_object_info_function();
 	std::string generate_calculate_normal_function();
 	std::string generate_get_target_ray_function();
+	std::string get_rotation_tranform(int p_index, float p_theta);
 	void compute_and_set_object_count();
 	void compute_uniforms();
 public:

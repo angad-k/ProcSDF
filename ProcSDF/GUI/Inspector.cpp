@@ -170,6 +170,18 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<TranslationNode>();
 			}
+			if (ImGui::Button("Rotation Around X-Axis"))
+			{
+				add_node<RotationNodeX>();
+			}
+			if (ImGui::Button("Rotation Around Y-Axis"))
+			{
+				add_node<RotationNodeX>();
+			}
+			if (ImGui::Button("Rotation Around Z-Axis"))
+			{
+				add_node<RotationNodeX>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();

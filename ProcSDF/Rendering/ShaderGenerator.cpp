@@ -176,6 +176,8 @@ std::string ShaderGenerator::generate_closest_object_info_function() {
 	return closest_object_function;
 }
 
+
+// TODO : refactor code to have small functions
 std::string ShaderGenerator::generate_object_functions() {
 
 	std::vector<int> topological_sorting = NodeGraph::get_singleton()->get_topological_sorting();
@@ -217,6 +219,8 @@ std::string ShaderGenerator::generate_object_functions() {
 			translation_tranform.replace(translation_tranform.find('$'), 1, std::to_string(std::get<1>(translation_offset)));
 			translation_tranform.replace(translation_tranform.find('$'), 1, std::to_string(std::get<2>(translation_offset)));
 
+			// TODO : make rotation tranform more efficient by storing the sines and cosines after computing once.
+
 			function_content.append(translation_tranform);
 			function_content.append(nd->get_string());
 			function_content.append("\n");
@@ -237,8 +241,7 @@ std::string ShaderGenerator::generate_object_functions() {
 	return object_functions;
 }
 
-std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variable_name, std::string p_label)
-{
+std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variable_name, std::string p_label){
 	std::string uniform_string = "u_";
 	uniform_string.append(p_variable_name);
 	uniform_string.append("_");
@@ -248,6 +251,24 @@ std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variabl
 		uniform_string.replace(uniform_string.find(' '), 1, "_");
 	}
 	return uniform_string;
+}
+
+std::string ShaderGenerator::get_rotation_tranform(int p_index, float p_theta) {
+	std::string rotation_transform;
+	switch (p_index) {
+	case 0: rotation_transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_X;
+		break;
+	case 1: rotation_transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Y;
+		break;
+	case 2: rotation_transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Z;
+		break;
+	}
+
+	while (rotation_transform.find('$') != std::string::npos) {
+		rotation_transform.replace(rotation_transform.find('$'), 1, std::to_string(p_theta));
+	}
+
+	return rotation_transform;
 }
 
 

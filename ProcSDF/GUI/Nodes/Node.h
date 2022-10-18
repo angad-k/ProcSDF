@@ -18,6 +18,7 @@ public:
 	std::vector <std::string> output_pins;
 	std::vector <int> output_ids;
 	std::map <int, std::tuple <float, float, float>> coordinate_offset_for_objects;
+	std::map <int, std::vector<std::tuple<int, float, float, float>>> rotation_offset_for_objects;
 
 	std::vector <std::string> input_float3_labels;
 	std::vector <std::vector<float>> input_float3;
