@@ -13,7 +13,7 @@ class NodeGraph
 {
 private:
 	static NodeGraph* nodeGraph;
-	void depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited, std::vector<int>& topological_sorting, Node* previous_non_tranform_node);
+	void depth_first_search_for_topological_sorting(int src, int ind, std::map<int, bool>& visited, std::vector<int>& topological_sorting, std::pair<Node*, int> previous_non_tranform_node_info);
 	std::map <int, Node*> allocated_ids;
 	bool dirty = false;
 public:
@@ -36,6 +36,7 @@ public:
 	bool error_in_compilation;
 	std::string compilation_error;
 	FinalNode* final_node;
+	// vector of pairs correspond to the node id and output ids
 	std::map<int, std::vector<int>> adjacency_list;
 	std::vector <Node*> nodes;
 	std::vector<std::pair<int, int>> links;

@@ -130,29 +130,31 @@ void NodeGraph::set_adjacency_list() {
 
 	std::map<int, std::vector<int>> adjacency_list;
 	for (auto link : NodeGraph::links) {
-		adjacency_list[allocated_ids[link.first]->id].push_back(allocated_ids[link.second]->id);
+		adjacency_list[allocated_ids[link.first]->id].push_back(link.second);
 	}
      
 	NodeGraph::adjacency_list = adjacency_list;
 }
 
-void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting, Node* previous_non_tranform_node) {
+void NodeGraph::depth_first_search_for_topological_sorting(int src, int ind, std::map<int,bool> &visited, std::vector<int>& topological_sorting, std::pair<Node*, int> previous_non_tranform_node_info) {
 
 	Node* src_node = NodeGraph::get_node(src);
 	std::set<int> child_object_nodes, object_nodes_subset;
 	std::vector<int> merge_output;
 	visited[src] = true;
+	int index = 0;
 
 	if (!src_node->is_tranform_node) {
-		previous_non_tranform_node = src_node;
+		previous_non_tranform_node_info = std::make_pair(src_node, ind);
 	}
 
-	src_node->previous_non_transform_node = previous_non_tranform_node;
+	src_node->previous_non_transform_node_info.push_back(previous_non_tranform_node_info);
 
 	// TODO : make this efficient by merging all the child object corresponding to each child node and then iterate.
-	for (int i : NodeGraph::adjacency_list[src]) {
+
+	for (auto i : NodeGraph::adjacency_list[src]) {
 		if (!visited[i]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting, previous_non_tranform_node);
+			NodeGraph::depth_first_search_for_topological_sorting(i, index, visited, topological_sorting, previous_non_tranform_node_info);
 		}
 
 		Node* child_node = NodeGraph::get_node(i);
@@ -179,6 +181,7 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 		object_nodes_subset = NodeGraph::reachable_objects[i];
 		std::merge(child_object_nodes.begin(), child_object_nodes.end(), object_nodes_subset.begin(), object_nodes_subset.end(), std::back_inserter(merge_output));
 		child_object_nodes = std::set<int>(merge_output.begin(), merge_output.end());
+		index++;
 	}
 
 	if (src_node->node_name == sdf::TRANSLATION_NODE) {
@@ -217,11 +220,13 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	
 
 	if (src_node->is_object_node) {
-		child_object_nodes.insert(src);
+		child_object_nodes.insert(src_node->id);
 	}
 
-	topological_sorting.push_back(src);
-	NodeGraph::reachable_objects[src] = child_object_nodes;
+	if (std::find(topological_sorting.begin(), topological_sorting.end(), src_node->id) == topological_sorting.end()) {
+		topological_sorting.push_back(src_node->id);
+	}
+	NodeGraph::reachable_objects[src_node->id] = child_object_nodes;
 }
 
 Node* NodeGraph::get_source_node(int dest_id)
@@ -257,11 +262,15 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 
 	for (auto i : NodeGraph::adjacency_list) {
 		if (!visited[i.first]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting, NULL);
+			NodeGraph::depth_first_search_for_topological_sorting(i.first, 0, visited, topological_sorting, std::make_pair((Node*)NULL, 0));
 		}
 	}
 
 	std::reverse(topological_sorting.begin(), topological_sorting.end());
+
+	for (int i : topological_sorting)
+		std::cout << i << " ";
+	std::cout << "\n";
 
 	std::map<int, int> node_index_in_topological_sorting;
 
@@ -271,8 +280,8 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 
 	bool contains_cycle = false;
 	for (auto it : NodeGraph::adjacency_list) {
-		for (int i : it.second) {
-			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[i]) {
+		for (auto i : it.second) {
+			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[allocated_ids[i]->id]) {
 				contains_cycle = true;
 				break;
 			}
@@ -311,7 +320,7 @@ void NodeGraph::print_node_graph()
 	for (auto it : adjacency_list) {
 		//fix with log after adding string formatting utility
 		std::cout << NodeGraph::allocated_ids[it.first]->node_name <<" ( "<<it.first<<" ) "<< " : ";
-		for(int j : it.second) {
+		for(auto j : it.second) {
 			std::cout << NodeGraph::allocated_ids[j]->node_name << " ( " << j << " ) " << " , ";
 		}
 		logger::log("\n");

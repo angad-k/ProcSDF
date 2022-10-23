@@ -159,7 +159,11 @@ std::string Node::get_string()
 			ERR(compilation_error);
 			return "ERR";
 		}
-		std::string input_arg_name = source_node->previous_non_transform_node->get_variable_name();
+
+		std::pair<Node*, int> non_transform_node_info = previous_non_transform_node_info[i];
+		std::string input_arg_name = non_transform_node_info.first->get_variable_name();
+		input_arg_name.append("_");
+		input_arg_name.append(std::to_string(non_transform_node_info.second));
 		if (comma_needed)
 		{
 			nodestr.append(", ");
