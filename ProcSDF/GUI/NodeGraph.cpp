@@ -149,6 +149,7 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 
 	src_node->previous_non_transform_node = previous_non_tranform_node;
 
+	// TODO : make this efficient by merging all the child object corresponding to each child node and then iterate.
 	for (int i : NodeGraph::adjacency_list[src]) {
 		if (!visited[i]) {
 			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting, previous_non_tranform_node);
@@ -166,6 +167,15 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 			std::get<2>(src_node->coordinate_offset_for_objects[it.first]) += std::get<2>(it.second);
 		}
 
+		for (auto it : child_node->rotation_offset_for_objects) {
+
+			if (src_node->rotation_offset_for_objects.find(it.first) == src_node->rotation_offset_for_objects.end()) {
+				src_node->rotation_offset_for_objects[it.first] = std::vector<std::tuple<int, float>>();
+			}
+
+			src_node->rotation_offset_for_objects[it.first].insert(src_node->rotation_offset_for_objects[it.first].begin(), it.second.begin(), it.second.end());
+		}
+
 		object_nodes_subset = NodeGraph::reachable_objects[i];
 		std::merge(child_object_nodes.begin(), child_object_nodes.end(), object_nodes_subset.begin(), object_nodes_subset.end(), std::back_inserter(merge_output));
 		child_object_nodes = std::set<int>(merge_output.begin(), merge_output.end());
@@ -181,6 +191,30 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 			std::get<2>(src_node->coordinate_offset_for_objects[it]) += src_node->input_float3[0][2];
 		}
 	}
+	else if (src_node->is_tranform_node) {
+		for (auto it : child_object_nodes) {
+			if (src_node->rotation_offset_for_objects.find(it) == src_node->rotation_offset_for_objects.end()) {
+				src_node->rotation_offset_for_objects[it] = std::vector<std::tuple<int, float>>();
+			}
+
+			int rotation_index;
+
+			if (src_node->node_name == sdf::ROTATION_X_NODE) {
+				rotation_index = 0;
+			}
+			else if (src_node->node_name == sdf::ROTATION_Y_NODE) {
+				rotation_index = 1;
+			}
+			else if (src_node->node_name == sdf::ROTATION_Z_NODE) {
+				rotation_index = 2;
+			}
+
+			std::tuple<int, float> rotation_info = std::make_tuple(rotation_index, src_node->input_floats[0]);
+			src_node->rotation_offset_for_objects[it].push_back(rotation_info);
+		}
+	}
+
+	
 
 	if (src_node->is_object_node) {
 		child_object_nodes.insert(src);

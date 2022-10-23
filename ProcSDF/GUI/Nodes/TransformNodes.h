@@ -27,7 +27,7 @@ class RotationNodeX : public TransformNode {
 public:
 	RotationNodeX()
 	{
-		node_name = "Rotation Around X-Axis";
+		node_name = "Rotation_X";
 		input_float_labels = { "Theta" };
 		init();
 	}
@@ -37,7 +37,7 @@ class RotationNodeY : public TransformNode {
 public:
 	RotationNodeY()
 	{
-		node_name = "Rotation Around Y-Axis";
+		node_name = "Rotation_Y";
 		input_float_labels = { "Theta" };
 		init();
 	}
@@ -47,7 +47,7 @@ class RotationNodeZ : public TransformNode {
 public:
 	RotationNodeZ()
 	{
-		node_name = "Rotation Around Z-Axis";
+		node_name = "Rotation_Z";
 		input_float_labels = { "Theta" };
 		init();
 	}

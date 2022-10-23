@@ -9,6 +9,9 @@ namespace sdf {
 	const std::string SHADER_FILE_EXTENSION = ".glsl";
 	const std::string VERTEX_SHADER_PATH = "Assets/Shaders/vertex.glsl";
 	const std::string TRANSLATION_NODE = "Translation";
+	const std::string ROTATION_X_NODE = "Rotation_X";
+	const std::string ROTATION_Y_NODE = "Rotation_Y";
+	const std::string ROTATION_Z_NODE = "Rotation_Z";
 }
 
 namespace shader_generation {
@@ -26,7 +29,6 @@ namespace shader_generation {
 		const std::string ROTATION_TRANSFORM_INIT_X = "\nrotation_transform_x[1][1] = rotation_transform_x[2][2] = cos(radians($));\nrotation_transform_x[1][2] = sin(radians($))\nrotation_transform_x[2][1] = -rotation_transform_x[1][2]\n";
 		const std::string ROTATION_TRANSFORM_INIT_Y = "\nrotation_transform_y[0][0] = rotation_transform_y[2][2] = cos(radians($));\nrotation_transform_y[2][0] = sin(radians($))\nrotation_transform_y[0][2] = -rotation_transform_y[1][2]\n";
 		const std::string ROTATION_TRANSFORM_INIT_Z = "\nrotation_transform_z[0][0] = rotation_transform_z[1][1] = cos(radians($));\nrotation_transform_z[0][1] = sin(radians($))\nrotation_transform_z[1][0] = -rotation_transform_z[1][2]\n";
-		const std::string TRANSLATION = "translation_transform";
 		const std::string ROTATION = "rotation_transform";
 	}
 	namespace closest_object_info {

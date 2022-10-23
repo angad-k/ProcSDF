@@ -209,8 +209,13 @@ std::string ShaderGenerator::generate_object_functions() {
 			}
 			
 			std::tuple<float, float, float> translation_offset = std::make_tuple(0.0, 0.0, 0.0);
+			std::vector<std::tuple<int, float>> rotation_offset = std::vector<std::tuple<int, float>>();
 			if (nd->coordinate_offset_for_objects.find(node_id) != nd->coordinate_offset_for_objects.end()) {
 				translation_offset = nd->coordinate_offset_for_objects[node_id];
+			}
+
+			if (nd->rotation_offset_for_objects.find(node_id) != nd->rotation_offset_for_objects.end()) {
+				rotation_offset = nd->rotation_offset_for_objects[node_id];
 			}
 			
 			std::string translation_tranform = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
