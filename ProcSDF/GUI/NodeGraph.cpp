@@ -128,9 +128,9 @@ void NodeGraph::delete_node(int p_id)
 
 void NodeGraph::set_adjacency_list() {
 
-	std::map<int, std::set<int>> adjacency_list;
+	std::map<int, std::vector<int>> adjacency_list;
 	for (auto link : NodeGraph::links) {
-		adjacency_list[allocated_ids[link.first]->id].insert(allocated_ids[link.second]->id);
+		adjacency_list[allocated_ids[link.first]->id].push_back(allocated_ids[link.second]->id);
 	}
      
 	NodeGraph::adjacency_list = adjacency_list;

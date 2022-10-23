@@ -36,7 +36,7 @@ public:
 	bool error_in_compilation;
 	std::string compilation_error;
 	FinalNode* final_node;
-	std::map<int, std::set<int>> adjacency_list;
+	std::map<int, std::vector<int>> adjacency_list;
 	std::vector <Node*> nodes;
 	std::vector<std::pair<int, int>> links;
 	std::map <int, std::set<int>> reachable_objects;
