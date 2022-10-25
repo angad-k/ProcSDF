@@ -160,10 +160,7 @@ std::string Node::get_string()
 			return "ERR";
 		}
 
-		std::pair<Node*, int> non_transform_node_info = previous_non_transform_node_info[i];
-		std::string input_arg_name = non_transform_node_info.first->get_variable_name();
-		input_arg_name.append("_");
-		input_arg_name.append(std::to_string(non_transform_node_info.second));
+		std::string input_arg_name = previous_non_transform_node[i]->get_variable_name();
 		if (comma_needed)
 		{
 			nodestr.append(", ");
@@ -174,8 +171,6 @@ std::string Node::get_string()
 
 	if (input_ids.size() == 0) {
 		nodestr.append(shader_generation::POSITION);
-		nodestr.append("_");
-		nodestr.append(std::to_string(Node::id));
 		comma_needed = true;
 	}
 
