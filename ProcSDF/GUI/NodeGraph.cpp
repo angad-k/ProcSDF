@@ -195,10 +195,10 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	}
 
 	if (src_node->is_object_node) {
-		child_object_nodes.insert(src_node->id);
+		child_object_nodes.insert(src);
 	}
 	
-	topological_sorting.push_back(src_node->id);
+	topological_sorting.push_back(src);
 	NodeGraph::reachable_objects[src_node->id] = child_object_nodes;
 	src_node->visit_count++;
 }
@@ -246,7 +246,10 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 
 	for (auto i : NodeGraph::adjacency_list) {
 		visited[i.first] = false;
-		NodeGraph::get_node(i.first)->visit_count = 0;
+	}
+
+	for (auto i : NodeGraph::nodes) {
+		i->visit_count = 0;
 	}
 
 	for (auto i : NodeGraph::adjacency_list) {
@@ -256,6 +259,10 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 	}
 
 	std::reverse(topological_sorting.begin(), topological_sorting.end());
+
+	for (int i : topological_sorting)
+		std::cout << i << " ";
+	std::cout << "\n";
 
 	std::map<int, int> node_index_in_topological_sorting;
 
