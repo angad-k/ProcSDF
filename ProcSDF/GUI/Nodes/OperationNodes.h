@@ -6,6 +6,7 @@ public:
 	OperationNode()
 	{
 		title_color = imgui_colors::BLUE;
+		is_operation_node = true;
 	}
 };
 class IntersectionNode : public OperationNode {

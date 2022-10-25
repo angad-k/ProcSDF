@@ -10,6 +10,7 @@ public:
 	bool is_final_node = false;
 	bool is_object_node = false;
 	bool is_tranform_node = false;
+	bool is_operation_node = false;
 	void draw();
 	std::string get_string();
 
@@ -17,8 +18,7 @@ public:
 	std::vector <int> input_ids;
 	std::vector <std::string> output_pins;
 	std::vector <int> output_ids;
-	std::map <int, std::tuple <float, float, float>> coordinate_offset_for_objects;
-	std::map <int, std::vector<std::tuple<int, float>>> rotation_offset_for_objects;
+	std::vector<std::tuple<int, std::vector<int>>> operation_ordering;
 
 	std::vector <std::string> input_float3_labels;
 	std::vector <std::vector<float>> input_float3;
@@ -27,8 +27,10 @@ public:
 
 	std::string node_name;
 	std::string variable_name;
-	std::vector<std::pair<Node*, int>> previous_non_transform_node_info;
 	int title_color = imgui_colors::BLUE;
+	int visit_count;
+
+	std::vector<Node*> previous_non_transform_node;
 
 	std::string get_variable_name()
 	{
