@@ -208,12 +208,6 @@ std::string ShaderGenerator::generate_object_functions() {
 
 		for (auto it : nd->operation_ordering) {
 			function_body.append(shader_generation::object_function::POSITION_RESTORATION);
-			if (nd->is_object_node) {
-				std::cout << "sdfsdf\n" << nd->previous_non_transform_node.size() << "\n";
-				for (auto it : nd->previous_non_transform_node)
-					std::cout << it->get_variable_name() << " ";
-				std::cout << "\n";
-			}
 			for (auto itr : it.second) {
 				function_body.append(ShaderGenerator::get_transform(std::get<0>(itr), std::get<1>(itr)));
 			}

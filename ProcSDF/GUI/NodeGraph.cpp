@@ -147,7 +147,6 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	Node* previous_non_transform_node) {
 
 	Node* src_node = NodeGraph::get_node(src);
-	std::cout << src_node->get_variable_name() << " " << ((previous_non_transform_node == 0)? "NULL":previous_non_transform_node->get_variable_name()) << "\n";
 	std::set<int> child_object_nodes, object_nodes_subset;
 	std::vector<int> merge_output;
 	visited[src] = true;
@@ -264,10 +263,6 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 	}
 
 	std::reverse(topological_sorting.begin(), topological_sorting.end());
-
-	for (int i : topological_sorting)
-		std::cout << i << " ";
-	std::cout << "\n";
 
 	std::map<int, int> node_index_in_topological_sorting;
 
