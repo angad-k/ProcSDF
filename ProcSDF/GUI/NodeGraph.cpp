@@ -60,15 +60,17 @@ void NodeGraph::add_link(int src, int dest)
 		{
 			if (!allocated_ids[link.second]->is_final_node)
 			{
-				ERR("All input pins(except for final) can have only one input.")
+				ERR("All input pins(except for final) can have only one input.");
 				possible = false;
+				break;
 			}
 		}
-		if (allocated_ids[link.first]->is_object_node && !allocated_ids[link.second]->is_final_node)
-		{
-			ERR("Object Node can only be connected to Final Node.");
-			possible = false;
-		}
+	}
+	if ((allocated_ids[src]->is_object_node && !allocated_ids[dest]->is_final_node)
+		|| ((!allocated_ids[src]->is_object_node) && allocated_ids[dest]->is_final_node))
+	{
+		ERR("|| Object Node --> Final Node || is the only acceptable link here.");
+		possible = false;
 	}
 	if (possible)
 	{
@@ -119,7 +121,7 @@ void NodeGraph::delete_node(int p_id)
 	if (node->is_final_node)
 	{
 		ERR("Cannot delete final node.")
-		return;
+			return;
 	}
 	nodes.erase(std::find(nodes.begin(), nodes.end(), node));
 	delete(node);
@@ -132,11 +134,11 @@ void NodeGraph::set_adjacency_list() {
 	for (auto link : NodeGraph::links) {
 		adjacency_list[allocated_ids[link.first]->id].insert(allocated_ids[link.second]->id);
 	}
-     
+
 	NodeGraph::adjacency_list = adjacency_list;
 }
 
-void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting) {
+void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited, std::vector<int>& topological_sorting) {
 
 	std::set<int> child_object_nodes, object_nodes_subset;
 	std::vector<int> merge_output;
@@ -236,7 +238,7 @@ void NodeGraph::print_node_graph()
 	for (auto it : links)
 	{
 		//fix with log after adding string formatting utility
-		std::cout << NodeGraph::allocated_ids[it.first]->node_name << " ( "<< NodeGraph::allocated_ids[it.first]->id << " ) -> " << NodeGraph::allocated_ids[it.second]->node_name << " ( " << NodeGraph::allocated_ids[it.second]->id << " ) " << std::endl;
+		std::cout << NodeGraph::allocated_ids[it.first]->node_name << " ( " << NodeGraph::allocated_ids[it.first]->id << " ) -> " << NodeGraph::allocated_ids[it.second]->node_name << " ( " << NodeGraph::allocated_ids[it.second]->id << " ) " << std::endl;
 	}
 
 	NodeGraph::set_adjacency_list();
@@ -245,8 +247,8 @@ void NodeGraph::print_node_graph()
 	logger::log(" Adjacency list :\n");
 	for (auto it : adjacency_list) {
 		//fix with log after adding string formatting utility
-		std::cout << NodeGraph::allocated_ids[it.first]->node_name <<" ( "<<it.first<<" ) "<< " : ";
-		for(int j : it.second) {
+		std::cout << NodeGraph::allocated_ids[it.first]->node_name << " ( " << it.first << " ) " << " : ";
+		for (int j : it.second) {
 			std::cout << NodeGraph::allocated_ids[j]->node_name << " ( " << j << " ) " << " , ";
 		}
 		logger::log("\n");
