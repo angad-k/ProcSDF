@@ -40,7 +40,7 @@ int NodeGraph::allocate_id(Node* p_node)
 
 void NodeGraph::deallocate_id(int id)
 {
-	if (allocated_ids.find(id) == allocated_ids.end())
+	if (allocated_ids.find(id) != allocated_ids.end())
 	{
 		allocated_ids.erase(id);
 	}
