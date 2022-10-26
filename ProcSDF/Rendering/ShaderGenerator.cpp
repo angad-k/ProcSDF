@@ -296,6 +296,7 @@ std::string ShaderGenerator::get_transform(int t_index, std::vector<int> params)
 		while (transform.find('$') != std::string::npos) {
 			transform.replace(transform.find('$'), 1, std::to_string(params[0]));
 		}
+
 		std::string transform_application = shader_generation::object_function::ROTATION_TRANSFORM_APPLICATION;
 		transform_application.replace(transform_application.find('$'), 1, char_rep);
 		transform.append(transform_application);
