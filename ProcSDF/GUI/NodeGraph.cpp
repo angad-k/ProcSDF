@@ -166,13 +166,13 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 			operation_info = std::make_tuple(0, std::vector<int>(src_node->input_float3[0].begin(), src_node->input_float3[0].end()));
 		}
 		else if (src_node->node_name == sdf::ROTATION_X_NODE) {
-			operation_info = std::make_tuple(1, std::vector<int>(src_node->input_floats[0]));
+			operation_info = std::make_tuple(1, std::vector<int>(1, src_node->input_floats[0]));
 		}
 		else if (src_node->node_name == sdf::ROTATION_Y_NODE) {
-			operation_info = std::make_tuple(2, std::vector<int>(src_node->input_floats[0]));
+			operation_info = std::make_tuple(2, std::vector<int>(1, src_node->input_floats[0]));
 		}
 		else if(src_node->node_name == sdf::ROTATION_Z_NODE) {
-			operation_info = std::make_tuple(3, std::vector<int>(src_node->input_floats[0]));
+			operation_info = std::make_tuple(3, std::vector<int>(1, src_node->input_floats[0]));
 		}
 
 		operation_ordering.push_back(operation_info);

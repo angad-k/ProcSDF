@@ -270,23 +270,35 @@ std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variabl
 
 std::string ShaderGenerator::get_transform(int t_index, std::vector<int> params) {
 	
-	std::string transform;
+	std::string transform, char_rep;
 	int index = 0;
 
 	switch (t_index) {
 	case 0: transform = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
 		break;
 	case 1: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_X;
+		char_rep = 'x';
 		break;
 	case 2: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Y;
+		char_rep = 'y';
 		break;
 	case 3: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Z;
+		char_rep = 'z';
 		break;
 	}
-
-	while (transform.find('$') != std::string::npos) {
-		transform.replace(transform.find('$'), 1, std::to_string(params[index]));
-		index++;
+	if (t_index == 0) {
+		while (transform.find('$') != std::string::npos) {
+			transform.replace(transform.find('$'), 1, std::to_string(params[index]));
+			index++;
+		}
+	}
+	else {
+		while (transform.find('$') != std::string::npos) {
+			transform.replace(transform.find('$'), 1, std::to_string(params[0]));
+		}
+		std::string transform_application = shader_generation::object_function::ROTATION_TRANSFORM_APPLICATION;
+		transform_application.replace(transform_application.find('$'), 1, char_rep);
+		transform.append(transform_application);
 	}
 
 	return transform;

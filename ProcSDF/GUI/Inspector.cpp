@@ -176,11 +176,11 @@ void Inspector::draw_node_graph_settings()
 			}
 			if (ImGui::Button("Rotation Around Y-Axis"))
 			{
-				add_node<RotationNodeX>();
+				add_node<RotationNodeY>();
 			}
 			if (ImGui::Button("Rotation Around Z-Axis"))
 			{
-				add_node<RotationNodeX>();
+				add_node<RotationNodeZ>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
