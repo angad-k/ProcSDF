@@ -26,9 +26,9 @@ namespace shader_generation {
 		const std::string FUNCTION_TEMPLATE = "\nfloat $(vec3 position)\n{\n#\n}\n";
 		const std::string INITIALIZATION = "\nmat3 rotation_transform_x = mat3(1.0);\nmat3 rotation_transform_y = mat3(1.0);\nmat3 rotation_transform_z = mat3(1.0);\nvec3 position_dup = position;\n";
 		const std::string TRANSLATION_TRANSFORM_APPLICATION = "\position = position - vec3($, $, $);\n";
-		const std::string ROTATION_TRANSFORM_INIT_X = "\nrotation_transform_x[1][1] = rotation_transform_x[2][2] = cos(radians($));\nrotation_transform_x[1][2] = -sin(radians($))\nrotation_transform_x[2][1] = -rotation_transform_x[1][2]\n";
-		const std::string ROTATION_TRANSFORM_INIT_Y = "\nrotation_transform_y[0][0] = rotation_transform_y[2][2] = cos(radians($));\nrotation_transform_y[2][0] = -sin(radians($))\nrotation_transform_y[0][2] = -rotation_transform_y[1][2]\n";
-		const std::string ROTATION_TRANSFORM_INIT_Z = "\nrotation_transform_z[0][0] = rotation_transform_z[1][1] = cos(radians($));\nrotation_transform_z[0][1] = -sin(radians($))\nrotation_transform_z[1][0] = -rotation_transform_z[1][2]\n";
+		const std::string ROTATION_TRANSFORM_INIT_X = "\nrotation_transform_x[1][1] = rotation_transform_x[2][2] = cos(radians($));\nrotation_transform_x[1][2] = -sin(radians($));\nrotation_transform_x[2][1] = -rotation_transform_x[1][2];\n";
+		const std::string ROTATION_TRANSFORM_INIT_Y = "\nrotation_transform_y[0][0] = rotation_transform_y[2][2] = cos(radians($));\nrotation_transform_y[2][0] = -sin(radians($));\nrotation_transform_y[0][2] = -rotation_transform_y[1][2];\n";
+		const std::string ROTATION_TRANSFORM_INIT_Z = "\nrotation_transform_z[0][0] = rotation_transform_z[1][1] = cos(radians($));\nrotation_transform_z[0][1] = -sin(radians($));\nrotation_transform_z[1][0] = -rotation_transform_z[1][2];\n";
 		const std::string ROTATION_TRANSFORM_APPLICATION = "\nposition = rotation_transform_$ * position;\n";
 		const std::string POSITION_RESTORATION = "\nposition = position_dup;\n";
 		const std::string DISTANCE_STORAGE = "\nfloat $ = $(position);\n";

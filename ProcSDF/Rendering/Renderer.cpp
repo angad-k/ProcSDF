@@ -75,6 +75,7 @@ void Renderer::draw(float width, float height)
 void Renderer::assemble_shader()
 {
 	std::string fragmentSrc = ShaderGenerator::get_singleton()->get_shader();
+	std::cout << fragmentSrc << "\n";
 
 	std::string vertexPath = sdf::VERTEX_SHADER_PATH;
 	unsigned int vertexShader = compile_shader(vertexPath, GL_VERTEX_SHADER);

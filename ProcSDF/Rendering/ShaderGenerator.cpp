@@ -208,6 +208,12 @@ std::string ShaderGenerator::generate_object_functions() {
 
 		for (auto it : nd->operation_ordering) {
 			function_body.append(shader_generation::object_function::POSITION_RESTORATION);
+			if (nd->is_object_node) {
+				std::cout << "sdfsdf\n" << nd->previous_non_transform_node.size() << "\n";
+				for (auto it : nd->previous_non_transform_node)
+					std::cout << it->get_variable_name() << " ";
+				std::cout << "\n";
+			}
 			for (auto itr : it.second) {
 				function_body.append(ShaderGenerator::get_transform(std::get<0>(itr), std::get<1>(itr)));
 			}
@@ -228,6 +234,10 @@ std::string ShaderGenerator::generate_object_functions() {
 
 			function_body.append(value_assignment);
 			index++;
+		}
+
+		if (!nd->is_object_node) {
+			return_variable = nd->get_variable_name();
 		}
 		return_statement.replace(return_statement.find('$'), 1, return_variable);
 
