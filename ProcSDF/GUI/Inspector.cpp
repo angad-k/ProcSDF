@@ -80,9 +80,9 @@ void Inspector::draw()
 void Inspector::draw_camera_settings()
 {
 	float cameraOrigin[3] = { renderer->get_camera_origin()[0], renderer->get_camera_origin()[1], renderer->get_camera_origin()[2] };
-	ImGui::InputFloat3("Camera Origin", cameraOrigin);
+	ImGui::DragFloat3("Camera Origin", cameraOrigin);
 	renderer->set_camera_origin(cameraOrigin);
-	ImGui::InputFloat("Focal Length", renderer->get_focal_length());
+	ImGui::DragFloat("Focal Length", renderer->get_focal_length());
 }
 
 void Inspector::draw_rendering_settings()
