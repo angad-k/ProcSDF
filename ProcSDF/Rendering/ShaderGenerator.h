@@ -12,6 +12,8 @@ private:
 	
 	std::vector<std::string> uniform_vec3;
 	std::vector<std::string> uniform_floats;
+	std::map<int, int> object_id_to_node_id_map;
+
 	
 	bool shader_modified = true;
 	static std::string fetch_file_content(std::string file_name);
@@ -20,6 +22,7 @@ private:
 	std::string generate_closest_object_info_function();
 	std::string generate_calculate_normal_function();
 	std::string generate_get_target_ray_function();
+	std::string get_transform(int t_index, std::vector<int> params);
 	void compute_and_set_object_count();
 	void compute_uniforms();
 public:

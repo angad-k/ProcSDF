@@ -159,7 +159,8 @@ std::string Node::get_string()
 			ERR(compilation_error);
 			return "ERR";
 		}
-		std::string input_arg_name = source_node->get_variable_name();
+
+		std::string input_arg_name = previous_non_transform_node[i]->get_variable_name();
 		if (comma_needed)
 		{
 			nodestr.append(", ");

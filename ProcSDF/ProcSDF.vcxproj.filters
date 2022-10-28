@@ -134,6 +134,9 @@
     <ClInclude Include="Constants\constant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\Nodes\TransformNodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\primitive.glsl" />

@@ -14,6 +14,7 @@ void ShaderGenerator::compute_and_set_object_count() {
 		if (node->is_object_node) {
 			object_count++;
 			ShaderGenerator::node_id_to_object_id_map[node->id] = object_count;
+			ShaderGenerator::object_id_to_node_id_map[object_count] = node->id;
 		}
 	}
 
@@ -175,52 +176,81 @@ std::string ShaderGenerator::generate_closest_object_info_function() {
 	return closest_object_function;
 }
 
+
+// TODO : refactor code to have small functions
 std::string ShaderGenerator::generate_object_functions() {
+	
+	std::string object_functions;
+	NodeGraph* nodeGraph = NodeGraph::get_singleton();
+	std::vector<int> topological_sorting = nodeGraph->get_topological_sorting();
 
-	std::vector<int> topological_sorting = NodeGraph::get_singleton()->get_topological_sorting();
-	std::vector<std::vector<int>> object_info = std::vector<std::vector<int>>(ShaderGenerator::object_count, std::vector<int>());
-	std::string object_functions = "\n";
+	for (int node_id : topological_sorting) {
+		
+		Node* nd = nodeGraph->get_node(node_id);
+		if (nd->is_tranform_node || nd->is_final_node) {
+			continue;
+		}
+		std::string function_name = nd->get_variable_name();
+		std::string function_body = shader_generation::object_function::INITIALIZATION;
+		std::string node_function = shader_generation::object_function::FUNCTION_TEMPLATE;
+		std::string return_variable = nd->get_variable_name();
+		std::string return_statement = shader_generation::RETURN;
+		
+		int index = 0;
 
-	for (int node : topological_sorting) {
-		for (int object_id : NodeGraph::get_singleton()->reachable_objects[node]) {
-			if (node != object_id) {
-				object_info[static_cast<int64_t>(ShaderGenerator::node_id_to_object_id_map[object_id]) - 1].push_back(node);
+		if (nd->is_object_node) {
+			function_name = "object";
+			function_name.append("_");
+			function_name.append(std::to_string(ShaderGenerator::node_id_to_object_id_map[nd->id]));
+		}
+		
+		node_function.replace(node_function.find('$'), 1, function_name);
+
+		for (auto it : nd->operation_ordering) {
+			function_body.append(shader_generation::object_function::POSITION_RESTORATION);
+			for (auto itr : it.second) {
+				function_body.append(ShaderGenerator::get_transform(std::get<0>(itr), std::get<1>(itr)));
 			}
+			std::string value_assignment = shader_generation::object_function::DISTANCE_STORAGE;
+			if (nd->previous_non_transform_node[index] == NULL) {
+				value_assignment = "\n";
+				value_assignment.append(nd->get_string());
+				value_assignment.append("\n");
+				return_variable = nd->get_variable_name();
+			}
+			else {
+				std::string variable_name = nd->previous_non_transform_node[index]->get_variable_name();
+				while (value_assignment.find('$') != std::string::npos) {
+					value_assignment.replace(value_assignment.find('$'), 1, variable_name);
+				}
+				return_variable = variable_name;
+			}
+
+			function_body.append(value_assignment);
+			index++;
 		}
-	}
 
-	for (int i = 0; i < object_info.size(); i++) {
-		int object_id = i+1;
-		std::string object = shader_generation::OBJECT_FUNCTION_TEMPLATE;
-		std::string function_content;
-		std::string return_variable_name;
-		std::string return_statement;
-		object.replace(object.find('$'), 1, std::to_string(object_id));
+		if (!nd->is_object_node) {
+			return_variable = nd->get_variable_name();
+		}
+		return_statement.replace(return_statement.find('$'), 1, return_variable);
 
-		for (int j = 0; j < object_info[i].size(); j++) {
-
-			Node* nd = NodeGraph::get_singleton()->get_node(object_info[i][j]);
-			function_content.append(nd->get_string());
-			function_content.append("\n");
-			return_variable_name = nd->variable_name;
+		if (nd->is_operation_node) {
+			std::string final_statement = "\n";
+			final_statement.append(nd->get_string());
+			final_statement.append("\n");
+			function_body.append(final_statement);
 		}
 
-		return_statement = shader_generation::RETURN;
-		return_statement.replace(return_statement.find('$'), 1, return_variable_name);
-
-		function_content.append(return_statement);
-		object.replace(object.find('#'), 1, function_content);
-
-		object_functions.append(object);
+		function_body.append(return_statement);
+		node_function.replace(node_function.find('#'), 1, function_body);
+		object_functions.append(node_function);
 	}
-
-	object_functions.append("\n");
 
 	return object_functions;
 }
 
-std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variable_name, std::string p_label)
-{
+std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variable_name, std::string p_label){
 	std::string uniform_string = "u_";
 	uniform_string.append(p_variable_name);
 	uniform_string.append("_");
@@ -230,6 +260,43 @@ std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variabl
 		uniform_string.replace(uniform_string.find(' '), 1, "_");
 	}
 	return uniform_string;
+}
+
+std::string ShaderGenerator::get_transform(int t_index, std::vector<int> params) {
+	
+	std::string transform, char_rep;
+	int index = 0;
+
+	switch (t_index) {
+	case 0: transform = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
+		break;
+	case 1: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_X;
+		char_rep = 'x';
+		break;
+	case 2: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Y;
+		char_rep = 'y';
+		break;
+	case 3: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Z;
+		char_rep = 'z';
+		break;
+	}
+	if (t_index == 0) {
+		while (transform.find('$') != std::string::npos) {
+			transform.replace(transform.find('$'), 1, std::to_string(params[index]));
+			index++;
+		}
+	}
+	else {
+		while (transform.find('$') != std::string::npos) {
+			transform.replace(transform.find('$'), 1, std::to_string(params[0]));
+		}
+
+		std::string transform_application = shader_generation::object_function::ROTATION_TRANSFORM_APPLICATION;
+		transform_application.replace(transform_application.find('$'), 1, char_rep);
+		transform.append(transform_application);
+	}
+
+	return transform;
 }
 
 

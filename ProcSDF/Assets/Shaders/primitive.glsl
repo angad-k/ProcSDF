@@ -1,9 +1,8 @@
 // PRIMITIVES
 
-float Sphere(in vec3 position, in float center_x,in float center_y, in float center_z, in float radius)
+float Sphere(in vec3 position, in float radius)
 {
-    vec3 center = vec3(center_x, center_y, center_z);
-    return length(position - center) - radius;
+    return length(position) - radius;
 }
 
 float Box(in vec3 position, in float dimension_x, in float dimension_y, in float dimension_z)

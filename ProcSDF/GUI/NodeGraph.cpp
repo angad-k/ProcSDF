@@ -128,36 +128,90 @@ void NodeGraph::delete_node(int p_id)
 
 void NodeGraph::set_adjacency_list() {
 
-	std::map<int, std::set<int>> adjacency_list;
+	std::map<int, std::set<int>> adjacency_list_set;
+	std::map<int, std::vector<int>> adjacency_list;
 	for (auto link : NodeGraph::links) {
-		adjacency_list[allocated_ids[link.first]->id].insert(allocated_ids[link.second]->id);
+		adjacency_list_set[NodeGraph::get_node(link.first)->id].insert(NodeGraph::get_node(link.second)->id);
+	}
+
+	for (auto it : adjacency_list_set) {
+		adjacency_list[it.first] = std::vector<int>(it.second.begin(), it.second.end());
 	}
      
 	NodeGraph::adjacency_list = adjacency_list;
 }
 
-void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int,bool> &visited, std::vector<int>& topological_sorting) {
+void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int, bool> &visited, 
+	std::vector<int>& topological_sorting,
+	std::vector<std::tuple<int, std::vector<int>>>& operation_ordering,
+	Node* previous_non_transform_node) {
 
+	Node* src_node = NodeGraph::get_node(src);
 	std::set<int> child_object_nodes, object_nodes_subset;
 	std::vector<int> merge_output;
 	visited[src] = true;
+	int index = 0;
+
+	src_node->previous_non_transform_node.push_back(previous_non_transform_node);
+
+	if (!src_node->is_tranform_node) {
+		previous_non_transform_node = src_node;
+		src_node->operation_ordering[src_node->visit_count] = operation_ordering;
+		operation_ordering.clear();
+	}
+	else {
+		std::tuple<int, std::vector<int>> operation_info;
+		if (src_node->node_name == sdf::TRANSLATION_NODE) {
+			operation_info = std::make_tuple(0, std::vector<int>(src_node->input_float3[0].begin(), src_node->input_float3[0].end()));
+		}
+		else if (src_node->node_name == sdf::ROTATION_X_NODE) {
+			operation_info = std::make_tuple(1, std::vector<int>(1, src_node->input_floats[0]));
+		}
+		else if (src_node->node_name == sdf::ROTATION_Y_NODE) {
+			operation_info = std::make_tuple(2, std::vector<int>(1, src_node->input_floats[0]));
+		}
+		else if(src_node->node_name == sdf::ROTATION_Z_NODE) {
+			operation_info = std::make_tuple(3, std::vector<int>(1, src_node->input_floats[0]));
+		}
+
+		operation_ordering.push_back(operation_info);
+	}
+
+	// TODO : make this efficient by merging all the child object corresponding to each child node and then iterate.
 
 	for (int i : NodeGraph::adjacency_list[src]) {
-		if (!visited[i]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting);
+
+		Node* itr_node = NodeGraph::get_node(i);
+		if (NodeGraph::is_iterable(itr_node->visit_count, itr_node->input_pins.size())) {
+			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting, operation_ordering, previous_non_transform_node);
 		}
+
+		Node* child_node = NodeGraph::get_node(i);
 
 		object_nodes_subset = NodeGraph::reachable_objects[i];
 		std::merge(child_object_nodes.begin(), child_object_nodes.end(), object_nodes_subset.begin(), object_nodes_subset.end(), std::back_inserter(merge_output));
 		child_object_nodes = std::set<int>(merge_output.begin(), merge_output.end());
+		index++;
 	}
 
-	if (NodeGraph::allocated_ids[src]->is_object_node) {
+	if (src_node->is_object_node) {
 		child_object_nodes.insert(src);
 	}
+	
+	if (src_node->visit_count == 0) {
+		topological_sorting.push_back(src);
+	}
+	NodeGraph::reachable_objects[src_node->id] = child_object_nodes;
+	src_node->visit_count++;
+}
 
-	topological_sorting.push_back(src);
-	NodeGraph::reachable_objects[src] = child_object_nodes;
+bool NodeGraph::is_iterable(int visit_count, int input_pin_size) {
+	if (visit_count < input_pin_size) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 Node* NodeGraph::get_source_node(int dest_id)
@@ -185,14 +239,21 @@ int NodeGraph::get_source_id(int dest_id)
 std::vector<int> NodeGraph::get_topological_sorting() {
 	std::map<int, bool> visited;
 	std::vector<int> topological_sorting;
+	std::vector<std::tuple<int, std::vector<int>>> operation_order;
 
 	for (auto i : NodeGraph::adjacency_list) {
 		visited[i.first] = false;
 	}
 
+	for (Node* i : NodeGraph::nodes) {
+		i->visit_count = 0;
+		i->previous_non_transform_node.clear();
+		i->operation_ordering.clear();
+	}
+
 	for (auto i : NodeGraph::adjacency_list) {
 		if (!visited[i.first]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting);
+			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting, operation_order, NULL);
 		}
 	}
 
