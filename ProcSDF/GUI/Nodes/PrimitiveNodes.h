@@ -16,7 +16,7 @@ public:
 	SphereNode()
 	{
 		node_name = "Sphere";
-		input_float3_labels = { "Centre Position" };
+		input_float3_labels = { };
 		input_float_labels = { "Radius" };
 		init();
 	}

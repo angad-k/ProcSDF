@@ -8,16 +8,32 @@ namespace sdf {
 	const std::string SHADER_FOLDER_PATH = "Assets/Shaders/";
 	const std::string SHADER_FILE_EXTENSION = ".glsl";
 	const std::string VERTEX_SHADER_PATH = "Assets/Shaders/vertex.glsl";
+	const std::string TRANSLATION_NODE = "Translation";
+	const std::string ROTATION_X_NODE = "Rotation_X";
+	const std::string ROTATION_Y_NODE = "Rotation_Y";
+	const std::string ROTATION_Z_NODE = "Rotation_Z";
 }
 
 namespace shader_generation {
 	// change the order of files according to the order of insertion in the generated fragment shader file.
-	const std::vector<std::string> shader_files{ "header", "primitive", "footer" };
+	const std::vector <std::string> shader_files{ "header", "primitive", "footer" };
 	const std::string POSITION = "position";
-	const std::string OBJECT_FUNCTION_TEMPLATE = "\nfloat object_$(vec3 position)\n{\n#\n}\n";
+	const std::string POSITION_OPERATION = "position_operation";
 	const std::string RETURN = "return $;\n";
 	const std::string SWITCH_STATEMENT = "\nswitch(object_index)\n{\n$\n}\n";
 	const std::string FLOAT = "float ";
+	namespace object_function {
+		const std::string FUNCTION_TEMPLATE = "\nfloat $(vec3 position)\n{\n#\n}\n";
+		const std::string INITIALIZATION = "\nmat3 rotation_transform_x = mat3(1.0);\nmat3 rotation_transform_y = mat3(1.0);\nmat3 rotation_transform_z = mat3(1.0);\nvec3 position_dup = position;\n";
+		const std::string TRANSLATION_TRANSFORM_APPLICATION = "\position = position - vec3($, $, $);\n";
+		const std::string ROTATION_TRANSFORM_INIT_X = "\nrotation_transform_x = mat3(1.0);\nrotation_transform_x[1][1] = rotation_transform_x[2][2] = cos(radians($));\nrotation_transform_x[1][2] = -sin(radians($));\nrotation_transform_x[2][1] = -rotation_transform_x[1][2];\n";
+		const std::string ROTATION_TRANSFORM_INIT_Y = "\nrotation_transform_y = mat3(1.0);\nrotation_transform_y[0][0] = rotation_transform_y[2][2] = cos(radians($));\nrotation_transform_y[2][0] = -sin(radians($));\nrotation_transform_y[0][2] = -rotation_transform_y[2][0];\n";
+		const std::string ROTATION_TRANSFORM_INIT_Z = "\nrotation_transform_y = mat3(1.0);\nrotation_transform_z[0][0] = rotation_transform_z[1][1] = cos(radians($));\nrotation_transform_z[0][1] = -sin(radians($));\nrotation_transform_z[1][0] = -rotation_transform_z[0][1];\n";
+		const std::string ROTATION_TRANSFORM_APPLICATION = "\nposition = rotation_transform_$ * position;\n";
+		const std::string POSITION_RESTORATION = "\nposition = position_dup;\n";
+		const std::string DISTANCE_STORAGE = "\nfloat $ = $(position);\n";
+		const std::string ROTATION = "rotation_transform";
+	}
 	namespace closest_object_info {
 		const std::string FUNCTION_TEMPLATE = "\nclosest_object_info get_closest_object_info(vec3 position)\n{\n$\nreturn closest_object_info(min_dist, object_index);\n}\n";
 		const std::string DISTANCE_COMPUTATION = "\nfloat dist_$ = object_$(position);\n";
@@ -49,7 +65,8 @@ namespace imgui_colors {
 	const int GREEN = IM_COL32(80, 190, 50, 255);
 	const int BLUE = IM_COL32(50, 50, 255, 255);
 	const int PURPLE = IM_COL32(160, 32, 240, 255);
-	const int ORANGE = IM_COL32(222, 107, 31, 255);
+	const int ORANGE = IM_COL32(255, 115, 29, 255);
+	const int TRANFSFORM = ORANGE;
 	const int PRIMITIVE = RED;
 	const int FINAL = GREEN;
 	const int OPERATION = BLUE;

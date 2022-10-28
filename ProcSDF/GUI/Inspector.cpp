@@ -4,6 +4,7 @@
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/ObjectNode.h"
+#include "GUI/Nodes/TransformNodes.h"
 
 void Inspector::initialize()
 {
@@ -135,6 +136,11 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<IntersectionNode>();
 			}
+			append_to_same_line_if_applicable(approximate_button_size);
+			if (ImGui::Button("Union"))
+			{
+				add_node<UnionNode>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
@@ -151,6 +157,34 @@ void Inspector::draw_node_graph_settings()
 				int final_node_id = NodeGraph::get_singleton()->final_node->id;
 				NodeGraph::get_singleton()->add_link(object_node->output_ids[0], 
 					NodeGraph::get_singleton()->final_node->input_ids[0]);
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Transform"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::TRANFSFORM);
+			if (ImGui::Button("Translation"))
+			{
+				add_node<TranslationNode>();
+			}
+			append_to_same_line_if_applicable(approximate_button_size);
+			if (ImGui::Button("Rotation Around X-Axis"))
+			{
+				add_node<RotationNodeX>();
+			}
+			append_to_same_line_if_applicable(approximate_button_size);
+			if (ImGui::Button("Rotation Around Y-Axis"))
+			{
+				add_node<RotationNodeY>();
+			}
+			append_to_same_line_if_applicable(approximate_button_size);
+			if (ImGui::Button("Rotation Around Z-Axis"))
+			{
+				add_node<RotationNodeZ>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

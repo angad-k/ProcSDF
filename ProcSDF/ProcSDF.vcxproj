@@ -184,6 +184,7 @@
     <ClInclude Include="GUI\Nodes\ObjectNode.h" />
     <ClInclude Include="GUI\Nodes\OperationNodes.h" />
     <ClInclude Include="GUI\Nodes\PrimitiveNodes.h" />
+    <ClInclude Include="GUI\Nodes\TransformNodes.h" />
     <ClInclude Include="Rendering\ShaderGenerator.h" />
     <ClInclude Include="Utilities\ProcVec.h" />
     <ClInclude Include="Rendering\Renderer.h" />
