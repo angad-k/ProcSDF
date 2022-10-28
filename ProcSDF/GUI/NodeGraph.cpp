@@ -245,7 +245,7 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 		visited[i.first] = false;
 	}
 
-	for (auto i : NodeGraph::nodes) {
+	for (Node* i : NodeGraph::nodes) {
 		i->visit_count = 0;
 		i->previous_non_transform_node.clear();
 		i->operation_ordering.clear();
@@ -268,7 +268,7 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 	bool contains_cycle = false;
 	for (auto it : NodeGraph::adjacency_list) {
 		for (int i : it.second) {
-			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[allocated_ids[i]->id]) {
+			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[i]) {
 				contains_cycle = true;
 				break;
 			}
