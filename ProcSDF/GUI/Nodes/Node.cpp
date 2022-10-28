@@ -99,9 +99,9 @@ void Node::draw()
 	{
 		ImGui::Text(input_float3_labels[i].c_str());
 		ImGui::PushID(id_counter++);
-		ImGui::InputFloat("x", &input_float3[i][0]);
-		ImGui::InputFloat("y", &input_float3[i][1]);
-		ImGui::InputFloat("z", &input_float3[i][2]);
+		ImGui::DragFloat("x", &input_float3[i][0]);
+		ImGui::DragFloat("y", &input_float3[i][1]);
+		ImGui::DragFloat("z", &input_float3[i][2]);
 		ImGui::PopID();
 		if (i != input_float3_labels.size() - 1)
 		{
@@ -125,7 +125,7 @@ void Node::draw()
 	{
 		ImGui::Text(input_float_labels[i].c_str());
 		ImGui::PushID(id_counter++);
-		ImGui::InputFloat("", &input_floats[i]);
+		ImGui::DragFloat("", &input_floats[i]);
 		ImGui::PopID();
 		Renderer::get_singleton()->set_uniform_float(
 			ShaderGenerator::get_uniform_string_from_label(variable_name, input_float_labels[i]),

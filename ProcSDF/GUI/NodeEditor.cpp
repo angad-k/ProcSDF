@@ -71,11 +71,12 @@ void NodeEditor::draw()
 	}
 
 	// since we create links with identifier being its index, we can directly use it here.
-	for (int i = 0; i < nodeGraph->links.size(); i++)
+	int link_id;
+	if (ImNodes::IsLinkDestroyed(&link_id))
 	{
-		if (ImNodes::IsLinkDestroyed(&i) && !nodeGraph->get_node(nodeGraph->links[i].second)->is_final_node)
+		if (!nodeGraph->get_node(nodeGraph->links[link_id].second)->is_final_node)
 		{
-			nodeGraph->links.erase(nodeGraph->links.begin() + i);
+			nodeGraph->links.erase(nodeGraph->links.begin() + link_id);
 			nodeGraph->inform_modification();
 		}
 	}

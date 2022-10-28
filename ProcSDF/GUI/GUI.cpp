@@ -107,6 +107,8 @@ GLFWwindow* GUI::setup_imgui_glfw()
 	ImNodes::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
+	io.ConfigDragClickToInputText = true;
+
 	ImGui::StyleColorsDark();
 
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
