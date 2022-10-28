@@ -179,7 +179,7 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 
 	// TODO : make this efficient by merging all the child object corresponding to each child node and then iterate.
 
-	for (auto i : NodeGraph::adjacency_list[src]) {
+	for (int i : NodeGraph::adjacency_list[src]) {
 
 		Node* itr_node = NodeGraph::get_node(i);
 		if (NodeGraph::is_iterable(itr_node->visit_count, itr_node->input_pins.size())) {
