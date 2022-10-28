@@ -136,6 +136,7 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<IntersectionNode>();
 			}
+			append_to_same_line_if_applicable(approximate_button_size);
 			if (ImGui::Button("Union"))
 			{
 				add_node<UnionNode>();
@@ -170,14 +171,17 @@ void Inspector::draw_node_graph_settings()
 			{
 				add_node<TranslationNode>();
 			}
+			append_to_same_line_if_applicable(approximate_button_size);
 			if (ImGui::Button("Rotation Around X-Axis"))
 			{
 				add_node<RotationNodeX>();
 			}
+			append_to_same_line_if_applicable(approximate_button_size);
 			if (ImGui::Button("Rotation Around Y-Axis"))
 			{
 				add_node<RotationNodeY>();
 			}
+			append_to_same_line_if_applicable(approximate_button_size);
 			if (ImGui::Button("Rotation Around Z-Axis"))
 			{
 				add_node<RotationNodeZ>();

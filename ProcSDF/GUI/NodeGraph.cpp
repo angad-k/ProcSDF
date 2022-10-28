@@ -182,7 +182,7 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	for (auto i : NodeGraph::adjacency_list[src]) {
 
 		Node* itr_node = NodeGraph::get_node(i);
-		if (NodeGraph::is_iterable(itr_node->visit_count, itr_node->is_operation_node)) {
+		if (NodeGraph::is_iterable(itr_node->visit_count, itr_node->input_pins.size())) {
 			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting, operation_ordering, previous_non_transform_node);
 		}
 
@@ -205,17 +205,12 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	src_node->visit_count++;
 }
 
-bool NodeGraph::is_iterable(int visit_count, bool is_operation_node) {
-	if(is_operation_node && visit_count < 2) {
+bool NodeGraph::is_iterable(int visit_count, int input_pin_size) {
+	if (visit_count < input_pin_size) {
 		return true;
 	}
 	else {
-		if (visit_count < 1) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return false;
 	}
 }
 
@@ -272,7 +267,7 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 
 	bool contains_cycle = false;
 	for (auto it : NodeGraph::adjacency_list) {
-		for (auto i : it.second) {
+		for (int i : it.second) {
 			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[allocated_ids[i]->id]) {
 				contains_cycle = true;
 				break;
@@ -312,7 +307,7 @@ void NodeGraph::print_node_graph()
 	for (auto it : adjacency_list) {
 		//fix with log after adding string formatting utility
 		std::cout << NodeGraph::allocated_ids[it.first]->node_name <<" ( "<<it.first<<" ) "<< " : ";
-		for(auto j : it.second) {
+		for(int j : it.second) {
 			std::cout << NodeGraph::allocated_ids[j]->node_name << " ( " << j << " ) " << " , ";
 		}
 		logger::log("\n");

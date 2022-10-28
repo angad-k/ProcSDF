@@ -35,7 +35,7 @@ public:
 	void remove_link_with_endpoints(std::vector<int> p_endpoints);
 	void print_node_graph();
 	void recompile_node_graph();
-	bool is_iterable(int count, bool is_operation_node);
+	bool is_iterable(int count, int input_pin_size);
 
 	bool error_in_compilation;
 	std::string compilation_error;
