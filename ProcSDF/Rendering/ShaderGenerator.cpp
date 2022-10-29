@@ -284,17 +284,18 @@ std::string ShaderGenerator::get_transform(TransformNode* p_node) {
 		postfix_for_rotation = 'z';
 		break;
 	}
+
+	// Translation requires only the vec3 as parameter, so we replace $ with that uniform's name.
 	if (p_node->m_TransformationType == TransformationType::TRANSLATION) {
-		while (transform.find('$') != std::string::npos) {
-			transform.replace(
-				transform.find('$'), 
-				1, 
-				get_uniform_string_from_label(p_node->get_variable_name(), p_node->input_float3_labels[index])
-			);
-			index++;
-		}
+		transform.replace(
+			transform.find('$'),
+			1,
+			get_uniform_string_from_label(p_node->get_variable_name(), p_node->input_float3_labels[0])
+		);
 	}
 	else {
+
+		// Rotation requires the theta to be replaced at 2 places, so we replace $ with it in loop.
 		while (transform.find('$') != std::string::npos) {
 			transform.replace(
 				transform.find('$'), 
