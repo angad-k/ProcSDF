@@ -190,7 +190,7 @@ std::string ShaderGenerator::generate_object_functions() {
 		if (nd->is_transform_node || nd->is_final_node) {
 			continue;
 		}
-		std::string function_name = nd->get_variable_name();
+		std::string function_name = "f_" + nd->get_variable_name();
 		std::string function_body = shader_generation::object_function::INITIALIZATION;
 		std::string node_function = shader_generation::object_function::FUNCTION_TEMPLATE;
 		std::string return_variable = nd->get_variable_name();
@@ -220,9 +220,10 @@ std::string ShaderGenerator::generate_object_functions() {
 			}
 			else {
 				std::string variable_name = nd->previous_non_transform_node[index]->get_variable_name();
-				while (value_assignment.find('$') != std::string::npos) {
-					value_assignment.replace(value_assignment.find('$'), 1, variable_name);
-				}
+				std::string function_name = "f_" + variable_name;
+				variable_name.append(std::to_string(index));
+				value_assignment.replace(value_assignment.find('$'), 1, variable_name);
+				value_assignment.replace(value_assignment.find('$'), 1, function_name);
 				return_variable = variable_name;
 			}
 
