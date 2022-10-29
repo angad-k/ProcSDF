@@ -143,7 +143,7 @@ void NodeGraph::set_adjacency_list() {
 	NodeGraph::adjacency_list = adjacency_list;
 }
 
-void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int, bool> &visited, 
+void NodeGraph::depth_first_search_for_topological_sorting(int src, 
 	std::vector<int>& topological_sorting,
 	std::vector<TransformNode*>& operation_ordering,
 	Node* previous_non_transform_node) {
@@ -151,7 +151,6 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 	Node* src_node = NodeGraph::get_node(src);
 	std::set<int> child_object_nodes, object_nodes_subset;
 	std::vector<int> merge_output;
-	visited[src] = true;
 	int index = 0;
 
 	src_node->previous_non_transform_node.push_back(previous_non_transform_node);
@@ -171,7 +170,7 @@ void NodeGraph::depth_first_search_for_topological_sorting(int src, std::map<int
 
 		Node* itr_node = NodeGraph::get_node(i);
 		if (NodeGraph::is_iterable(itr_node->visit_count, itr_node->input_pins.size())) {
-			NodeGraph::depth_first_search_for_topological_sorting(i, visited, topological_sorting, operation_ordering, previous_non_transform_node);
+			NodeGraph::depth_first_search_for_topological_sorting(i, topological_sorting, operation_ordering, previous_non_transform_node);
 		}
 
 		Node* child_node = NodeGraph::get_node(i);
@@ -225,13 +224,9 @@ int NodeGraph::get_source_id(int dest_id)
 }
 
 std::vector<int> NodeGraph::get_topological_sorting() {
-	std::map<int, bool> visited;
+
 	std::vector<int> topological_sorting;
 	std::vector<TransformNode*> operation_order;
-
-	for (auto i : NodeGraph::adjacency_list) {
-		visited[i.first] = false;
-	}
 
 	for (Node* i : NodeGraph::nodes) {
 		i->visit_count = 0;
@@ -240,8 +235,8 @@ std::vector<int> NodeGraph::get_topological_sorting() {
 	}
 
 	for (auto i : NodeGraph::adjacency_list) {
-		if (!visited[i.first]) {
-			NodeGraph::depth_first_search_for_topological_sorting(i.first, visited, topological_sorting, operation_order, NULL);
+		if (NodeGraph::get_node(i.first)->input_pins.size() == 0) {
+			NodeGraph::depth_first_search_for_topological_sorting(i.first, topological_sorting, operation_order, NULL);
 		}
 	}
 
