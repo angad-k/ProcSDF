@@ -2,6 +2,7 @@
 #include<string>
 #include<vector>
 #include "GUI/NodeGraph.h"
+#include "GUI/Nodes/TransformNodes.h"
 class ShaderGenerator
 {
 private:
@@ -22,7 +23,7 @@ private:
 	std::string generate_closest_object_info_function();
 	std::string generate_calculate_normal_function();
 	std::string generate_get_target_ray_function();
-	std::string get_transform(int t_index, std::vector<int> params);
+	std::string get_transform(TransformNode* p_node);
 	void compute_and_set_object_count();
 	void compute_uniforms();
 public:
