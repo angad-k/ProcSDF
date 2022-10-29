@@ -187,7 +187,7 @@ std::string ShaderGenerator::generate_object_functions() {
 	for (int node_id : topological_sorting) {
 		
 		Node* nd = nodeGraph->get_node(node_id);
-		if (nd->is_tranform_node || nd->is_final_node) {
+		if (nd->is_transform_node || nd->is_final_node) {
 			continue;
 		}
 		std::string function_name = nd->get_variable_name();
@@ -209,7 +209,7 @@ std::string ShaderGenerator::generate_object_functions() {
 		for (auto it : nd->operation_ordering) {
 			function_body.append(shader_generation::object_function::POSITION_RESTORATION);
 			for (auto itr : it.second) {
-				function_body.append(ShaderGenerator::get_transform(std::get<0>(itr), std::get<1>(itr)));
+				function_body.append(ShaderGenerator::get_transform(itr));
 			}
 			std::string value_assignment = shader_generation::object_function::DISTANCE_STORAGE;
 			if (nd->previous_non_transform_node[index] == NULL) {
@@ -262,37 +262,49 @@ std::string ShaderGenerator::get_uniform_string_from_label(std::string p_variabl
 	return uniform_string;
 }
 
-std::string ShaderGenerator::get_transform(int t_index, std::vector<int> params) {
+std::string ShaderGenerator::get_transform(TransformNode* p_node) {
 	
-	std::string transform, char_rep;
+	std::string transform, postfix_for_rotation;
 	int index = 0;
 
-	switch (t_index) {
-	case 0: transform = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
+	switch (p_node->m_TransformationType) {
+	case TransformationType::TRANSLATION: 
+		transform = shader_generation::object_function::TRANSLATION_TRANSFORM_APPLICATION;
 		break;
-	case 1: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_X;
-		char_rep = 'x';
+	case TransformationType::ROTATION_X:
+		transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_X;
+		postfix_for_rotation = 'x';
 		break;
-	case 2: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Y;
-		char_rep = 'y';
+	case TransformationType::ROTATION_Y:
+		transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Y;
+		postfix_for_rotation = 'y';
 		break;
-	case 3: transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Z;
-		char_rep = 'z';
+	case TransformationType::ROTATION_Z:
+		transform = shader_generation::object_function::ROTATION_TRANSFORM_INIT_Z;
+		postfix_for_rotation = 'z';
 		break;
 	}
-	if (t_index == 0) {
-		while (transform.find('$') != std::string::npos) {
-			transform.replace(transform.find('$'), 1, std::to_string(params[index]));
-			index++;
-		}
+
+	// Translation requires only the vec3 as parameter, so we replace $ with that uniform's name.
+	if (p_node->m_TransformationType == TransformationType::TRANSLATION) {
+		transform.replace(
+			transform.find('$'),
+			1,
+			get_uniform_string_from_label(p_node->get_variable_name(), p_node->input_float3_labels[0])
+		);
 	}
 	else {
-		while (transform.find('$') != std::string::npos) {
-			transform.replace(transform.find('$'), 1, std::to_string(params[0]));
-		}
 
+		// Rotation requires the theta to be replaced at 2 places, so we replace $ with it in loop.
+		while (transform.find('$') != std::string::npos) {
+			transform.replace(
+				transform.find('$'), 
+				1, 
+				get_uniform_string_from_label(p_node->get_variable_name(), p_node->input_float_labels[0])
+			);
+		}
 		std::string transform_application = shader_generation::object_function::ROTATION_TRANSFORM_APPLICATION;
-		transform_application.replace(transform_application.find('$'), 1, char_rep);
+		transform_application.replace(transform_application.find('$'), 1, postfix_for_rotation);
 		transform.append(transform_application);
 	}
 

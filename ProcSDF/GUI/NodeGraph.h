@@ -13,9 +13,8 @@ class NodeGraph
 {
 private:
 	static NodeGraph* nodeGraph;
-	void depth_first_search_for_topological_sorting(int src, std::map<int, bool>& visited,
-		std::vector<int>& topological_sorting,
-		std::vector<std::tuple<int, std::vector<int>>>& operation_ordering,
+	void depth_first_search_for_topological_sorting(int src, std::vector<int>& topological_sorting,
+		std::vector<TransformNode*>& operation_ordering,
 		Node* previous_non_transform_node = NULL);
 	std::map <int, Node*> allocated_ids;
 	bool dirty = false;
