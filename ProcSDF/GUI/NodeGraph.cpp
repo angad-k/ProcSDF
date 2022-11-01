@@ -11,26 +11,26 @@
 
 void NodeGraph::initialize()
 {
-	error_in_compilation = false;
-	SphereNode* sn = new SphereNode();
-	sn->input_floats[0] = 2.0;
-	FinalNode* fn = new FinalNode();
-	ObjectNode* on = new ObjectNode();
-	NodeGraph::add_link(sn->output_ids[0], on->input_ids[0]);
-	NodeGraph::add_link(on->output_ids[0], fn->input_ids[0]);
-	final_node = fn;
-	nodes.push_back(sn);
-	nodes.push_back(fn);
-	nodes.push_back(on);
+	m_errorInCompilation = false;
+	SphereNode* l_sn = new SphereNode();
+	l_sn->m_inputFloats[0] = 2.0;
+	FinalNode* l_fn = new FinalNode();
+	ObjectNode* l_on = new ObjectNode();
+	NodeGraph::addLink(l_sn->m_outputIDs[0], l_on->m_inputIDs[0]);
+	NodeGraph::addLink(l_on->m_outputIDs[0], l_fn->m_inputIDs[0]);
+	m_finalNode = l_fn;
+	m_nodes.push_back(l_sn);
+	m_nodes.push_back(l_fn);
+	m_nodes.push_back(l_on);
 }
 
-int NodeGraph::allocate_id(Node* p_node)
+int NodeGraph::allocateID(Node* p_node)
 {
 	for (int i = 0; i < INT_MAX; i++)
 	{
-		if (allocated_ids.find(i) == allocated_ids.end())
+		if (m_allocatedIDs.find(i) == m_allocatedIDs.end())
 		{
-			allocated_ids[i] = p_node;
+			m_allocatedIDs[i] = p_node;
 			return i;
 		}
 	}
@@ -38,161 +38,161 @@ int NodeGraph::allocate_id(Node* p_node)
 	// TO DO : handle too many allocations
 }
 
-void NodeGraph::deallocate_id(int id)
+void NodeGraph::deallocateID(int p_id)
 {
-	if (allocated_ids.find(id) != allocated_ids.end())
+	if (m_allocatedIDs.find(p_id) != m_allocatedIDs.end())
 	{
-		allocated_ids.erase(id);
+		m_allocatedIDs.erase(p_id);
 	}
 }
 
-Node* NodeGraph::get_node(int id)
+Node* NodeGraph::getNode(int p_id)
 {
-	return allocated_ids[id];
+	return m_allocatedIDs[p_id];
 }
 
-void NodeGraph::add_link(int src, int dest)
+void NodeGraph::addLink(int p_src, int p_dest)
 {
-	bool possible = true;
-	for (auto link : links)
+	bool l_possible = true;
+	for (auto link : m_links)
 	{
-		if (link.second == dest)
+		if (link.second == p_dest)
 		{
-			if (!allocated_ids[link.second]->is_final_node)
+			if (!m_allocatedIDs[link.second]->m_isFinalNode)
 			{
 				ERR("All input pins(except for final) can have only one input.");
-				possible = false;
+				l_possible = false;
 				break;
 			}
 		}
 	}
-	if ((allocated_ids[src]->is_object_node && !allocated_ids[dest]->is_final_node)
-		|| ((!allocated_ids[src]->is_object_node) && allocated_ids[dest]->is_final_node))
+	if ((m_allocatedIDs[p_src]->m_isObjectNode && !m_allocatedIDs[p_dest]->m_isFinalNode)
+		|| ((!m_allocatedIDs[p_src]->m_isObjectNode) && m_allocatedIDs[p_dest]->m_isFinalNode))
 	{
 		ERR("|| Object Node --> Final Node || is the only acceptable link here.");
-		possible = false;
+		l_possible = false;
 	}
-	if (possible)
+	if (l_possible)
 	{
-		links.push_back(std::make_pair(src, dest));
-		dirty = true;
+		m_links.push_back(std::make_pair(p_src, p_dest));
+		m_dirty = true;
 	}
 }
 
-void NodeGraph::remove_link_with_endpoint(int p_endpoint)
+void NodeGraph::removeLinkWithEndpoint(int p_endpoint)
 {
-	std::vector<std::pair<int, int>>filtered_links;
-	for (std::pair<int, int> link : links)
+	std::vector<std::pair<int, int>>l_filteredLinks;
+	for (std::pair<int, int> link : m_links)
 	{
 		if (link.first != p_endpoint && link.second != p_endpoint)
 		{
-			filtered_links.push_back(link);
+			l_filteredLinks.push_back(link);
 		}
 	}
-	links = filtered_links;
+	m_links = l_filteredLinks;
 }
 
-void NodeGraph::remove_link_with_endpoints(std::vector<int> p_endpoints)
+void NodeGraph::removeLinkWithEndpoints(std::vector<int> p_endpoints)
 {
-	std::vector<std::pair<int, int>>filtered_links;
-	for (std::pair<int, int> link : links)
+	std::vector<std::pair<int, int>>m_filteredLinks;
+	for (std::pair<int, int> link : m_links)
 	{
 		if (std::find(p_endpoints.begin(), p_endpoints.end(), link.first) == p_endpoints.end() &&
 			std::find(p_endpoints.begin(), p_endpoints.end(), link.second) == p_endpoints.end())
 		{
-			filtered_links.push_back(link);
+			m_filteredLinks.push_back(link);
 		}
 	}
-	links = filtered_links;
+	m_links = m_filteredLinks;
 }
 
-void NodeGraph::add_node(Node* p_new_node)
+void NodeGraph::addNode(Node* p_new_node)
 {
 	if (p_new_node)
 	{
-		nodes.push_back(p_new_node);
-		dirty = true;
+		m_nodes.push_back(p_new_node);
+		m_dirty = true;
 	}
 }
 
-void NodeGraph::delete_node(int p_id)
+void NodeGraph::deleteNode(int p_id)
 {
-	Node* node = allocated_ids[p_id];
-	if (node->is_final_node)
+	Node* node = m_allocatedIDs[p_id];
+	if (node->m_isFinalNode)
 	{
 		ERR("Cannot delete final node.")
 			return;
 	}
-	nodes.erase(std::find(nodes.begin(), nodes.end(), node));
+	m_nodes.erase(std::find(m_nodes.begin(), m_nodes.end(), node));
 	delete(node);
-	dirty = true;
+	m_dirty = true;
 }
 
-void NodeGraph::set_adjacency_list() {
+void NodeGraph::setAdjacencyList() {
 
-	std::map<int, std::set<int>> adjacency_list_set;
-	std::map<int, std::vector<int>> adjacency_list;
-	for (auto link : NodeGraph::links) {
-		adjacency_list_set[NodeGraph::get_node(link.first)->id].insert(NodeGraph::get_node(link.second)->id);
+	std::map<int, std::set<int>> l_adjacencyListSet;
+	std::map<int, std::vector<int>> l_adjacencyList;
+	for (auto link : NodeGraph::m_links) {
+		l_adjacencyListSet[NodeGraph::getNode(link.first)->m_ID].insert(NodeGraph::getNode(link.second)->m_ID);
 	}
 
-	for (auto it : adjacency_list_set) {
-		adjacency_list[it.first] = std::vector<int>(it.second.begin(), it.second.end());
+	for (auto it : l_adjacencyListSet) {
+		l_adjacencyList[it.first] = std::vector<int>(it.second.begin(), it.second.end());
 	}
 
-	NodeGraph::adjacency_list = adjacency_list;
+	NodeGraph::m_adjacencyList = l_adjacencyList;
 }
 
-void NodeGraph::depth_first_search_for_topological_sorting(int src, 
-	std::vector<int>& topological_sorting,
-	std::vector<TransformNode*>& operation_ordering,
-	Node* previous_non_transform_node) {
+void NodeGraph::depthFirstSearchForTopologicalSorting(int p_src, 
+	std::vector<int>& p_topologicalSorting,
+	std::vector<TransformNode*>& p_operationOrdering,
+	Node* p_previousNonTransformNode) {
 
-	Node* src_node = NodeGraph::get_node(src);
-	std::set<int> child_object_nodes, object_nodes_subset;
-	std::vector<int> merge_output;
-	int index = 0;
+	Node* l_srcNode = NodeGraph::getNode(p_src);
+	std::set<int> l_childObjectNodes, l_objectNodesSubset;
+	std::vector<int> l_mergeOutput;
+	int l_index = 0;
 
-	src_node->previous_non_transform_node.push_back(previous_non_transform_node);
+	l_srcNode->m_previousNonTransformNode.push_back(p_previousNonTransformNode);
 
-	if (!src_node->is_transform_node) {
-		previous_non_transform_node = src_node;
-		src_node->operation_ordering[src_node->visit_count] = operation_ordering;
-		operation_ordering.clear();
+	if (!l_srcNode->m_isTransformNode) {
+		p_previousNonTransformNode = l_srcNode;
+		l_srcNode->m_operationOrdering[l_srcNode->m_visitCount] = p_operationOrdering;
+		p_operationOrdering.clear();
 	}
 	else {
-		operation_ordering.push_back((TransformNode*)src_node);
+		p_operationOrdering.push_back((TransformNode*)l_srcNode);
 	}
 
 	// TODO : make this efficient by merging all the child object corresponding to each child node and then iterate.
 
-	for (int i : NodeGraph::adjacency_list[src]) {
+	for (int i : NodeGraph::m_adjacencyList[p_src]) {
 
-		Node* itr_node = NodeGraph::get_node(i);
-		if (NodeGraph::is_iterable(itr_node->visit_count, itr_node->input_pins.size())) {
-			NodeGraph::depth_first_search_for_topological_sorting(i, topological_sorting, operation_ordering, previous_non_transform_node);
+		Node* l_itrNode = NodeGraph::getNode(i);
+		if (NodeGraph::isIterable(l_itrNode->m_visitCount, l_itrNode->m_inputPins.size())) {
+			NodeGraph::depthFirstSearchForTopologicalSorting(i, p_topologicalSorting, p_operationOrdering, p_previousNonTransformNode);
 		}
 
-		Node* child_node = NodeGraph::get_node(i);
+		Node* l_childNode = NodeGraph::getNode(i);
 
-		object_nodes_subset = NodeGraph::reachable_objects[i];
-		std::merge(child_object_nodes.begin(), child_object_nodes.end(), object_nodes_subset.begin(), object_nodes_subset.end(), std::back_inserter(merge_output));
-		child_object_nodes = std::set<int>(merge_output.begin(), merge_output.end());
-		index++;
+		l_objectNodesSubset = NodeGraph::m_reachableObjects[i];
+		std::merge(l_childObjectNodes.begin(), l_childObjectNodes.end(), l_objectNodesSubset.begin(), l_objectNodesSubset.end(), std::back_inserter(l_mergeOutput));
+		l_childObjectNodes = std::set<int>(l_mergeOutput.begin(), l_mergeOutput.end());
+		l_index++;
 	}
 
-	if (src_node->is_object_node) {
-		child_object_nodes.insert(src);
+	if (l_srcNode->m_isObjectNode) {
+		l_childObjectNodes.insert(p_src);
 	}
 	
-	if (src_node->visit_count == 0) {
-		topological_sorting.push_back(src);
+	if (l_srcNode->m_visitCount == 0) {
+		p_topologicalSorting.push_back(p_src);
 	}
-	NodeGraph::reachable_objects[src_node->id] = child_object_nodes;
-	src_node->visit_count++;
+	NodeGraph::m_reachableObjects[l_srcNode->m_ID] = l_childObjectNodes;
+	l_srcNode->m_visitCount++;
 }
 
-bool NodeGraph::is_iterable(int visit_count, int input_pin_size) {
+bool NodeGraph::isIterable(int visit_count, int input_pin_size) {
 	if (visit_count < input_pin_size) {
 		return true;
 	}
@@ -201,19 +201,19 @@ bool NodeGraph::is_iterable(int visit_count, int input_pin_size) {
 	}
 }
 
-Node* NodeGraph::get_source_node(int dest_id)
+Node* NodeGraph::getSourceNode(int dest_id)
 {
-	int src_id = get_source_id(dest_id);
+	int src_id = getSourceId(dest_id);
 	if (src_id == -1)
 	{
 		return nullptr;
 	}
-	return allocated_ids[src_id];
+	return m_allocatedIDs[src_id];
 }
 
-int NodeGraph::get_source_id(int dest_id)
+int NodeGraph::getSourceId(int dest_id)
 {
-	for (auto it : links)
+	for (auto it : m_links)
 	{
 		if (it.second == dest_id)
 		{
@@ -223,75 +223,75 @@ int NodeGraph::get_source_id(int dest_id)
 	return -1;
 }
 
-std::vector<int> NodeGraph::get_topological_sorting() {
+std::vector<int> NodeGraph::getTopologicalSorting() {
 
-	std::vector<int> topological_sorting;
-	std::vector<TransformNode*> operation_order;
+	std::vector<int> l_topologicalSorting;
+	std::vector<TransformNode*> l_operationOrder;
 
-	for (Node* i : NodeGraph::nodes) {
-		i->visit_count = 0;
-		i->previous_non_transform_node.clear();
-		i->operation_ordering.clear();
+	for (Node* i : NodeGraph::m_nodes) {
+		i->m_visitCount = 0;
+		i->m_previousNonTransformNode.clear();
+		i->m_operationOrdering.clear();
 	}
 
-	for (auto i : NodeGraph::adjacency_list) {
-		if (NodeGraph::get_node(i.first)->input_pins.size() == 0) {
-			NodeGraph::depth_first_search_for_topological_sorting(i.first, topological_sorting, operation_order, NULL);
+	for (auto i : NodeGraph::m_adjacencyList) {
+		if (NodeGraph::getNode(i.first)->m_inputPins.size() == 0) {
+			NodeGraph::depthFirstSearchForTopologicalSorting(i.first, l_topologicalSorting, l_operationOrder, NULL);
 		}
 	}
 
-	std::reverse(topological_sorting.begin(), topological_sorting.end());
+	std::reverse(l_topologicalSorting.begin(), l_topologicalSorting.end());
 
-	std::map<int, int> node_index_in_topological_sorting;
+	std::map<int, int> l_nodeIndexInTopologicalSorting;
 
-	for (int i = 0; i < topological_sorting.size(); i++) {
-		node_index_in_topological_sorting[topological_sorting[i]] = i;
+	for (int i = 0; i < l_topologicalSorting.size(); i++) {
+		l_nodeIndexInTopologicalSorting[l_topologicalSorting[i]] = i;
 	}
 
-	bool contains_cycle = false;
-	for (auto it : NodeGraph::adjacency_list) {
+	bool l_containsCycle = false;
+	for (auto it : NodeGraph::m_adjacencyList) {
 		for (int i : it.second) {
-			if (node_index_in_topological_sorting[it.first] > node_index_in_topological_sorting[i]) {
-				contains_cycle = true;
+			if (l_nodeIndexInTopologicalSorting[it.first] > l_nodeIndexInTopologicalSorting[i]) {
+				l_containsCycle = true;
 				break;
 			}
 		}
 	}
 
-	if (contains_cycle)
+	if (l_containsCycle)
 	{
-		std::string compilation_error = "Node Graph contains cycle";
-		set_compilation_error(compilation_error);
-		ERR(compilation_error);
+		std::string l_compilationError = "Node Graph contains cycle";
+		setCompilationError(l_compilationError);
+		ERR(l_compilationError);
 	}
 
-	return topological_sorting;
+	return l_topologicalSorting;
 }
 
-void NodeGraph::print_node_graph()
+void NodeGraph::printNodeGraph()
 {
 	logger::log("Nodes are :\n");
-	for (auto it : NodeGraph::allocated_ids)
+	for (auto it : NodeGraph::m_allocatedIDs)
 	{
-		std::cout << "id : " << it.first << " | type : " << it.second->node_name << std::endl;
+		std::cout << "id : " << it.first << " | type : " << it.second->m_nodeName << std::endl;
 	}
 
 	logger::log("Links are :\n");
-	for (auto it : links)
+	for (auto it : m_links)
 	{
 		//fix with log after adding string formatting utility
-		std::cout << NodeGraph::allocated_ids[it.first]->node_name << " ( " << NodeGraph::allocated_ids[it.first]->id << " ) -> " << NodeGraph::allocated_ids[it.second]->node_name << " ( " << NodeGraph::allocated_ids[it.second]->id << " ) " << std::endl;
+		std::cout << NodeGraph::m_allocatedIDs[it.first]->m_nodeName << " ( " << NodeGraph::m_allocatedIDs[it.first]->m_ID << " ) -> " << NodeGraph::m_allocatedIDs[it.second]->m_nodeName << " ( " << NodeGraph::m_allocatedIDs[it.second]->m_ID << " ) " << std::endl;
 	}
 
-	NodeGraph::set_adjacency_list();
-	auto adjacency_list = NodeGraph::adjacency_list;
+	NodeGraph::setAdjacencyList();
+	auto l_adjacencyList = NodeGraph::m_adjacencyList;
 
 	logger::log(" Adjacency list :\n");
-	for (auto it : adjacency_list) {
+	for (auto it : l_adjacencyList) {
 		//fix with log after adding string formatting utility
-		std::cout << NodeGraph::allocated_ids[it.first]->node_name << " ( " << it.first << " ) " << " : ";
+		std::cout << NodeGraph::m_allocatedIDs[it.first]->m_nodeName << " ( " << it.first << " ) " << " : ";
 		for (int j : it.second) {
-			std::cout << NodeGraph::allocated_ids[j]->node_name << " ( " << j << " ) " << " , ";
+			std::cout << NodeGraph::m_allocatedIDs[j]->m_nodeName << " ( " << j << " ) " << " , ";
 		}
 		logger::log("\n");
 	}
@@ -299,29 +299,29 @@ void NodeGraph::print_node_graph()
 
 }
 
-void NodeGraph::recompile_node_graph()
+void NodeGraph::recompileNodeGraph()
 {
-	dirty = false;
-	NodeGraph::clear_compilation_error();
-	print_node_graph();
-	std::vector<int> topologically_sorted_nodes = NodeGraph::get_topological_sorting();
-	if (check_compilation_error())
+	m_dirty = false;
+	NodeGraph::clearCompilationError();
+	printNodeGraph();
+	std::vector<int> l_topologicallySortedNodes = NodeGraph::getTopologicalSorting();
+	if (checkCompilationError())
 	{
 		return;
 	}
 	logger::log("Topo sorting : \n");
-	for (int i : topologically_sorted_nodes) {
-		Node* topo_node = allocated_ids[i];
-		std::string topo_string = topo_node->get_string();
-		if (check_compilation_error())
+	for (int i : l_topologicallySortedNodes) {
+		Node* l_topoNode = m_allocatedIDs[i];
+		std::string l_topoString = l_topoNode->m_getString();
+		if (checkCompilationError())
 		{
 			return;
 		}
 		logger::log(std::to_string(i) + " -> ");
-		logger::log(topo_string);
+		logger::log(l_topoString);
 		logger::log("\n");
 	}
 	logger::log("\n");
 
-	ShaderGenerator::get_singleton()->generate_and_set_shader();
+	ShaderGenerator::getSingleton()->generateAndSetShader();
 }

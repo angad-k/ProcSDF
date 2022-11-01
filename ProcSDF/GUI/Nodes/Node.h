@@ -7,35 +7,35 @@
 class TransformNode;
 class Node {
 public:
-	int id;
-	bool is_final_node = false;
-	bool is_object_node = false;
-	bool is_transform_node = false;
-	bool is_operation_node = false;
+	int m_ID;
+	bool m_isFinalNode = false;
+	bool m_isObjectNode = false;
+	bool m_isTransformNode = false;
+	bool m_isOperationNode = false;
 	void draw();
-	std::string get_string();
+	std::string m_getString();
 
-	std::vector <std::string> input_pins;
-	std::vector <int> input_ids;
-	std::vector <std::string> output_pins;
-	std::vector <int> output_ids;
-	std::map<int, std::vector<TransformNode*>> operation_ordering;
+	std::vector <std::string> m_inputPins;
+	std::vector <int> m_inputIDs;
+	std::vector <std::string> m_outputPins;
+	std::vector <int> m_outputIDs;
+	std::map<int, std::vector<TransformNode*>> m_operationOrdering;
 
-	std::vector <std::string> input_float3_labels;
-	std::vector <std::vector<float>> input_float3;
-	std::vector <std::string> input_float_labels;
-	std::vector <float> input_floats;
+	std::vector <std::string> m_inputFloat3Labels;
+	std::vector <std::vector<float>> m_inputFloat3;
+	std::vector <std::string> m_inputFloatLabels;
+	std::vector <float> m_inputFloats;
 
-	std::string node_name;
-	std::string variable_name;
-	int title_color = imgui_colors::BLUE;
-	int visit_count;
+	std::string m_nodeName;
+	std::string m_variableName;
+	int m_titleColor = imgui_colors::BLUE;
+	int m_visitCount;
 
-	std::vector<Node*> previous_non_transform_node;
+	std::vector<Node*> m_previousNonTransformNode;
 
-	std::string get_variable_name()
+	std::string getVariableName()
 	{
-		return variable_name;
+		return m_variableName;
 	}
 	void init();
 

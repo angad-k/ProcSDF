@@ -12,71 +12,71 @@
 class NodeGraph
 {
 private:
-	static NodeGraph* nodeGraph;
-	void depth_first_search_for_topological_sorting(int src, std::vector<int>& topological_sorting,
-		std::vector<TransformNode*>& operation_ordering,
-		Node* previous_non_transform_node = NULL);
-	std::map <int, Node*> allocated_ids;
-	bool dirty = false;
+	static NodeGraph* s_nodeGraph;
+	void depthFirstSearchForTopologicalSorting(int p_src, std::vector<int>& p_topologicalSorting,
+		std::vector<TransformNode*>& p_operationOrdering,
+		Node* p_previousNonTransformNode = NULL);
+	std::map <int, Node*> m_allocatedIDs;
+	bool m_dirty = false;
 public:
 	void initialize();
-	int allocate_id(Node* p_node);
-	void deallocate_id(int id);
-	Node* get_node(int id);
-	void delete_node(int p_id);
-	void add_node(Node* p_new_node);
-	void set_adjacency_list();
-	std::vector<int> get_topological_sorting();
-	Node* get_source_node(int dest_id);
-	int get_source_id(int dest_id);
-	void add_link(int src, int dest);
-	void remove_link_with_endpoint(int p_endpoint);
-	void remove_link_with_endpoints(std::vector<int> p_endpoints);
-	void print_node_graph();
-	void recompile_node_graph();
-	bool is_iterable(int count, int input_pin_size);
+	int allocateID(Node* p_node);
+	void deallocateID(int p_id);
+	Node* getNode(int p_id);
+	void deleteNode(int p_id);
+	void addNode(Node* p_newNode);
+	void setAdjacencyList();
+	std::vector<int> getTopologicalSorting();
+	Node* getSourceNode(int p_destID);
+	int getSourceId(int p_destID);
+	void addLink(int p_src, int p_dest);
+	void removeLinkWithEndpoint(int p_endpoint);
+	void removeLinkWithEndpoints(std::vector<int> p_endpoints);
+	void printNodeGraph();
+	void recompileNodeGraph();
+	bool isIterable(int p_count, int p_inputPinSize);
 
-	bool error_in_compilation;
-	std::string compilation_error;
-	FinalNode* final_node;
+	bool m_errorInCompilation;
+	std::string m_compilationError;
+	FinalNode* m_finalNode;
 	// vector of pairs correspond to the node id and output ids
-	std::map<int, std::vector<int>> adjacency_list;
-	std::vector <Node*> nodes;
-	std::vector<std::pair<int, int>> links;
-	std::map <int, std::set<int>> reachable_objects;
+	std::map<int, std::vector<int>> m_adjacencyList;
+	std::vector <Node*> m_nodes;
+	std::vector<std::pair<int, int>> m_links;
+	std::map <int, std::set<int>> m_reachableObjects;
 	
-	std::string get_compilation_error()
+	std::string getCompilationError()
 	{
-		return compilation_error;
+		return m_compilationError;
 	}
-	void set_compilation_error(std::string p_compilation_error)
+	void setCompilationError(std::string p_compilation_error)
 	{
-		compilation_error = p_compilation_error;
-		error_in_compilation = true;
+		m_compilationError = p_compilation_error;
+		m_errorInCompilation = true;
 	}
-	void clear_compilation_error()
+	void clearCompilationError()
 	{
-		compilation_error.clear();
-		error_in_compilation = false;
+		m_compilationError.clear();
+		m_errorInCompilation = false;
 	}
-	bool check_compilation_error()
+	bool checkCompilationError()
 	{
-		return error_in_compilation;
+		return m_errorInCompilation;
 	}
-	bool is_dirty()
+	bool isDirty()
 	{
-		return dirty;
+		return m_dirty;
 	}
-	void inform_modification()
+	void informModification()
 	{
-		dirty = true;
+		m_dirty = true;
 	}
 
-	static NodeGraph* get_singleton() {
-		if (!nodeGraph)
+	static NodeGraph* getSingleton() {
+		if (!s_nodeGraph)
 		{
-			nodeGraph = new NodeGraph();
+			s_nodeGraph = new NodeGraph();
 		}
-		return nodeGraph;
+		return s_nodeGraph;
 	}
 };

@@ -8,24 +8,24 @@
 
 namespace logger
 {
-	static void log(std::string message)
+	static void log(std::string p_message)
 	{
-		printf(message.c_str());
+		printf(p_message.c_str());
 	}
-	static void log_warning(std::string message)
+	static void logWarning(std::string p_message)
 	{
-		std::string output = "WARNING: " + message + "\n";
+		std::string l_output = "WARNING: " + p_message + "\n";
 		std::cout.clear();
 		std::cout << YELLOW_ANSI;
-		std::cout << output;
+		std::cout << l_output;
 		std::cout << WHITE_ANSI;
 	}
-	static void log_error(std::string message)
+	static void logError(std::string p_message)
 	{
-		std::string output = "ERROR: " + message + "\n";
+		std::string l_output = "ERROR: " + p_message + "\n";
 		std::cout.clear();
 		std::cout << RED_ANSI;
-		std::cout << output;
+		std::cout << l_output;
 		std::cout << WHITE_ANSI;
 	}
 }
@@ -41,11 +41,11 @@ namespace logger
 #define WARN(m_Msg)                                                                                                 \
 	{                                                                                                               \
 		std::string msg = std::string(__FILE__) + ":" + std::to_string(__LINE__) + ":" + std::string(__FUNCTION__) + ": " + m_Msg; \
-		::logger::log_warning(msg);                                                                                    \
+		::logger::logWarning(msg);                                                                                    \
 	}
 
 #define ERR(m_Msg)                                                                                                  \
 	{                                                                                                               \
 		std::string msg = std::string(__FILE__) + ":" + std::to_string(__LINE__) + ":" + std::string(__FUNCTION__) + ": " + m_Msg; \
-		::logger::log_error(msg);                                                                                      \
+		::logger::logError(msg);                                                                                      \
 	}

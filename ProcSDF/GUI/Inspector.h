@@ -7,9 +7,9 @@
 class Inspector
 {
 private:
-	static Inspector* inspector;
+	static Inspector* s_inspector;
 
-	Renderer* renderer;
+	Renderer* m_renderer;
 
 	enum class Tab
 	{
@@ -18,12 +18,12 @@ private:
 		NODEGRAPH_SETTINGS,
 	};
 
-	Tab openedTab;
+	Tab m_openedTab;
 
-	void append_to_same_line_if_applicable(float space_needed)
+	void appendToSameLineIfApplicable(float p_spaceNeeded)
 	{
 		ImGui::SameLine();
-		if (ImGui::GetContentRegionAvail().x <= space_needed)
+		if (ImGui::GetContentRegionAvail().x <= p_spaceNeeded)
 		{
 			ImGui::NewLine();
 		}
@@ -32,16 +32,16 @@ private:
 public:
 	void initialize();
 
-	static Inspector* get_singleton() {
-		if (!inspector)
+	static Inspector* getSingleton() {
+		if (!s_inspector)
 		{
-			inspector = new Inspector();
+			s_inspector = new Inspector();
 		}
-		return inspector;
+		return s_inspector;
 	}
-	template <typename p_nodeType> Node* add_node();
+	template <typename p_nodeType> Node* addNode();
 	void draw();
-	void draw_camera_settings();
-	void draw_rendering_settings();
-	void draw_node_graph_settings();
+	void drawCameraSettings();
+	void drawRenderingSettings();
+	void drawNodeGraphSettings();
 };

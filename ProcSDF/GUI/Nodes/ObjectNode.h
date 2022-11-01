@@ -6,12 +6,12 @@ class ObjectNode : public Node {
 public:
 	ObjectNode()
 	{
-		variable_name = "object";
-		node_name = "Object node";
-		input_pins = { "Input" };
-		output_pins = { "Final Output" };
-		is_object_node = true;
-		title_color = imgui_colors::PURPLE;
+		m_variableName = "object";
+		m_nodeName = "Object node";
+		m_inputPins = { "Input" };
+		m_outputPins = { "Final Output" };
+		m_isObjectNode = true;
+		m_titleColor = imgui_colors::PURPLE;
 		init();
 	}
 };

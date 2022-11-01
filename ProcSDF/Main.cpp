@@ -13,42 +13,42 @@ extern "C" {
 	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
 
-Renderer* Renderer::renderer = 0;
-GUI* GUI::gui = 0;
-Inspector* Inspector::inspector = 0;
-NodeEditor* NodeEditor::nodeEditor = 0;
-ShaderGenerator* ShaderGenerator::shader_generator = 0;
-NodeGraph* NodeGraph::nodeGraph = 0;
+Renderer* Renderer::s_renderer = 0;
+GUI* GUI::s_gui = 0;
+Inspector* Inspector::s_inspector = 0;
+NodeEditor* NodeEditor::s_nodeEditor = 0;
+ShaderGenerator* ShaderGenerator::m_shaderGenerator = 0;
+NodeGraph* NodeGraph::s_nodeGraph = 0;
 
 int main(int, char**)
 {
 	//GUI needs to be created before renderer since it also sets up OpenGL
-	GUI* gui = GUI::get_singleton();
-	Renderer* renderer = Renderer::get_singleton();
-	ShaderGenerator::get_singleton();
-	NodeGraph::get_singleton();
-	Inspector::get_singleton();
-	NodeEditor::get_singleton();
+	GUI* l_gui = GUI::getSingleton();
+	Renderer* m_renderer = Renderer::getSingleton();
+	ShaderGenerator::getSingleton();
+	NodeGraph::getSingleton();
+	Inspector::getSingleton();
+	NodeEditor::getSingleton();
 
 	//This lets the GUI query for Renderer's singleton object.
-	gui->initialize();
+	l_gui->initialize();
 	
-	GLFWwindow* window = gui->get_window();
-	unsigned int render_texture = renderer->get_render_texture();
+	GLFWwindow* l_window = l_gui->getWindow();
+	unsigned int l_renderTexture = m_renderer->getRenderTexture();
 	
-	NodeGraph::get_singleton()->recompile_node_graph();
+	NodeGraph::getSingleton()->recompileNodeGraph();
 
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(l_window))
 	{
-		gui->setup_frame();
+		l_gui->setupFrame();
 
-		ImVec2 renderSceneSize = gui->get_render_size();
-		renderer->draw(renderSceneSize.x, renderSceneSize.y);
+		ImVec2 l_renderSceneSize = l_gui->getRenderSize();
+		m_renderer->draw(l_renderSceneSize.x, l_renderSceneSize.y);
 		
-		gui->render_frame();
+		l_gui->renderFrame();
 	}
 
-	gui->~GUI();
+	l_gui->~GUI();
 
 	return 0;
 }

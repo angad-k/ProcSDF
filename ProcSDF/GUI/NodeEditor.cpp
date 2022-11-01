@@ -8,35 +8,35 @@ void NodeEditor::draw()
 	ImGui::Begin("Nodes workspace");
 	if (ImGui::Button("Recompile"))
 	{
-		NodeGraph::get_singleton()->recompile_node_graph();
+		NodeGraph::getSingleton()->recompileNodeGraph();
 	}
 	ImGui::SameLine();
 
-	if (selected_nodes.size() == 0)
+	if (m_selectedNodes.size() == 0)
 	{
 		ImGui::BeginDisabled();
 	}
 	ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::RED);
 	if (ImGui::Button("Delete selected nodes"))
 	{
-		for (int sel_id : selected_nodes)
+		for (int sel_id : m_selectedNodes)
 		{
-			NodeGraph::get_singleton()->delete_node(sel_id);
+			NodeGraph::getSingleton()->deleteNode(sel_id);
 		}
 	}
 	ImGui::PopStyleColor();
 	ImGui::SameLine();
-	if (selected_nodes.size() == 0)
+	if (m_selectedNodes.size() == 0)
 	{
 		ImGui::EndDisabled();
 	}
-	selected_nodes.clear();
+	m_selectedNodes.clear();
 
 	ImGui::PushStyleColor(ImGuiCol_Text, imgui_colors::RED);
-	ImGui::Text(NodeGraph::get_singleton()->get_compilation_error().c_str());
+	ImGui::Text(NodeGraph::getSingleton()->getCompilationError().c_str());
 	ImGui::PopStyleColor();
 	ImGui::PushStyleColor(ImGuiCol_Text, imgui_colors::ORANGE);
-	if ((!NodeGraph::get_singleton()->check_compilation_error()) && NodeGraph::get_singleton()->is_dirty())
+	if ((!NodeGraph::getSingleton()->checkCompilationError()) && NodeGraph::getSingleton()->isDirty())
 	{
 		ImGui::SameLine();
 		ImGui::Text("Node Graph modified, recompile for changes to take effect.");
@@ -48,44 +48,44 @@ void NodeEditor::draw()
 
 	ImNodes::GetIO().LinkDetachWithModifierClick.Modifier = &ImGui::GetIO().KeyCtrl;
 
-	NodeGraph* nodeGraph = NodeGraph::get_singleton();
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 
-	for (int i = 0; i < nodeGraph->nodes.size(); i++)
+	for (int i = 0; i < l_nodeGraph->m_nodes.size(); i++)
 	{
-		nodeGraph->nodes[i]->draw();
+		l_nodeGraph->m_nodes[i]->draw();
 	}
 
-	for (int i = 0; i < nodeGraph->links.size(); ++i)
+	for (int i = 0; i < l_nodeGraph->m_links.size(); ++i)
 	{
-		const std::pair<int, int> p = nodeGraph->links[i];
+		const std::pair<int, int> p = l_nodeGraph->m_links[i];
 		ImNodes::Link(i, p.first, p.second);
 	}
 
 	ImNodes::EndNodeEditor();
 
-	int start_attr;
-	int end_attr;
-	if (ImNodes::IsLinkCreated(&start_attr, &end_attr))
+	int l_startAttr;
+	int l_endAttr;
+	if (ImNodes::IsLinkCreated(&l_startAttr, &l_endAttr))
 	{
-		nodeGraph->add_link(start_attr, end_attr);
+		l_nodeGraph->addLink(l_startAttr, l_endAttr);
 	}
 
 	// since we create links with identifier being its index, we can directly use it here.
-	int link_id;
-	if (ImNodes::IsLinkDestroyed(&link_id))
+	int l_linkID;
+	if (ImNodes::IsLinkDestroyed(&l_linkID))
 	{
-		if (!nodeGraph->get_node(nodeGraph->links[link_id].second)->is_final_node)
+		if (!l_nodeGraph->getNode(l_nodeGraph->m_links[l_linkID].second)->m_isFinalNode)
 		{
-			nodeGraph->links.erase(nodeGraph->links.begin() + link_id);
-			nodeGraph->inform_modification();
+			l_nodeGraph->m_links.erase(l_nodeGraph->m_links.begin() + l_linkID);
+			l_nodeGraph->informModification();
 		}
 	}
 	
-	const int num_selected_nodes = ImNodes::NumSelectedNodes();
-	selected_nodes.resize(num_selected_nodes);
-	if (num_selected_nodes > 0)
+	const int l_numSelectedNodes = ImNodes::NumSelectedNodes();
+	m_selectedNodes.resize(l_numSelectedNodes);
+	if (l_numSelectedNodes > 0)
 	{
-		ImNodes::GetSelectedNodes(selected_nodes.data());
+		ImNodes::GetSelectedNodes(m_selectedNodes.data());
 	}
 
 	ImGui::End();

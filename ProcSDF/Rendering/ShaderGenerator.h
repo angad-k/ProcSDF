@@ -6,63 +6,63 @@
 class ShaderGenerator
 {
 private:
-	std::string shader;
-	int object_count;
-	static ShaderGenerator* shader_generator;
-	std::map<int, int> node_id_to_object_id_map;
+	std::string m_shader;
+	int m_objectCount;
+	static ShaderGenerator* m_shaderGenerator;
+	std::map<int, int> m_nodeIDToObjectIDMap;
 	
-	std::vector<std::string> uniform_vec3;
-	std::vector<std::string> uniform_floats;
-	std::map<int, int> object_id_to_node_id_map;
+	std::vector<std::string> m_uniformVec3;
+	std::vector<std::string> m_uniformFloats;
+	std::map<int, int> m_objectIDToNodeIDMap;
 
 	
-	bool shader_modified = true;
-	static std::string fetch_file_content(std::string file_name);
-	std::string generate_uniform_declarations();
-	std::string generate_object_functions();
-	std::string generate_closest_object_info_function();
-	std::string generate_calculate_normal_function();
-	std::string generate_get_target_ray_function();
-	std::string get_transform(TransformNode* p_node);
-	void compute_and_set_object_count();
-	void compute_uniforms();
+	bool m_shaderModified = true;
+	static std::string fetchFileContent(std::string p_fileName);
+	std::string generateUniformDeclarations();
+	std::string generateObjectFunctions();
+	std::string generateClosestObjectInfoFunction();
+	std::string generateCalculateNormalFunction();
+	std::string generateGetTargetRayFunction();
+	std::string getTransform(TransformNode* p_node);
+	void computeAndSetObjectCount();
+	void computeUniforms();
 public:
-	static ShaderGenerator* get_singleton() {
-		if (!shader_generator)
+	static ShaderGenerator* getSingleton() {
+		if (!m_shaderGenerator)
 		{
-			shader_generator = new ShaderGenerator();
+			m_shaderGenerator = new ShaderGenerator();
 		}
-		return shader_generator;
+		return m_shaderGenerator;
 	}
 
-	static std::string get_uniform_string_from_label(std::string p_variable_name, std::string p_label);
+	static std::string getUniformStringFromLabel(std::string p_variable_name, std::string p_label);
 
-	std::string get_shader() {
-		return shader;
+	std::string getShader() {
+		return m_shader;
 	}
 
-	bool is_shader_modified()
+	bool isShaderModified()
 	{
-		return shader_modified;
+		return m_shaderModified;
 	}
 
-	void set_shader_modification_handled()
+	void setShaderModificationHandled()
 	{
-		shader_modified = false;
+		m_shaderModified = false;
 	}
 
-	void set_shader(std::string shader) {
-		this->shader = shader;
+	void setShader(std::string p_shader) {
+		this->m_shader = p_shader;
 	}
 
-	int get_object_count() {
-		return object_count;
+	int getObjectCount() {
+		return m_objectCount;
 	}
 
-	void set_object_count(int count) {
-		object_count = count;
+	void setObjectCount(int p_count) {
+		m_objectCount = p_count;
 	}
 
-	void generate_and_set_shader();
+	void generateAndSetShader();
 };
 
