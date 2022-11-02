@@ -6,6 +6,7 @@
 #include "GUI/GUI.h"
 #include "Rendering/ShaderGenerator.h"
 #include "GUI/NodeGraph.h"
+#include "Common/WindowsInterface.h"
 
 // This is just a one-liner I found online that increases the code's affinity to Nvidia's GPU and so, 
 // doesn't run on the integrated card by default.
@@ -17,7 +18,7 @@ Renderer* Renderer::s_renderer = 0;
 GUI* GUI::s_gui = 0;
 Inspector* Inspector::s_inspector = 0;
 NodeEditor* NodeEditor::s_nodeEditor = 0;
-ShaderGenerator* ShaderGenerator::m_shaderGenerator = 0;
+ShaderGenerator* ShaderGenerator::s_shaderGenerator = 0;
 NodeGraph* NodeGraph::s_nodeGraph = 0;
 
 int main(int, char**)
@@ -37,6 +38,8 @@ int main(int, char**)
 	unsigned int l_renderTexture = l_renderer->getRenderTexture();
 	
 	NodeGraph::getSingleton()->recompileNodeGraph();
+
+	WindowsInterface::openFile();
 
 	while (!glfwWindowShouldClose(l_window))
 	{
