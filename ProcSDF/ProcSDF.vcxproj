@@ -160,6 +160,7 @@
     <ClCompile Include="GUI\Inspector.cpp" />
     <ClCompile Include="GUI\NodeEditor.cpp" />
     <ClCompile Include="GUI\NodeGraph.cpp" />
+    <ClCompile Include="GUI\Nodes\CustomNode.cpp" />
     <ClCompile Include="GUI\Nodes\Node.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="GUI\Inspector.h" />
     <ClInclude Include="GUI\NodeEditor.h" />
     <ClInclude Include="GUI\NodeGraph.h" />
+    <ClInclude Include="GUI\Nodes\CustomNode.h" />
     <ClInclude Include="GUI\Nodes\FinalNode.h" />
     <ClInclude Include="GUI\Nodes\Node.h" />
     <ClInclude Include="GUI\Nodes\ObjectNode.h" />

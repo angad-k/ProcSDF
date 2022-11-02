@@ -7,7 +7,6 @@
 #include "GUI/GUI.h"
 #include "Rendering/ShaderGenerator.h"
 #include "GUI/NodeGraph.h"
-#include "Common/os.h"
 
 // This is just a one-liner I found online that increases the code's affinity to Nvidia's GPU and so, 
 // doesn't run on the integrated card by default.
@@ -39,8 +38,6 @@ int main(int, char**)
 	unsigned int l_renderTexture = l_renderer->getRenderTexture();
 	
 	NodeGraph::getSingleton()->recompileNodeGraph();
-
-	OS::pickFile();
 
 	while (!glfwWindowShouldClose(l_window))
 	{

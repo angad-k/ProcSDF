@@ -5,7 +5,9 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/ObjectNode.h"
 #include "GUI/Nodes/TransformNodes.h"
+#include "GUI/Nodes/CustomNode.h"
 #include "GuiUtilities.h"
+#include "Common/os.h"
 
 void Inspector::initialize()
 {
@@ -94,6 +96,17 @@ void Inspector::drawRenderingSettings()
 
 void Inspector::drawNodeGraphSettings()
 {
+	if (ImGui::Button("Add custom node"))
+	{
+		std::pair<bool, std::string> l_pickFileResult = OS::pickFile();
+		if (l_pickFileResult.first)
+		{
+			std::string l_filePath = l_pickFileResult.second;
+			CustomNode* l_customNode = new CustomNode(l_filePath);
+			NodeGraph::getSingleton()->addNode(l_customNode);
+		}
+	}
+	ImGui::Separator();
 	if (ImGui::TreeNode("Add nodes"))
 	{
 		ImGui::Indent();

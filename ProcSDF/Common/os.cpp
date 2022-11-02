@@ -14,5 +14,9 @@ std::pair<bool, std::string> OS::pickFile() {
 	{
 		PRINT("File picked : " + l_filePath.second);
 	}
+	else
+	{
+		PRINT("File not picked.");
+	}
 	return l_filePath;
 }

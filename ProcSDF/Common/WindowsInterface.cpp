@@ -1,5 +1,9 @@
 #include "WindowsInterface.h"
 
+// Credits to   : xCENTx 
+// from         : https://stackoverflow.com/questions/68601080/how-do-you-open-a-file-explorer-dialogue-in-c
+// for being kind enough for helping internet strangers navigate the wild wild west of native Windows API.
+// openFile is picked from the above link.
 std::pair<bool, std::string> WindowsInterface::openFile()
 {
     std::string l_filePath;
