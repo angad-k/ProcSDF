@@ -5,7 +5,7 @@
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/FinalNode.h"
 #include "GUI/Nodes/ObjectNode.h"
-#include "Utilities/logger.h"
+#include "Common/logger.h"
 #include "Rendering/ShaderGenerator.h"
 #pragma once
 

@@ -6,7 +6,7 @@
 
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
-#include "Constants/constant.h"
+#include "Common/constant.h"
 #pragma once
 
 Renderer::Renderer()

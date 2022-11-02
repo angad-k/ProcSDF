@@ -90,7 +90,7 @@
     <ClCompile Include="GUI\GuiUtilities.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\logger.h">
+    <ClCompile Include="Common\logger.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,7 +131,7 @@
     <ClInclude Include="GUI\Nodes\ObjectNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Constants\constant.h">
+    <ClInclude Include="Common\constant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Nodes\TransformNodes.h">

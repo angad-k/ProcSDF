@@ -1,7 +1,7 @@
 #include "GUI/NodeEditor.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeGraph.h"
-#include "Constants/constant.h"
+#include "Common/constant.h"
 
 void NodeEditor::draw()
 {

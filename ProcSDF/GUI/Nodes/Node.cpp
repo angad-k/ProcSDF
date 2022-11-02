@@ -1,14 +1,14 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "Constants/constant.h"
+#include "Common/constant.h"
 #include "GUI/GuiUtilities.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
-#include "Utilities/logger.h"
+#include "Common/logger.h"
 #include "Rendering/ShaderGenerator.h"
 
 void Node::init()
