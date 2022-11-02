@@ -1,5 +1,3 @@
-#include <fstream>
-#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -7,6 +5,7 @@
 #include "Rendering/ShaderGenerator.h"
 #include "Common/constant.h"
 #include "GUI/NodeGraph.h"
+#include "Common/os.h"
 void ShaderGenerator::computeAndSetObjectCount() {
 	
 	int l_objectCount = 0;
@@ -47,11 +46,11 @@ void ShaderGenerator::generateAndSetShader() {
 	int l_index = 0;
 	
 	// Appends the shader header which includes a number of utility functions.
-	l_shaderString.append(ShaderGenerator::fetchFileContent(shader_generation::shader_files[l_index++]));
+	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 	// Appends all the uniform declarations.
 	l_shaderString.append(ShaderGenerator::generateUniformDeclarations());
 	// Appends all the primitive functions.
-	l_shaderString.append(ShaderGenerator::fetchFileContent(shader_generation::shader_files[l_index++]));
+	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 	// Generates and appends the object distance functions.
 	l_shaderString.append(ShaderGenerator::generateObjectFunctions());
 	// Generates and appends the closest object info function.
@@ -61,20 +60,17 @@ void ShaderGenerator::generateAndSetShader() {
 	// Generates and appends the get target ray function.
 	l_shaderString.append(ShaderGenerator::generateGetTargetRayFunction());
 	// Appends the raymarch and main function.
-	l_shaderString.append(ShaderGenerator::fetchFileContent(shader_generation::shader_files[l_index++]));
+	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 
 	ShaderGenerator::setShader(l_shaderString);
 
 	m_shaderModified = true;
 }
 
-std::string ShaderGenerator::fetchFileContent(std::string p_fileName) {
-	std::string l_fileContent = "\n";
+std::string ShaderGenerator::generateShaderFilePath(std::string p_fileName)
+{
 	std::string l_filePath = sdf::SHADER_FOLDER_PATH + p_fileName + sdf::SHADER_FILE_EXTENSION;
-	std::ifstream sourceFile(l_filePath);
-	l_fileContent.append((std::istreambuf_iterator< char >(sourceFile)), std::istreambuf_iterator< char >());
-	l_fileContent.append("\n");
-	return l_fileContent;
+	return l_filePath;
 }
 
 std::string ShaderGenerator::generateUniformDeclarations()

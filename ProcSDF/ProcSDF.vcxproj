@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\constant.h" />
+    <ClInclude Include="Common\os.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Inspector.h" />
     <ClInclude Include="GUI\NodeEditor.h" />

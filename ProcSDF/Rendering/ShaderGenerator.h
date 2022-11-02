@@ -17,7 +17,8 @@ private:
 
 	
 	bool m_shaderModified = true;
-	static std::string fetchFileContent(std::string p_fileName);
+
+	std::string generateShaderFilePath(std::string p_fileName);
 	std::string generateUniformDeclarations();
 	std::string generateObjectFunctions();
 	std::string generateClosestObjectInfoFunction();
