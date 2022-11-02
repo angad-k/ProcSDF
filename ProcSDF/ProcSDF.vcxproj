@@ -152,6 +152,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Common\os.cpp" />
+    <ClCompile Include="Common\WindowsInterface.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="GUI\GUI.cpp" />
     <ClCompile Include="GUI\GuiUtilities.h" />

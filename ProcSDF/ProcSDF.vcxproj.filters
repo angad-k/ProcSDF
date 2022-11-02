@@ -93,6 +93,12 @@
     <ClCompile Include="Common\logger.h">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Common\os.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\WindowsInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rendering\Renderer.h">

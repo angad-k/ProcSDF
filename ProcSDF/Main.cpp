@@ -1,12 +1,13 @@
 #include <glad/glad.h>
 #include <stdio.h>
 #include <GLFW/glfw3.h>
+#pragma once
 #include <windows.h>
 #include "Renderer.h"
 #include "GUI/GUI.h"
 #include "Rendering/ShaderGenerator.h"
 #include "GUI/NodeGraph.h"
-#include "Common/WindowsInterface.h"
+#include "Common/os.h"
 
 // This is just a one-liner I found online that increases the code's affinity to Nvidia's GPU and so, 
 // doesn't run on the integrated card by default.
@@ -39,7 +40,7 @@ int main(int, char**)
 	
 	NodeGraph::getSingleton()->recompileNodeGraph();
 
-	WindowsInterface::openFile();
+	OS::pickFile();
 
 	while (!glfwWindowShouldClose(l_window))
 	{
