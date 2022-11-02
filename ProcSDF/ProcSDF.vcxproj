@@ -162,7 +162,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\ShaderGenerator.cpp" />
-    <ClCompile Include="Utilities\logger.h" />
+    <ClCompile Include="Common\logger.h" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_draw.cpp" />
@@ -174,7 +174,8 @@
     <ClCompile Include="Vendor\Include\ImGUI\imnodes.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constants\constant.h" />
+    <ClInclude Include="Common\constant.h" />
+    <ClInclude Include="Common\os.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Inspector.h" />
     <ClInclude Include="GUI\NodeEditor.h" />

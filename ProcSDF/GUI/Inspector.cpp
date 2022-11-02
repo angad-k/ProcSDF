@@ -5,99 +5,100 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/ObjectNode.h"
 #include "GUI/Nodes/TransformNodes.h"
+#include "GuiUtilities.h"
 
 void Inspector::initialize()
 {
-	renderer = Renderer::get_singleton();
+	m_renderer = Renderer::getSingleton();
 }
 
 template<typename p_nodeType>
-inline Node* Inspector::add_node()
+inline Node* Inspector::addNode()
 {
-	Node* new_node = new p_nodeType();
-	NodeGraph::get_singleton()->add_node(new_node);
-	return new_node;
+	Node* l_newNode = new p_nodeType();
+	NodeGraph::getSingleton()->addNode(l_newNode);
+	return l_newNode;
 }
 
 void Inspector::draw()
 {
 	ImGui::Begin("Inspector");
 
-	Tab oldTab = openedTab;
+	Tab l_oldTab = m_openedTab;
 
-	if (oldTab == Tab::CAMERA_SETTINGS)
+	if (l_oldTab == Tab::CAMERA_SETTINGS)
 	{
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Camera Settings"))
-		openedTab = Tab::CAMERA_SETTINGS;
+		m_openedTab = Tab::CAMERA_SETTINGS;
 	ImGui::SameLine();
-	if (oldTab == Tab::CAMERA_SETTINGS)
+	if (l_oldTab == Tab::CAMERA_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
 
-	if (oldTab == Tab::RENDERING_SETTINGS)
+	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Rendering Settings"))
-		openedTab = Tab::RENDERING_SETTINGS;
+		m_openedTab = Tab::RENDERING_SETTINGS;
 	ImGui::SameLine();
-	if (oldTab == Tab::RENDERING_SETTINGS)
+	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
 
-	if (oldTab == Tab::NODEGRAPH_SETTINGS)
+	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
 	{
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Node graph settings"))
-		openedTab = Tab::NODEGRAPH_SETTINGS;
-	if (oldTab == Tab::NODEGRAPH_SETTINGS)
+		m_openedTab = Tab::NODEGRAPH_SETTINGS;
+	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
 
 	ImGui::Separator();
 
-	switch (openedTab)
+	switch (m_openedTab)
 	{
 	case Tab::CAMERA_SETTINGS:
-		draw_camera_settings();
+		drawCameraSettings();
 		break;
 	case Tab::RENDERING_SETTINGS:
-		draw_rendering_settings();
+		drawRenderingSettings();
 		break;
 	case Tab::NODEGRAPH_SETTINGS:
-		draw_node_graph_settings();
+		drawNodeGraphSettings();
 		break;
 	}
 
 	ImGui::End();
 }
 
-void Inspector::draw_camera_settings()
+void Inspector::drawCameraSettings()
 {
-	float cameraOrigin[3] = { renderer->get_camera_origin()[0], renderer->get_camera_origin()[1], renderer->get_camera_origin()[2] };
-	ImGui::DragFloat3("Camera Origin", cameraOrigin);
-	renderer->set_camera_origin(cameraOrigin);
-	ImGui::DragFloat("Focal Length", renderer->get_focal_length());
+	float p_cameraOrigin[3] = { m_renderer->get_camera_origin()[0], m_renderer->get_camera_origin()[1], m_renderer->get_camera_origin()[2] };
+	ImGui::DragFloat3("Camera Origin", p_cameraOrigin);
+	m_renderer->setCameraOrigin(p_cameraOrigin);
+	ImGui::DragFloat("Focal Length", m_renderer->getFocalLength());
 }
 
-void Inspector::draw_rendering_settings()
+void Inspector::drawRenderingSettings()
 {
 	ImGui::Text("Something will come here");
 }
 
-void Inspector::draw_node_graph_settings()
+void Inspector::drawNodeGraphSettings()
 {
 	if (ImGui::TreeNode("Add nodes"))
 	{
 		ImGui::Indent();
 		
-		const int approximate_button_size = 85;
+		const int l_approximateButtonSize = 85;
 
 		if (ImGui::TreeNode("Primitives"))
 		{
@@ -105,22 +106,22 @@ void Inspector::draw_node_graph_settings()
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::PRIMITIVE);
 			if (ImGui::Button("Sphere"))
 			{
-				add_node<SphereNode>();
+				addNode<SphereNode>();
 			}
-			append_to_same_line_if_applicable(approximate_button_size);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Box"))
 			{
-				add_node<BoxNode>();
+				addNode<BoxNode>();
 			}
-			append_to_same_line_if_applicable(approximate_button_size);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Torus"))
 			{
-				add_node<TorusNode>();
+				addNode<TorusNode>();
 			}
-			append_to_same_line_if_applicable(approximate_button_size);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Box Frame"))
 			{
-				add_node<BoxFrameNode>();
+				addNode<BoxFrameNode>();
 			}
 
 			ImGui::PopStyleColor();
@@ -134,12 +135,12 @@ void Inspector::draw_node_graph_settings()
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OPERATION);
 			if (ImGui::Button("Intersection"))
 			{
-				add_node<IntersectionNode>();
+				addNode<IntersectionNode>();
 			}
-			append_to_same_line_if_applicable(approximate_button_size);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Union"))
 			{
-				add_node<UnionNode>();
+				addNode<UnionNode>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
@@ -153,10 +154,10 @@ void Inspector::draw_node_graph_settings()
 			if (ImGui::Button("Object"))
 			{
 				//int node_id = add_node<ObjectNode>();
-				Node* object_node = add_node<ObjectNode>();
-				int final_node_id = NodeGraph::get_singleton()->final_node->id;
-				NodeGraph::get_singleton()->add_link(object_node->output_ids[0], 
-					NodeGraph::get_singleton()->final_node->input_ids[0]);
+				Node* object_node = addNode<ObjectNode>();
+				int final_node_id = NodeGraph::getSingleton()->m_finalNode->m_ID;
+				NodeGraph::getSingleton()->addLink(object_node->m_outputIDs[0], 
+					NodeGraph::getSingleton()->m_finalNode->m_inputIDs[0]);
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
@@ -169,22 +170,22 @@ void Inspector::draw_node_graph_settings()
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::TRANFSFORM);
 			if (ImGui::Button("Translation"))
 			{
-				add_node<TranslationNode>();
+				addNode<TranslationNode>();
 			}
-			append_to_same_line_if_applicable(approximate_button_size);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Rotation Around X-Axis"))
 			{
-				add_node<RotationNodeX>();
+				addNode<RotationNodeX>();
 			}
-			append_to_same_line_if_applicable(approximate_button_size);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Rotation Around Y-Axis"))
 			{
-				add_node<RotationNodeY>();
+				addNode<RotationNodeY>();
 			}
-			append_to_same_line_if_applicable(approximate_button_size);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Rotation Around Z-Axis"))
 			{
-				add_node<RotationNodeZ>();
+				addNode<RotationNodeZ>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

@@ -6,204 +6,204 @@
 
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
-#include "Constants/constant.h"
+#include "Common/constant.h"
 #pragma once
 
 Renderer::Renderer()
 {
-	float vertices[] = {
+	float l_vertices[] = {
 	 1.5f,  1.5f, 1.0f,
 	 1.5f, -1.5f, 1.0f,
 	-1.5f, -1.5f, 1.0f,
 	-1.5f,  1.5f, 1.0f
 	};
-	unsigned int indices[] = {
+	unsigned int l_indices[] = {
 		0, 1, 3,
 		1, 2, 3
 	};
 
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
+	unsigned int l_VBO;
+	glGenBuffers(1, &l_VBO);
 
-	unsigned int EBO;
-	glGenBuffers(1, &EBO);
+	unsigned int l_EBO;
+	glGenBuffers(1, &l_EBO);
 
 	//assemble_shader();
 
-	setup_frame_buffer();
+	setupFrameBuffer();
 
-	glGenVertexArrays(1, &VAO);
+	glGenVertexArrays(1, &m_VAO);
 
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBindVertexArray(m_VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, l_VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(l_vertices), l_vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, l_EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(l_indices), l_indices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 }
 
-void Renderer::draw(float width, float height)
+void Renderer::draw(float p_width, float p_height)
 {
-	if (cachedWidth != width || cachedHeight != height)
+	if (m_cachedWidth != p_width || m_cachedHeight != p_height)
 	{
-		resize_render_texture(width, height);
+		resizeRenderTexture(p_width, p_height);
 	}
 
-	if (ShaderGenerator::get_singleton()->is_shader_modified())
+	if (ShaderGenerator::getSingleton()->isShaderModified())
 	{
-		assemble_shader();
-		ShaderGenerator::get_singleton()->set_shader_modification_handled();
+		assembleShader();
+		ShaderGenerator::getSingleton()->setShaderModificationHandled();
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	glViewport(0.0, 0.0, width, height);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+	glViewport(0.0, 0.0, p_width, p_height);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	float timeValue = glfwGetTime();
 
-	glUniform3f(cameraOrigin, cameraOriginValue[0], cameraOriginValue[1], cameraOriginValue[2]);// +5.0 * sin(timeValue));
-	glUniform2f(viewportSize, width, height);
-	glUniform1f(focalLength, focalLengthValue);
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
+	glUniform3f(m_cameraOrigin, m_cameraOriginValue[0], m_cameraOriginValue[1], m_cameraOriginValue[2]);
+	glUniform2f(m_viewportSize, p_width, p_height);
+	glUniform1f(m_focalLength, m_focalLengthValue);
+	glUseProgram(m_shaderProgram);
+	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::assemble_shader()
+void Renderer::assembleShader()
 {
-	std::string fragmentSrc = ShaderGenerator::get_singleton()->get_shader();
+	std::string l_fragmentSrc = ShaderGenerator::getSingleton()->getShader();
 
-	std::string vertexPath = sdf::VERTEX_SHADER_PATH;
-	unsigned int vertexShader = compile_shader(vertexPath, GL_VERTEX_SHADER);
-	unsigned int fragmentShader = compile_shader(fragmentSrc.c_str(), GL_FRAGMENT_SHADER);
+	std::string l_vertexPath = sdf::VERTEX_SHADER_PATH;
+	unsigned int l_vertexShader = compileShader(l_vertexPath, GL_VERTEX_SHADER);
+	unsigned int l_fragmentShader = compileShader(l_fragmentSrc.c_str(), GL_FRAGMENT_SHADER);
 
-	link_shader(vertexShader, fragmentShader);
+	linkShader(l_vertexShader, l_fragmentShader);
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	glDeleteShader(l_vertexShader);
+	glDeleteShader(l_fragmentShader);
 }
 
-unsigned int Renderer::compile_shader(std::string shaderPath, unsigned int shaderType)
+unsigned int Renderer::compileShader(std::string p_shaderPath, unsigned int p_shaderType)
 {
-	std::string shaderString;
-	std::ifstream sourceFile(shaderPath);
-	shaderString.assign((std::istreambuf_iterator< char >(sourceFile)), std::istreambuf_iterator< char >());
-	const GLchar* shaderSource = shaderString.c_str();
+	std::string l_shaderString;
+	std::ifstream sourceFile(p_shaderPath);
+	l_shaderString.assign((std::istreambuf_iterator< char >(sourceFile)), std::istreambuf_iterator< char >());
+	const GLchar* l_shaderSource = l_shaderString.c_str();
 
-	unsigned int shader;
-	shader = glCreateShader(shaderType);
+	unsigned int l_shader;
+	l_shader = glCreateShader(p_shaderType);
 
-	glShaderSource(shader, 1, (const GLchar**)&shaderSource, NULL);
-	glCompileShader(shader);
+	glShaderSource(l_shader, 1, (const GLchar**)&l_shaderSource, NULL);
+	glCompileShader(l_shader);
 
-	int  success;
-	char infoLog[512];
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-	if (!success)
+	int  l_success;
+	char l_infoLog[512];
+	glGetShaderiv(l_shader, GL_COMPILE_STATUS, &l_success);
+	if (!l_success)
 	{
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+		glGetShaderInfoLog(l_shader, 512, NULL, l_infoLog);
+		std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << l_infoLog << std::endl;
 	}
-	return shader;
+	return l_shader;
 }
 
-unsigned int Renderer::compile_shader(const char* shaderSrc, unsigned int shaderType)
+unsigned int Renderer::compileShader(const char* p_shaderSrc, unsigned int p_shaderType)
 {
-	const GLchar* shaderSource = shaderSrc;
+	const GLchar* l_shaderSource = p_shaderSrc;
 
-	unsigned int shader;
-	shader = glCreateShader(shaderType);
+	unsigned int l_shader;
+	l_shader = glCreateShader(p_shaderType);
 
-	glShaderSource(shader, 1, (const GLchar**)&shaderSource, NULL);
-	glCompileShader(shader);
+	glShaderSource(l_shader, 1, (const GLchar**)&l_shaderSource, NULL);
+	glCompileShader(l_shader);
 
-	int  success;
-	char infoLog[512];
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-	if (!success)
+	int  l_success;
+	char l_infoLog[512];
+	glGetShaderiv(l_shader, GL_COMPILE_STATUS, &l_success);
+	if (!l_success)
 	{
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+		glGetShaderInfoLog(l_shader, 512, NULL, l_infoLog);
+		std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << l_infoLog << std::endl;
 		std::cout << "Shader : \n";
-		std::cout << shaderSrc << std::endl;
+		std::cout << p_shaderSrc << std::endl;
 	}
-	return shader;
+	return l_shader;
 }
 
 
-void Renderer::link_shader(unsigned int vertexShader, unsigned int fragmentShader)
+void Renderer::linkShader(unsigned int p_vertexShader, unsigned int p_fragmentShader)
 {
-	shaderProgram = glCreateProgram();
+	m_shaderProgram = glCreateProgram();
 
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
+	glAttachShader(m_shaderProgram, p_vertexShader);
+	glAttachShader(m_shaderProgram, p_fragmentShader);
+	glLinkProgram(m_shaderProgram);
 
-	cameraOrigin = glGetUniformLocation(shaderProgram, "u_camera_origin");
-	viewportSize = glGetUniformLocation(shaderProgram, "u_viewport_size");
-	focalLength = glGetUniformLocation(shaderProgram, "u_focal_length");
+	m_cameraOrigin = glGetUniformLocation(m_shaderProgram, "u_camera_origin");
+	m_viewportSize = glGetUniformLocation(m_shaderProgram, "u_viewport_size");
+	m_focalLength = glGetUniformLocation(m_shaderProgram, "u_focal_length");
 
-	int  success;
-	char infoLog[512];
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::LINK_FAILED\n" << infoLog << std::endl;
+	int  l_success;
+	char l_infoLog[512];
+	glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &l_success);
+	if (!l_success) {
+		glGetProgramInfoLog(m_shaderProgram, 512, NULL, l_infoLog);
+		std::cout << "ERROR::SHADER::LINK_FAILED\n" << l_infoLog << std::endl;
 	}
 }
 
-void Renderer::setup_frame_buffer()
+void Renderer::setupFrameBuffer()
 {
-	glGenFramebuffers(1, &FBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glGenFramebuffers(1, &m_FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 
-	glGenTextures(1, &render_texture);
-	glBindTexture(GL_TEXTURE_2D, render_texture);
+	glGenTextures(1, &m_renderTexture);
+	glBindTexture(GL_TEXTURE_2D, m_renderTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_renderTexture, 0);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::resize_render_texture(float width, float height)
+void Renderer::resizeRenderTexture(float p_width, float p_height)
 {
-	glBindTexture(GL_TEXTURE_2D, render_texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glBindTexture(GL_TEXTURE_2D, m_renderTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, p_width, p_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, render_texture, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_renderTexture, 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	cachedWidth = width;
-	cachedHeight = height;
+	m_cachedWidth = p_width;
+	m_cachedHeight = p_height;
 }
 
-void Renderer::set_uniform_float(std::string p_uniform_name, float p_val)
+void Renderer::setUniformFloat(std::string p_uniform_name, float p_val)
 {
-	unsigned int uniform_location = glGetUniformLocation(shaderProgram, p_uniform_name.c_str());
-	glUniform1f(uniform_location, p_val);
+	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
+	glUniform1f(l_uniform_location, p_val);
 }
 
-void Renderer::set_uniform_float2(std::string p_uniform_name, float p_x, float p_y)
+void Renderer::setUniformFloat2(std::string p_uniform_name, float p_x, float p_y)
 {
-	unsigned int uniform_location = glGetUniformLocation(shaderProgram, p_uniform_name.c_str());
-	glUniform2f(uniform_location, p_x, p_y);
+	unsigned int l_uniformLocation = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
+	glUniform2f(l_uniformLocation, p_x, p_y);
 }
 
-void Renderer::set_uniform_float3(std::string p_uniform_name, float p_x, float p_y, float p_z)
+void Renderer::setUniformFloat3(std::string p_uniform_name, float p_x, float p_y, float p_z)
 {
-	unsigned int uniform_location = glGetUniformLocation(shaderProgram, p_uniform_name.c_str());
-	glUniform3f(uniform_location, p_x, p_y, p_z);
+	unsigned int l_uniformLocation = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
+	glUniform3f(l_uniformLocation, p_x, p_y, p_z);
 }

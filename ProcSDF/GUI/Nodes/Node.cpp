@@ -1,135 +1,135 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "Constants/constant.h"
+#include "Common/constant.h"
 #include "GUI/GuiUtilities.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeEditor.h"
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
-#include "Utilities/logger.h"
+#include "Common/logger.h"
 #include "Rendering/ShaderGenerator.h"
 
 void Node::init()
 {
-	NodeGraph* node_graph = NodeGraph::get_singleton();
-	id = node_graph->allocate_id(this);
-	variable_name = node_name + "_" + std::to_string(id);
-	input_ids = std::vector<int>(input_pins.size());
-	output_ids = std::vector<int>(output_pins.size());
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	m_ID = l_nodeGraph->allocateID(this);
+	m_variableName = m_nodeName + "_" + std::to_string(m_ID);
+	m_inputIDs = std::vector<int>(m_inputPins.size());
+	m_outputIDs = std::vector<int>(m_outputPins.size());
 
-	std::transform(input_ids.begin(), input_ids.end(), input_ids.begin(), [node_graph, this](int i) { return node_graph->allocate_id(this); });
+	std::transform(m_inputIDs.begin(), m_inputIDs.end(), m_inputIDs.begin(), [l_nodeGraph, this](int i) { return l_nodeGraph->allocateID(this); });
 
-	std::transform(output_ids.begin(), output_ids.end(), output_ids.begin(), [node_graph, this](int i) { return node_graph->allocate_id(this); });
+	std::transform(m_outputIDs.begin(), m_outputIDs.end(), m_outputIDs.begin(), [l_nodeGraph, this](int i) { return l_nodeGraph->allocateID(this); });
 
-	input_float3 = std::vector<std::vector<float>>(input_float3_labels.size(), std::vector<float>(3, 0.0));
+	m_inputFloat3 = std::vector<std::vector<float>>(m_inputFloat3Labels.size(), std::vector<float>(3, 0.0));
 
-	input_floats = std::vector<float>(input_float_labels.size(), 0.0);
+	m_inputFloats = std::vector<float>(m_inputFloatLabels.size(), 0.0);
 
 }
 
 Node::~Node()
 {
-	NodeGraph* node_graph = NodeGraph::get_singleton();
-	node_graph->deallocate_id(id);
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	l_nodeGraph->deallocateID(m_ID);
 
-	for (int input_id : input_ids)
+	for (int l_inputID : m_inputIDs)
 	{
-		node_graph->deallocate_id(input_id);
+		l_nodeGraph->deallocateID(l_inputID);
 	}
-	node_graph->remove_link_with_endpoints(input_ids);
+	l_nodeGraph->removeLinkWithEndpoints(m_inputIDs);
 
-	for (int output_id : output_ids)
+	for (int l_outputID : m_outputIDs)
 	{
-		node_graph->deallocate_id(output_id);
+		l_nodeGraph->deallocateID(l_outputID);
 	}
-	node_graph->remove_link_with_endpoints(output_ids);
+	l_nodeGraph->removeLinkWithEndpoints(m_outputIDs);
 }
 
 void Node::draw()
 {
 	ImNodes::PushColorStyle(
-		ImNodesCol_TitleBar, title_color);
+		ImNodesCol_TitleBar, m_titleColor);
 
 	//ImNodes::PushColorStyle(
 	//	ImNodesCol_TitleBarSelected, title_color);
 
-	ImNodes::BeginNode(id);
+	ImNodes::BeginNode(m_ID);
 	ImGui::BeginGroup();
 
 	ImNodes::BeginNodeTitleBar();
-	ImGui::TextUnformatted(node_name.c_str());
+	ImGui::TextUnformatted(m_nodeName.c_str());
 	if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
 	{
-		ImGui::SetTooltip(variable_name.c_str());
+		ImGui::SetTooltip(m_variableName.c_str());
 	}
 	ImNodes::EndNodeTitleBar();
 
-	int id_counter = 0;
+	int l_idCounter = 0;
 
-	assert(input_ids.size() == input_pins.size());
+	assert(m_inputIDs.size() == m_inputPins.size());
 
-	for (unsigned int i = 0; i < input_pins.size(); i++)
+	for (unsigned int i = 0; i < m_inputPins.size(); i++)
 	{
-		ImNodes::BeginInputAttribute(input_ids[i]);
-		ImGui::Text(input_pins[i].c_str());
+		ImNodes::BeginInputAttribute(m_inputIDs[i]);
+		ImGui::Text(m_inputPins[i].c_str());
 		ImNodes::EndInputAttribute();
 	}
 
-	assert(output_ids.size() == output_pins.size());
+	assert(m_outputIDs.size() == m_outputPins.size());
 
-	for (unsigned int i = 0; i < output_pins.size(); i++)
+	for (unsigned int i = 0; i < m_outputPins.size(); i++)
 	{
-		ImNodes::BeginOutputAttribute(output_ids[i]);
-		ImGui::Text(output_pins[i].c_str());
+		ImNodes::BeginOutputAttribute(m_outputIDs[i]);
+		ImGui::Text(m_outputPins[i].c_str());
 		ImNodes::EndOutputAttribute();
 	}
 	
 	ImGui::PushItemWidth(80);
 
-	if (input_float3_labels.size() != 0 || input_float_labels.size() != 0)
+	if (m_inputFloat3Labels.size() != 0 || m_inputFloatLabels.size() != 0)
 	{
-		GUI_Utilities::horizontal_seperator(15);
+		GUI_Utilities::horizontalSeperator(15);
 	}
 
-	assert(input_float3.size() == input_float3_labels.size());
+	assert(m_inputFloat3.size() == m_inputFloat3Labels.size());
 
-	for (unsigned int i = 0; i < input_float3_labels.size(); i++)
+	for (unsigned int i = 0; i < m_inputFloat3Labels.size(); i++)
 	{
-		ImGui::Text(input_float3_labels[i].c_str());
-		ImGui::PushID(id_counter++);
-		ImGui::DragFloat("x", &input_float3[i][0]);
-		ImGui::DragFloat("y", &input_float3[i][1]);
-		ImGui::DragFloat("z", &input_float3[i][2]);
+		ImGui::Text(m_inputFloat3Labels[i].c_str());
+		ImGui::PushID(l_idCounter++);
+		ImGui::DragFloat("x", &m_inputFloat3[i][0]);
+		ImGui::DragFloat("y", &m_inputFloat3[i][1]);
+		ImGui::DragFloat("z", &m_inputFloat3[i][2]);
 		ImGui::PopID();
-		if (i != input_float3_labels.size() - 1)
+		if (i != m_inputFloat3Labels.size() - 1)
 		{
-			GUI_Utilities::horizontal_seperator(15);
+			GUI_Utilities::horizontalSeperator(15);
 		}
-		Renderer::get_singleton()->set_uniform_float3(
-			ShaderGenerator::get_uniform_string_from_label(variable_name, input_float3_labels[i]),
-			input_float3[i][0],
-			input_float3[i][1],
-			input_float3[i][2]);
+		Renderer::getSingleton()->setUniformFloat3(
+			ShaderGenerator::getUniformStringFromLabel(m_variableName, m_inputFloat3Labels[i]),
+			m_inputFloat3[i][0],
+			m_inputFloat3[i][1],
+			m_inputFloat3[i][2]);
 	}
 
-	if (input_float_labels.size() != 0 && input_float3_labels.size() != 0)
+	if (m_inputFloatLabels.size() != 0 && m_inputFloat3Labels.size() != 0)
 	{
-		GUI_Utilities::horizontal_seperator(15);
+		GUI_Utilities::horizontalSeperator(15);
 	}
 
-	assert(input_floats.size() == input_float_labels.size());
+	assert(m_inputFloats.size() == m_inputFloatLabels.size());
 
-	for (unsigned int i = 0; i < input_float_labels.size(); i++)
+	for (unsigned int i = 0; i < m_inputFloatLabels.size(); i++)
 	{
-		ImGui::Text(input_float_labels[i].c_str());
-		ImGui::PushID(id_counter++);
-		ImGui::DragFloat("", &input_floats[i]);
+		ImGui::Text(m_inputFloatLabels[i].c_str());
+		ImGui::PushID(l_idCounter++);
+		ImGui::DragFloat("", &m_inputFloats[i]);
 		ImGui::PopID();
-		Renderer::get_singleton()->set_uniform_float(
-			ShaderGenerator::get_uniform_string_from_label(variable_name, input_float_labels[i]),
-			input_floats[i]
+		Renderer::getSingleton()->setUniformFloat(
+			ShaderGenerator::getUniformStringFromLabel(m_variableName, m_inputFloatLabels[i]),
+			m_inputFloats[i]
 		);
 	}
 	ImGui::PopItemWidth();
@@ -141,63 +141,63 @@ void Node::draw()
 	ImNodes::PopColorStyle();
 }
 
-std::string Node::get_string()
+std::string Node::m_getString()
 {
-	std::string nodestr = shader_generation::FLOAT;
-	nodestr.append(variable_name);
-	nodestr.append(" = ");
-	nodestr.append(node_name);
-	nodestr.append("(");
-	bool comma_needed = false;
-	for (unsigned int i = 0; i < input_ids.size(); i++)
+	std::string l_nodestr = shader_generation::FLOAT;
+	l_nodestr.append(m_variableName);
+	l_nodestr.append(" = ");
+	l_nodestr.append(m_nodeName);
+	l_nodestr.append("(");
+	bool l_commaNeeded = false;
+	for (unsigned int i = 0; i < m_inputIDs.size(); i++)
 	{
-		Node* source_node = NodeGraph::get_singleton()->get_source_node(input_ids[i]);
-		if (source_node == nullptr)
+		Node* l_sourceNode = NodeGraph::getSingleton()->getSourceNode(m_inputIDs[i]);
+		if (l_sourceNode == nullptr)
 		{
-			std::string compilation_error = "Input is undefined for " + variable_name;
-			NodeGraph::get_singleton()->set_compilation_error(compilation_error);
-			ERR(compilation_error);
+			std::string l_compilationError = "Input is undefined for " + m_variableName;
+			NodeGraph::getSingleton()->setCompilationError(l_compilationError);
+			ERR(l_compilationError);
 			return "ERR";
 		}
 
-		std::string input_arg_name = previous_non_transform_node[i]->get_variable_name() + std::to_string(i);
-		if (comma_needed)
+		std::string l_inputArgName = m_previousNonTransformNode[i]->getVariableName() + std::to_string(i);
+		if (l_commaNeeded)
 		{
-			nodestr.append(", ");
+			l_nodestr.append(", ");
 		}
-		nodestr.append(input_arg_name);
-		comma_needed = true;
+		l_nodestr.append(l_inputArgName);
+		l_commaNeeded = true;
 	}
 
-	if (input_ids.size() == 0) {
-		nodestr.append(shader_generation::POSITION);
-		comma_needed = true;
+	if (m_inputIDs.size() == 0) {
+		l_nodestr.append(shader_generation::POSITION);
+		l_commaNeeded = true;
 	}
 
-	for (std::string float3_label : input_float3_labels)
+	for (std::string l_float3Label : m_inputFloat3Labels)
 	{
-		if (comma_needed)
+		if (l_commaNeeded)
 		{
-			nodestr.append(", ");
+			l_nodestr.append(", ");
 		}
-		std::string uniform_label = ShaderGenerator::get_uniform_string_from_label(variable_name, float3_label);
-		nodestr.append(uniform_label + ".x");
-		nodestr.append(", ");
-		nodestr.append(uniform_label + ".y");
-		nodestr.append(", ");
-		nodestr.append(uniform_label + ".z");
+		std::string l_uniformLabel = ShaderGenerator::getUniformStringFromLabel(m_variableName, l_float3Label);
+		l_nodestr.append(l_uniformLabel + ".x");
+		l_nodestr.append(", ");
+		l_nodestr.append(l_uniformLabel + ".y");
+		l_nodestr.append(", ");
+		l_nodestr.append(l_uniformLabel + ".z");
 	}
 
-	for (std::string float_label : input_float_labels)
+	for (std::string l_floatLabel : m_inputFloatLabels)
 	{
-		if (comma_needed)
+		if (l_commaNeeded)
 		{
-			nodestr.append(", ");
+			l_nodestr.append(", ");
 		}
-		std::string uniform_label = ShaderGenerator::get_uniform_string_from_label(variable_name, float_label);
-		nodestr.append(uniform_label);
+		std::string l_uniformLabel = ShaderGenerator::getUniformStringFromLabel(m_variableName, l_floatLabel);
+		l_nodestr.append(l_uniformLabel);
 	}
 
-	nodestr.append(");");
-	return nodestr;
+	l_nodestr.append(");");
+	return l_nodestr;
 }

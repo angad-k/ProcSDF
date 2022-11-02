@@ -1,15 +1,15 @@
 #include "GUI/GUI.h"
 #include "GUI/NodeGraph.h"
 
-static void glfw_error_callback(int error, const char* description)
+static void glfwErrorCallback(int p_error, const char* p_description)
 {
-	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+	fprintf(stderr, "Glfw Error %d: %s\n", p_error, p_description);
 }
 
 GUI::GUI()
 {
-	window = setup_imgui_glfw();
-	if (window == NULL)
+	m_window = setupImguiGlfw();
+	if (m_window == NULL)
 	{
 		std::cout << "ERROR::GUI::FAILED TO INITIALIZE WINDOW\n";
 	}
@@ -17,21 +17,21 @@ GUI::GUI()
 
 void GUI::initialize()
 {
-	renderer = Renderer::get_singleton();
+	m_renderer = Renderer::getSingleton();
 	
 	//All new windows added to GUI need to be initialized after being created.
-	inspector = Inspector::get_singleton();
-	inspector->initialize();
+	m_inspector = Inspector::getSingleton();
+	m_inspector->initialize();
 
-	nodeEditor = NodeEditor::get_singleton();
+	m_nodeEditor = NodeEditor::getSingleton();
 	//nodeEditor->initialize();
 
-	NodeGraph* nodeGraph = NodeGraph::get_singleton();
-	nodeGraph->initialize();
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	l_nodeGraph->initialize();
 
 }
 
-void GUI::setup_frame()
+void GUI::setupFrame()
 {
 	glfwPollEvents();
 
@@ -43,58 +43,58 @@ void GUI::setup_frame()
 		{
 			ImGui::Begin("Scene");
 
-			ImVec2 vMin = ImGui::GetWindowContentRegionMin();
-			ImVec2 vMax = ImGui::GetWindowContentRegionMax();
+			ImVec2 l_vMin = ImGui::GetWindowContentRegionMin();
+			ImVec2 l_vMax = ImGui::GetWindowContentRegionMax();
 
-			vMin.x += ImGui::GetWindowPos().x;
-			vMin.y += ImGui::GetWindowPos().y;
-			vMax.x += ImGui::GetWindowPos().x;
-			vMax.y += ImGui::GetWindowPos().y;
-			renderSceneSize = ImVec2(vMax.x - vMin.x, vMax.y - vMin.y);
+			l_vMin.x += ImGui::GetWindowPos().x;
+			l_vMin.y += ImGui::GetWindowPos().y;
+			l_vMax.x += ImGui::GetWindowPos().x;
+			l_vMax.y += ImGui::GetWindowPos().y;
+			m_renderSceneSize = ImVec2(l_vMax.x - l_vMin.x, l_vMax.y - l_vMin.y);
 
-			ImGui::Image((ImTextureID)renderer->get_render_texture(), renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::Image((ImTextureID)m_renderer->getRenderTexture(), m_renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
 
 			ImGui::End();
 		}
 
 		{
-			inspector->draw();
+			m_inspector->draw();
 		}
 
 		{
-			nodeEditor->draw();
+			m_nodeEditor->draw();
 		}
 	}
 }
 
-void GUI::render_frame()
+void GUI::renderFrame()
 {
 	ImGui::Render();
-	int display_w, display_h;
-	glfwGetFramebufferSize(window, &display_w, &display_h);
-	glViewport(0, 0, display_w, display_h);
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+	int l_displayW, l_displayH;
+	glfwGetFramebufferSize(m_window, &l_displayW, &l_displayH);
+	glViewport(0, 0, l_displayW, l_displayH);
+	ImVec4 l_clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	glClearColor(l_clearColor.x * l_clearColor.w, l_clearColor.y * l_clearColor.w, l_clearColor.z * l_clearColor.w, l_clearColor.w);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-	glfwSwapBuffers(window);
+	glfwSwapBuffers(m_window);
 }
 
-GLFWwindow* GUI::setup_imgui_glfw()
+GLFWwindow* GUI::setupImguiGlfw()
 {
-	glfwSetErrorCallback(glfw_error_callback);
+	glfwSetErrorCallback(glfwErrorCallback);
 	if (!glfwInit())
 		return NULL;
 
-	const char* glsl_version = "#version 130";
+	const char* l_glslVersion = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "ProcSDF", NULL, NULL);
-	if (window == NULL)
+	GLFWwindow* l_window = glfwCreateWindow(1280, 720, "ProcSDF", NULL, NULL);
+	if (l_window == NULL)
 		return NULL;
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(l_window);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
@@ -111,10 +111,10 @@ GLFWwindow* GUI::setup_imgui_glfw()
 
 	ImGui::StyleColorsDark();
 
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui_ImplGlfw_InitForOpenGL(l_window, true);
+	ImGui_ImplOpenGL3_Init(l_glslVersion);
 
-	return window;
+	return l_window;
 }
 
 GUI::~GUI()
@@ -124,6 +124,6 @@ GUI::~GUI()
 	ImGui::DestroyContext();
 	ImNodes::DestroyContext();
 
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }

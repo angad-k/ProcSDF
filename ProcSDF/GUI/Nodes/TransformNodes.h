@@ -15,10 +15,10 @@ public:
 	TransformationType m_TransformationType;
 	TransformNode()
 	{
-		is_transform_node = true;
-		input_pins = { "Input" };
-		output_pins = { "Output" };
-		title_color = imgui_colors::ORANGE;
+		m_isTransformNode = true;
+		m_inputPins = { "Input" };
+		m_outputPins = { "Output" };
+		m_titleColor = imgui_colors::ORANGE;
 	}
 };
 
@@ -27,8 +27,8 @@ public:
 	TranslationNode()
 	{
 		m_TransformationType = TransformationType::TRANSLATION;
-		node_name = "Translation";
-		input_float3_labels = { "Translation" };
+		m_nodeName = "Translation";
+		m_inputFloat3Labels = { "Translation" };
 		init();
 	}
 };
@@ -38,8 +38,8 @@ public:
 	RotationNodeX()
 	{
 		m_TransformationType = TransformationType::ROTATION_X;
-		node_name = "Rotation_X";
-		input_float_labels = { "Theta" };
+		m_nodeName = "Rotation_X";
+		m_inputFloatLabels = { "Theta" };
 		init();
 	}
 };
@@ -49,8 +49,8 @@ public:
 	RotationNodeY()
 	{
 		m_TransformationType = TransformationType::ROTATION_Y;
-		node_name = "Rotation_Y";
-		input_float_labels = { "Theta" };
+		m_nodeName = "Rotation_Y";
+		m_inputFloatLabels = { "Theta" };
 		init();
 	}
 };
@@ -60,8 +60,8 @@ public:
 	RotationNodeZ()
 	{
 		m_TransformationType = TransformationType::ROTATION_Z;
-		node_name = "Rotation_Z";
-		input_float_labels = { "Theta" };
+		m_nodeName = "Rotation_Z";
+		m_inputFloatLabels = { "Theta" };
 		init();
 	}
 };

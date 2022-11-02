@@ -13,43 +13,43 @@
 class GUI
 {
 private:
-	static GUI* gui;
+	static GUI* s_gui;
 
-	GLFWwindow* window;
-	GLFWwindow* setup_imgui_glfw();
+	GLFWwindow* m_window;
+	GLFWwindow* setupImguiGlfw();
 
-	Renderer* renderer;
-	Inspector* inspector;
-	NodeEditor* nodeEditor;
+	Renderer* m_renderer;
+	Inspector* m_inspector;
+	NodeEditor* m_nodeEditor;
 
-	ImVec2 renderSceneSize;
+	ImVec2 m_renderSceneSize;
 
 public:
 	GUI();
 	~GUI();
 	void initialize();
 
-	static GUI* get_singleton() {
-		if (!gui)
+	static GUI* getSingleton() {
+		if (!s_gui)
 		{
-			gui = new GUI();
+			s_gui = new GUI();
 		}
-		return gui;
+		return s_gui;
 	}
 
-	GLFWwindow* get_window()
+	GLFWwindow* getWindow()
 	{
-		return window;
+		return m_window;
 	}
 
-	ImVec2 get_render_size()
+	ImVec2 getRenderSize()
 	{
-		return renderSceneSize;
+		return m_renderSceneSize;
 	}
 
 	// set up the frame - sets up the GUI. doesn't render it.
-	void setup_frame();
+	void setupFrame();
 
 	// renders the GUI.
-	void render_frame();
+	void renderFrame();
 };

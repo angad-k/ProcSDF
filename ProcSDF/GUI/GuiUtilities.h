@@ -3,9 +3,18 @@
 #include <string>
 
 namespace GUI_Utilities {
-	static void horizontal_seperator(unsigned int width)
+	static void horizontalSeperator(unsigned int p_width)
 	{
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 10);
-		ImGui::Text(std::string(width, '_').c_str());
+		ImGui::Text(std::string(p_width, '_').c_str());
+	}
+
+	static void appendToSameLineIfApplicable(float p_spaceNeeded)
+	{
+		ImGui::SameLine();
+		if (ImGui::GetContentRegionAvail().x <= p_spaceNeeded)
+		{
+			ImGui::NewLine();
+		}
 	}
 }
