@@ -3,6 +3,7 @@
 #include <string>
 #include <shobjidl.h>
 
-namespace WindowsInterface {
-    std::pair<bool, std::string> openFile();
-}
+class WindowsInterface {
+public:
+    static std::pair<bool, std::string> openFile();
+};
