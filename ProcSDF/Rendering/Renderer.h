@@ -9,20 +9,20 @@ class Renderer
 private:
 	static Renderer* s_renderer;
 	unsigned int m_renderTexture;
-	unsigned int l_VAO;
-	unsigned int l_shaderProgram;
+	unsigned int m_VAO;
+	unsigned int m_shaderProgram;
 	unsigned int m_FBO;
 
 	float m_cachedWidth = 600;
 	float m_cachedHeight = 600;
 
-	int l_cameraOrigin;
-	int l_focalLength;
-	int l_viewportSize;
+	int m_cameraOrigin;
+	int m_focalLength;
+	int m_viewportSize;
 	int m_lightPosition;
 
-	float l_cameraOriginValue[3] = { 0.0, 0.0, 5.0 };
-	float l_focalLengthValue = 1.0;
+	float m_cameraOriginValue[3] = { 0.0, 0.0, 5.0 };
+	float m_focalLengthValue = 1.0;
 
 	void assembleShader();
 	unsigned int compileShader(std::string p_shaderPath, unsigned int p_shaderType);
@@ -51,24 +51,24 @@ public:
 
 	void setCameraOrigin(float p_cameraOrigin[3])
 	{
-		l_cameraOriginValue[0] = p_cameraOrigin[0];
-		l_cameraOriginValue[1] = p_cameraOrigin[1];
-		l_cameraOriginValue[2] = p_cameraOrigin[2];
+		m_cameraOriginValue[0] = p_cameraOrigin[0];
+		m_cameraOriginValue[1] = p_cameraOrigin[1];
+		m_cameraOriginValue[2] = p_cameraOrigin[2];
 	}
 
 	float* get_camera_origin()
 	{
-		return l_cameraOriginValue;
+		return m_cameraOriginValue;
 	}
 
 	void set_focal_length(float p_focalLength)
 	{
-		l_focalLengthValue = p_focalLength;
+		m_focalLengthValue = p_focalLength;
 	}
 
 	float* getFocalLength()
 	{
-		return &l_focalLengthValue;
+		return &m_focalLengthValue;
 	}
 
 	void setUniformFloat(std::string p_uniform_name, float p_val);

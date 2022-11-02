@@ -20,15 +20,6 @@ private:
 
 	Tab m_openedTab;
 
-	void appendToSameLineIfApplicable(float p_spaceNeeded)
-	{
-		ImGui::SameLine();
-		if (ImGui::GetContentRegionAvail().x <= p_spaceNeeded)
-		{
-			ImGui::NewLine();
-		}
-	}
-
 public:
 	void initialize();
 

@@ -32,9 +32,9 @@ Renderer::Renderer()
 
 	setupFrameBuffer();
 
-	glGenVertexArrays(1, &l_VAO);
+	glGenVertexArrays(1, &m_VAO);
 
-	glBindVertexArray(l_VAO);
+	glBindVertexArray(m_VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, l_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(l_vertices), l_vertices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, l_EBO);
@@ -62,11 +62,11 @@ void Renderer::draw(float p_width, float p_height)
 	glClear(GL_COLOR_BUFFER_BIT);
 	float timeValue = glfwGetTime();
 
-	glUniform3f(l_cameraOrigin, l_cameraOriginValue[0], l_cameraOriginValue[1], l_cameraOriginValue[2]);// +5.0 * sin(timeValue));
-	glUniform2f(l_viewportSize, p_width, p_height);
-	glUniform1f(l_focalLength, l_focalLengthValue);
-	glUseProgram(l_shaderProgram);
-	glBindVertexArray(l_VAO);
+	glUniform3f(m_cameraOrigin, m_cameraOriginValue[0], m_cameraOriginValue[1], m_cameraOriginValue[2]);
+	glUniform2f(m_viewportSize, p_width, p_height);
+	glUniform1f(m_focalLength, m_focalLengthValue);
+	glUseProgram(m_shaderProgram);
+	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -136,21 +136,21 @@ unsigned int Renderer::compileShader(const char* p_shaderSrc, unsigned int p_sha
 
 void Renderer::linkShader(unsigned int p_vertexShader, unsigned int p_fragmentShader)
 {
-	l_shaderProgram = glCreateProgram();
+	m_shaderProgram = glCreateProgram();
 
-	glAttachShader(l_shaderProgram, p_vertexShader);
-	glAttachShader(l_shaderProgram, p_fragmentShader);
-	glLinkProgram(l_shaderProgram);
+	glAttachShader(m_shaderProgram, p_vertexShader);
+	glAttachShader(m_shaderProgram, p_fragmentShader);
+	glLinkProgram(m_shaderProgram);
 
-	l_cameraOrigin = glGetUniformLocation(l_shaderProgram, "u_camera_origin");
-	l_viewportSize = glGetUniformLocation(l_shaderProgram, "u_viewport_size");
-	l_focalLength = glGetUniformLocation(l_shaderProgram, "u_focal_length");
+	m_cameraOrigin = glGetUniformLocation(m_shaderProgram, "u_camera_origin");
+	m_viewportSize = glGetUniformLocation(m_shaderProgram, "u_viewport_size");
+	m_focalLength = glGetUniformLocation(m_shaderProgram, "u_focal_length");
 
 	int  l_success;
 	char l_infoLog[512];
-	glGetProgramiv(l_shaderProgram, GL_LINK_STATUS, &l_success);
+	glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &l_success);
 	if (!l_success) {
-		glGetProgramInfoLog(l_shaderProgram, 512, NULL, l_infoLog);
+		glGetProgramInfoLog(m_shaderProgram, 512, NULL, l_infoLog);
 		std::cout << "ERROR::SHADER::LINK_FAILED\n" << l_infoLog << std::endl;
 	}
 }
@@ -192,18 +192,18 @@ void Renderer::resizeRenderTexture(float p_width, float p_height)
 
 void Renderer::setUniformFloat(std::string p_uniform_name, float p_val)
 {
-	unsigned int l_uniform_location = glGetUniformLocation(l_shaderProgram, p_uniform_name.c_str());
+	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
 	glUniform1f(l_uniform_location, p_val);
 }
 
 void Renderer::setUniformFloat2(std::string p_uniform_name, float p_x, float p_y)
 {
-	unsigned int l_uniformLocation = glGetUniformLocation(l_shaderProgram, p_uniform_name.c_str());
+	unsigned int l_uniformLocation = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
 	glUniform2f(l_uniformLocation, p_x, p_y);
 }
 
 void Renderer::setUniformFloat3(std::string p_uniform_name, float p_x, float p_y, float p_z)
 {
-	unsigned int l_uniformLocation = glGetUniformLocation(l_shaderProgram, p_uniform_name.c_str());
+	unsigned int l_uniformLocation = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
 	glUniform3f(l_uniformLocation, p_x, p_y, p_z);
 }

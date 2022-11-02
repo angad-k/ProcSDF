@@ -24,7 +24,7 @@ int main(int, char**)
 {
 	//GUI needs to be created before renderer since it also sets up OpenGL
 	GUI* l_gui = GUI::getSingleton();
-	Renderer* m_renderer = Renderer::getSingleton();
+	Renderer* l_renderer = Renderer::getSingleton();
 	ShaderGenerator::getSingleton();
 	NodeGraph::getSingleton();
 	Inspector::getSingleton();
@@ -34,7 +34,7 @@ int main(int, char**)
 	l_gui->initialize();
 	
 	GLFWwindow* l_window = l_gui->getWindow();
-	unsigned int l_renderTexture = m_renderer->getRenderTexture();
+	unsigned int l_renderTexture = l_renderer->getRenderTexture();
 	
 	NodeGraph::getSingleton()->recompileNodeGraph();
 
@@ -43,7 +43,7 @@ int main(int, char**)
 		l_gui->setupFrame();
 
 		ImVec2 l_renderSceneSize = l_gui->getRenderSize();
-		m_renderer->draw(l_renderSceneSize.x, l_renderSceneSize.y);
+		l_renderer->draw(l_renderSceneSize.x, l_renderSceneSize.y);
 		
 		l_gui->renderFrame();
 	}

@@ -8,4 +8,13 @@ namespace GUI_Utilities {
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 10);
 		ImGui::Text(std::string(p_width, '_').c_str());
 	}
+
+	static void appendToSameLineIfApplicable(float p_spaceNeeded)
+	{
+		ImGui::SameLine();
+		if (ImGui::GetContentRegionAvail().x <= p_spaceNeeded)
+		{
+			ImGui::NewLine();
+		}
+	}
 }

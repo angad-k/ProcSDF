@@ -90,7 +90,7 @@ void Node::draw()
 
 	if (m_inputFloat3Labels.size() != 0 || m_inputFloatLabels.size() != 0)
 	{
-		GUI_Utilities::horizontal_seperator(15);
+		GUI_Utilities::horizontalSeperator(15);
 	}
 
 	assert(m_inputFloat3.size() == m_inputFloat3Labels.size());
@@ -105,7 +105,7 @@ void Node::draw()
 		ImGui::PopID();
 		if (i != m_inputFloat3Labels.size() - 1)
 		{
-			GUI_Utilities::horizontal_seperator(15);
+			GUI_Utilities::horizontalSeperator(15);
 		}
 		Renderer::getSingleton()->setUniformFloat3(
 			ShaderGenerator::getUniformStringFromLabel(m_variableName, m_inputFloat3Labels[i]),
@@ -116,7 +116,7 @@ void Node::draw()
 
 	if (m_inputFloatLabels.size() != 0 && m_inputFloat3Labels.size() != 0)
 	{
-		GUI_Utilities::horizontal_seperator(15);
+		GUI_Utilities::horizontalSeperator(15);
 	}
 
 	assert(m_inputFloats.size() == m_inputFloatLabels.size());

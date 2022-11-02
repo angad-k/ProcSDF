@@ -5,6 +5,7 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/ObjectNode.h"
 #include "GUI/Nodes/TransformNodes.h"
+#include "GuiUtilities.h"
 
 void Inspector::initialize()
 {
@@ -107,17 +108,17 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<SphereNode>();
 			}
-			appendToSameLineIfApplicable(l_approximateButtonSize);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Box"))
 			{
 				addNode<BoxNode>();
 			}
-			appendToSameLineIfApplicable(l_approximateButtonSize);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Torus"))
 			{
 				addNode<TorusNode>();
 			}
-			appendToSameLineIfApplicable(l_approximateButtonSize);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Box Frame"))
 			{
 				addNode<BoxFrameNode>();
@@ -136,7 +137,7 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<IntersectionNode>();
 			}
-			appendToSameLineIfApplicable(l_approximateButtonSize);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Union"))
 			{
 				addNode<UnionNode>();
@@ -171,17 +172,17 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<TranslationNode>();
 			}
-			appendToSameLineIfApplicable(l_approximateButtonSize);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Rotation Around X-Axis"))
 			{
 				addNode<RotationNodeX>();
 			}
-			appendToSameLineIfApplicable(l_approximateButtonSize);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Rotation Around Y-Axis"))
 			{
 				addNode<RotationNodeY>();
 			}
-			appendToSameLineIfApplicable(l_approximateButtonSize);
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Rotation Around Z-Axis"))
 			{
 				addNode<RotationNodeZ>();
