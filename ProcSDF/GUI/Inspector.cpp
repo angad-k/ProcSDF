@@ -103,7 +103,14 @@ void Inspector::drawNodeGraphSettings()
 		{
 			std::string l_filePath = l_pickFileResult.second;
 			CustomNode* l_customNode = new CustomNode(l_filePath);
-			NodeGraph::getSingleton()->addNode(l_customNode);
+			if (l_customNode->isMalformed())
+			{
+				delete(l_customNode);
+			}
+			else
+			{
+				NodeGraph::getSingleton()->addNode(l_customNode);
+			}
 		}
 	}
 	ImGui::Separator();

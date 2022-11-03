@@ -38,6 +38,15 @@ void ShaderGenerator::computeUniforms()
 	}
 }
 
+void ShaderGenerator::appendCustomFunctions(std::string &p_shaderString)
+{
+	std::vector<std::string> l_customNodeFileContents = NodeGraph::getSingleton()->getCustomNodeFileContents();
+	for (std::string l_fileContent : l_customNodeFileContents)
+	{
+		p_shaderString.append(l_fileContent);
+	}
+}
+
 void ShaderGenerator::generateAndSetShader() {
 
 	computeAndSetObjectCount();
@@ -52,6 +61,8 @@ void ShaderGenerator::generateAndSetShader() {
 	l_shaderString.append(ShaderGenerator::generateUniformDeclarations());
 	// Appends all the primitive functions.
 	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
+	// Appends all the user defined functions.
+	appendCustomFunctions(l_shaderString);
 	// Generates and appends the object distance functions.
 	l_shaderString.append(ShaderGenerator::generateObjectFunctions());
 	// Generates and appends the closest object info function.

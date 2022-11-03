@@ -27,6 +27,7 @@ private:
 	std::string getTransform(TransformNode* p_node);
 	void computeAndSetObjectCount();
 	void computeUniforms();
+	void appendCustomFunctions(std::string& p_shaderString);
 public:
 	static ShaderGenerator* getSingleton() {
 		if (!s_shaderGenerator)

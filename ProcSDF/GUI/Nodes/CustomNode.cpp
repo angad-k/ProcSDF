@@ -1,5 +1,6 @@
 #include "CustomNode.h"
 #include "Common/os.h"
+#include "GUI/NodeGraph.h"
 #include <iostream>
 #include <regex>
 #include <string>
@@ -31,6 +32,7 @@ CustomNode::CustomNode(std::string p_filePath)
 				if (l_tokens.size() <= 2)
 				{
 					ERR("type should be followed by an argument.");
+					m_isMalformed = true;
 					break;
 				}
 				if (l_tokens[2] == "primitive")
@@ -51,6 +53,7 @@ CustomNode::CustomNode(std::string p_filePath)
 				if (l_tokens.size() <= 2)
 				{
 					ERR("type should be followed by an argument.");
+					m_isMalformed = true;
 					break;
 				}
 				m_nodeName = l_tokens[2];
@@ -79,5 +82,8 @@ CustomNode::CustomNode(std::string p_filePath)
 		}
 	}
 	m_outputPins.push_back("Output");
+
+	NodeGraph::getSingleton()->setCustomNodeFileContents(p_filePath, l_fileContent);
+
 	init();
 }
