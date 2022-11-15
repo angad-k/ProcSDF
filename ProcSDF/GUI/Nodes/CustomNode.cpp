@@ -60,24 +60,15 @@ CustomNode::CustomNode(std::string p_filePath)
 			}
 			else if (l_tokens[1] == "input_pins")
 			{
-				for (int i = 2; i < l_tokens.size(); i++)
-				{
-					m_inputPins.push_back(l_tokens[i]);
-				}
+				m_inputPins.insert(m_inputPins.end(), l_tokens.begin() + 2, l_tokens.end());
 			}
 			else if (l_tokens[1] == "vec3_params")
 			{
-				for (int i = 2; i < l_tokens.size(); i++)
-				{
-					m_inputFloat3Labels.push_back(l_tokens[i]);
-				}
+				m_inputFloat3Labels.insert(m_inputFloat3Labels.end(), l_tokens.begin() + 2, l_tokens.end());
 			}
 			else if (l_tokens[1] == "float_params")
 			{
-				for (int i = 2; i < l_tokens.size(); i++)
-				{
-					m_inputFloatLabels.push_back(l_tokens[i]);
-				}
+				m_inputFloatLabels.insert(m_inputFloatLabels.end(), l_tokens.begin() + 2, l_tokens.end());
 			}
 		}
 	}
