@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <stdio.h>
 #include <GLFW/glfw3.h>
+#pragma once
 #include <windows.h>
 #include "Renderer.h"
 #include "GUI/GUI.h"
@@ -17,7 +18,7 @@ Renderer* Renderer::s_renderer = 0;
 GUI* GUI::s_gui = 0;
 Inspector* Inspector::s_inspector = 0;
 NodeEditor* NodeEditor::s_nodeEditor = 0;
-ShaderGenerator* ShaderGenerator::m_shaderGenerator = 0;
+ShaderGenerator* ShaderGenerator::s_shaderGenerator = 0;
 NodeGraph* NodeGraph::s_nodeGraph = 0;
 
 int main(int, char**)

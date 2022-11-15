@@ -8,7 +8,7 @@ class ShaderGenerator
 private:
 	std::string m_shader;
 	int m_objectCount;
-	static ShaderGenerator* m_shaderGenerator;
+	static ShaderGenerator* s_shaderGenerator;
 	std::map<int, int> m_nodeIDToObjectIDMap;
 	
 	std::vector<std::string> m_uniformVec3;
@@ -27,13 +27,14 @@ private:
 	std::string getTransform(TransformNode* p_node);
 	void computeAndSetObjectCount();
 	void computeUniforms();
+	void appendCustomFunctions(std::string& p_shaderString);
 public:
 	static ShaderGenerator* getSingleton() {
-		if (!m_shaderGenerator)
+		if (!s_shaderGenerator)
 		{
-			m_shaderGenerator = new ShaderGenerator();
+			s_shaderGenerator = new ShaderGenerator();
 		}
-		return m_shaderGenerator;
+		return s_shaderGenerator;
 	}
 
 	static std::string getUniformStringFromLabel(std::string p_variable_name, std::string p_label);

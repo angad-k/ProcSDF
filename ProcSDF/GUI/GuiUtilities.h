@@ -5,6 +5,8 @@
 namespace GUI_Utilities {
 	static void horizontalSeperator(unsigned int p_width)
 	{
+		// since we are using underscore, we move the cursor a 
+		// little up so that the distance doesn't seem weird.
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 10);
 		ImGui::Text(std::string(p_width, '_').c_str());
 	}
