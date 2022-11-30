@@ -60,6 +60,10 @@ namespace shader_generation {
 	}
 }
 
+namespace save_project {
+	const std::string NODE_LINK = "nodeLink";
+}
+
 namespace imgui_colors {
 	const int RED = IM_COL32(255, 50, 50, 255);
 	const int GREEN = IM_COL32(80, 190, 50, 255);

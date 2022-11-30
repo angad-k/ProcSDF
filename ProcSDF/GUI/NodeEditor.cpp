@@ -2,14 +2,24 @@
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeGraph.h"
 #include "Common/constant.h"
+#include "Common/ProjectSaver.h"
 
 void NodeEditor::draw()
 {
+	ProjectSaver projectSaver;
 	ImGui::Begin("Nodes workspace");
 	if (ImGui::Button("Recompile"))
 	{
 		NodeGraph::getSingleton()->recompileNodeGraph();
 	}
+	
+	ImGui::SameLine();
+
+	if (ImGui::Button("Save Project"))
+	{
+		projectSaver.saveProject("Sample");
+	}
+
 	ImGui::SameLine();
 
 	if (m_selectedNodes.size() == 0)
