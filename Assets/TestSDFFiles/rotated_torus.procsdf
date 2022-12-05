@@ -1,0 +1,27 @@
+{
+   "0" : {
+      "inputFloat" : [ 39.0 ],
+      "inputIDs" : [ 1 ],
+      "nodeName" : "Rotation_X",
+      "outputIDS" : [ 9 ]
+   },
+   "2" : {
+      "inputIDs" : [ 3 ],
+      "nodeName" : "Final node"
+   },
+   "4" : {
+      "inputIDs" : [ 5 ],
+      "nodeName" : "Object node",
+      "outputIDS" : [ 6 ]
+   },
+   "7" : {
+      "inputFloat" : [ 6.0, 2.0 ],
+      "nodeName" : "Torus",
+      "outputIDS" : [ 8 ]
+   },
+   "nodeLink" : [
+      [ 6, 3 ],
+      [ 8, 1 ],
+      [ 9, 5 ]
+   ]
+}
