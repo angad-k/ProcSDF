@@ -21,11 +21,12 @@ std::pair<bool, std::string> OS::pickFile() {
 	return l_filePath;
 }
 
-static bool saveFileContent(std::string p_filePath, std::string p_fileContent) {
-	std::fstream l_fileStream;
-	l_fileStream.open(p_filePath, std::fstream::in | std::fstream::out | std::fstream::trunc);
+// if file exists overwrite it else create it and save the file.
+bool OS::saveFileContent(std::string p_filePath, std::string p_fileContent) {
+	std::ofstream l_fileStream(p_filePath, std::ofstream::trunc);
 
 	if (!l_fileStream) {
+		ERR("File not saved");
 		return false;
 	}
 

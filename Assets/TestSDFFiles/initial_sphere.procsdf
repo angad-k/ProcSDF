@@ -1,0 +1,20 @@
+{
+   "0" : {
+      "inputFloat" : [ 2.0 ],
+      "nodeName" : "Sphere",
+      "outputIDS" : [ 1 ]
+   },
+   "2" : {
+      "inputIDs" : [ 3 ],
+      "nodeName" : "Final node"
+   },
+   "4" : {
+      "inputIDs" : [ 5 ],
+      "nodeName" : "Object node",
+      "outputIDS" : [ 6 ]
+   },
+   "nodeLink" : [
+      [ 1, 5 ],
+      [ 6, 3 ]
+   ]
+}

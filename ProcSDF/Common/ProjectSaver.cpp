@@ -58,13 +58,11 @@ bool ProjectSaver::saveProject(std::string p_filePath) {
 	Json::FastWriter fastWriter;
 
 	std::cout << styledWriter.write(l_jsonValue) << "\n";
-	std::cout << fastWriter.write(l_jsonValue) << "\n";
 
 	std::pair<bool, std::string> l_filePathInfo = WindowsInterface::saveFile("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
-	std::cout << l_filePathInfo.first << " " << l_filePathInfo.second << "\n";
 	
 	if(l_filePathInfo.first) {
-		OS::saveFileContent(l_filePathInfo.second, styledWriter.write(l_jsonValue));
+	    bool flag =	OS::saveFileContent(l_filePathInfo.second + save_project::PROCSDF_EXTENSION, std::string(styledWriter.write(l_jsonValue)));
 	}
 
 	return true;

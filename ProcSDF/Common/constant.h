@@ -67,6 +67,7 @@ namespace save_project {
 	const std::string OUTPUT_IDS = "outputIDS";
 	const std::string INPUT_FLOAT3 = "inputFloat3";
 	const std::string INPUT_FLOAT = "inputFloat";
+	const std::string PROCSDF_EXTENSION = ".procsdf";
 }
 
 namespace imgui_colors {
