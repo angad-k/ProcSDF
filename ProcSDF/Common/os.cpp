@@ -20,3 +20,15 @@ std::pair<bool, std::string> OS::pickFile() {
 	}
 	return l_filePath;
 }
+
+static bool saveFileContent(std::string p_filePath, std::string p_fileContent) {
+	std::fstream l_fileStream;
+	l_fileStream.open(p_filePath, std::fstream::in | std::fstream::out | std::fstream::trunc);
+
+	if (!l_fileStream) {
+		return false;
+	}
+
+	l_fileStream << p_fileContent;
+	l_fileStream.close();
+}

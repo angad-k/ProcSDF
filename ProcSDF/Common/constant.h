@@ -62,6 +62,11 @@ namespace shader_generation {
 
 namespace save_project {
 	const std::string NODE_LINK = "nodeLink";
+	const std::string NODE_NAME = "nodeName";
+	const std::string INPUT_IDS = "inputIDs";
+	const std::string OUTPUT_IDS = "outputIDS";
+	const std::string INPUT_FLOAT3 = "inputFloat3";
+	const std::string INPUT_FLOAT = "inputFloat";
 }
 
 namespace imgui_colors {

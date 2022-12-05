@@ -1,4 +1,7 @@
 #include "WindowsInterface.h"
+#include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 
 // Credits to   : xCENTx 
 // from         : https://stackoverflow.com/questions/68601080/how-do-you-open-a-file-explorer-dialogue-in-c
@@ -66,4 +69,25 @@ std::pair<bool, std::string> WindowsInterface::openFile()
     CoUninitialize();
 
     return std::make_pair<bool, std::string>(true, l_filePath.c_str());
+}
+
+
+// Credits : The Cherno
+// From : https://youtu.be/zn7N7zHgCcs?t=589
+std::pair<bool, std::string> WindowsInterface::saveFile(const char * p_filter) {
+    OPENFILENAMEA l_fileInfoStruct;
+    CHAR l_file[260] = { 0 };
+    ZeroMemory(&l_fileInfoStruct, sizeof(OPENFILENAMEA));
+    l_fileInfoStruct.lStructSize = sizeof(OPENFILENAME);
+    l_fileInfoStruct.lpstrFile = l_file;
+    l_fileInfoStruct.nMaxFile = sizeof(l_file);
+    l_fileInfoStruct.lpstrFilter = p_filter;
+    l_fileInfoStruct.nFilterIndex = 1;
+    l_fileInfoStruct.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+    
+    if (GetSaveFileNameA(&l_fileInfoStruct) == TRUE) {
+        return std::make_pair(true, l_fileInfoStruct.lpstrFile);
+    }
+
+    return std::make_pair(false, std::string());
 }
