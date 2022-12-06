@@ -80,8 +80,42 @@ bool ProjectSaver::saveProject() {
 	return false;
 }
 
+bool ProjectSaver::syntaxChecker(std::string p_jsonString) {
+	Json::Value value;
+	Json::Reader reader;
+	bool l_isParseSucessful = reader.parse(p_jsonString, value);
+	if (!l_isParseSucessful) {
+		return false;
+	}
+
+	if (!value.isMember(save_project::CAMERA_SETTING) || !value.isMember(save_project::NODE_ID) || !value.isMember(save_project::NODE_LINK)
+		|| !value[save_project::NODE_ID].isArray()) {
+		return false;
+	}
+
+	Json::Value l_nodeIDList = value[save_project::NODE_ID];
+
+	for (int i = 0; i < l_nodeIDList.size(); i++) {
+		if (!value.isMember(std::to_string(l_nodeIDList[i].asInt()))) {
+			return false;
+		}
+	}
+	return true;
+
+}
+
 bool ProjectSaver::loadProject() {
+	std::pair<bool, std::string> l_filePath = OS::pickFile();
+
+	if (!l_filePath.first) {
+		return false;
+	}
+
+	std::string l_jsonString = OS::fetchFileContent(l_filePath.second);
+
 	NodeGraph::getSingleton()->clear();
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+
 	return true;
 }

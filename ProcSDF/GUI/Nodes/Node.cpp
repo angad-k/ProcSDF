@@ -29,6 +29,19 @@ void Node::init()
 
 }
 
+void Node::init(int p_ID)
+{
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	l_nodeGraph->setID(this, p_ID);
+	m_variableName = m_nodeName + "_" + std::to_string(m_ID);
+	m_inputIDs = std::vector<int>(m_inputPins.size());
+	m_outputIDs = std::vector<int>(m_outputPins.size());
+
+	m_inputFloat3 = std::vector<std::vector<float>>(m_inputFloat3Labels.size(), std::vector<float>(3, 0.0));
+	m_inputFloats = std::vector<float>(m_inputFloatLabels.size(), 0.0);
+
+}
+
 Node::~Node()
 {
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();

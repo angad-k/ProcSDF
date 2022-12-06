@@ -22,6 +22,7 @@ private:
 public:
 	void initialize();
 	int allocateID(Node* p_node);
+	void setID(Node* p_node, int m_ID);
 	void deallocateID(int p_id);
 	Node* getNode(int p_id);
 	void deleteNode(int p_id);

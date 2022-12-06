@@ -20,6 +20,13 @@ public:
 		m_inputFloatLabels = { "Radius" };
 		init();
 	}
+	SphereNode(int p_ID)
+	{
+		m_nodeName = "Sphere";
+		m_inputFloat3Labels = { };
+		m_inputFloatLabels = { "Radius" };
+		init(p_ID);
+	}
 };
 
 class BoxNode : public PrimitiveNode {
@@ -30,6 +37,13 @@ public:
 		m_inputFloat3Labels = { "Box Dimension" };
 		m_inputFloatLabels = {};
 		init();
+	}
+	BoxNode(int p_ID)
+	{
+		m_nodeName = "Box";
+		m_inputFloat3Labels = { "Box Dimension" };
+		m_inputFloatLabels = {};
+		init(p_ID);
 	}
 };
 
@@ -42,6 +56,13 @@ public:
 		m_inputFloatLabels = { "Path Radius", "Circle Radius" };
 		init();
 	}
+	TorusNode(int p_ID)
+	{
+		m_nodeName = "Torus";
+		m_inputFloat3Labels = {};
+		m_inputFloatLabels = { "Path Radius", "Circle Radius" };
+		init(p_ID);
+	}
 };
 
 class BoxFrameNode : public PrimitiveNode {
@@ -52,6 +73,13 @@ public:
 		m_inputFloat3Labels = { "Box Dimension" };
 		m_inputFloatLabels = { "Frame Thickness" };
 		init();
+	}
+	BoxFrameNode(int p_ID)
+	{
+		m_nodeName = "BoxFrame";
+		m_inputFloat3Labels = { "Box Dimension" };
+		m_inputFloatLabels = { "Frame Thickness" };
+		init(p_ID);
 	}
 };
 

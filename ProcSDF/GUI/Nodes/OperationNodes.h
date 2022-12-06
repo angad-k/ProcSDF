@@ -19,6 +19,14 @@ public:
 		m_isFinalNode = false;
 		init();
 	}
+	IntersectionNode(int p_ID)
+	{
+		m_nodeName = "Intersection";
+		m_inputPins = { "Input 1", "Input 2" };
+		m_outputPins = { "Output" };
+		m_isFinalNode = false;
+		init(p_ID);
+	}
 };
 
 class UnionNode : public OperationNode {
@@ -30,5 +38,13 @@ public:
 		m_outputPins = { "Output" };
 		m_isFinalNode = false;
 		init();
+	}
+	UnionNode(int p_ID)
+	{
+		m_nodeName = "Union";
+		m_inputPins = { "Input 1", "Input 2" };
+		m_outputPins = { "Output" };
+		m_isFinalNode = false;
+		init(p_ID);
 	}
 };
