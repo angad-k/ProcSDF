@@ -37,8 +37,11 @@ bool ProjectSaver::saveProject() {
 	  }
 	*/
 
+	index = 0;
 	for (Node* nd : l_nodeGraph->m_nodes) {
+		
 		l_jsonValue[std::to_string(nd->m_ID)][save_project::NODE_NAME] = nd->m_nodeName;
+		l_jsonValue[save_project::NODE_ID][index] = nd->m_ID;
 
 		for (int i = 0; i < nd->m_inputIDs.size(); i++) {
 			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_IDS][i] = nd->m_inputIDs[i];
@@ -58,6 +61,8 @@ bool ProjectSaver::saveProject() {
 			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_FLOAT][i] = nd->m_inputFloats[i];
 		}
 
+		index++;
+
 	}
 
 	Json::StyledWriter styledWriter;
@@ -76,5 +81,7 @@ bool ProjectSaver::saveProject() {
 }
 
 bool ProjectSaver::loadProject() {
+	NodeGraph::getSingleton()->clear();
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	return true;
 }

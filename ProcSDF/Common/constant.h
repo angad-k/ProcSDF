@@ -71,6 +71,7 @@ namespace save_project {
 	const std::string CAMERA_SETTING = "cameraSetting";
 	const std::string CAMERA_ORIGIN = "cameraOrigin";
 	const std::string CAMERA_FOCAL_LENGTH = "focalLength";
+	const std::string NODE_ID = "nodeID";
 }
 
 namespace imgui_colors {
