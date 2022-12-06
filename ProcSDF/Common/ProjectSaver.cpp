@@ -4,6 +4,11 @@
 #include "Common/WindowsInterface.h"
 #include "Common/os.h"
 #include "Rendering/Renderer.h"
+#include "GUI/Nodes/FinalNode.h"
+#include "GUI/Nodes/ObjectNode.h"
+#include "GUI/Nodes/OperationNodes.h"
+#include "GUI/Nodes/PrimitiveNodes.h"
+#include "GUI/Nodes/TransformNodes.h"
 
 bool ProjectSaver::saveProject() {
 	
@@ -80,28 +85,46 @@ bool ProjectSaver::saveProject() {
 	return false;
 }
 
-bool ProjectSaver::syntaxChecker(std::string p_jsonString) {
-	Json::Value value;
-	Json::Reader reader;
-	bool l_isParseSucessful = reader.parse(p_jsonString, value);
-	if (!l_isParseSucessful) {
-		return false;
+Node* ProjectSaver::getNodeFromNodeName(std::string p_nodeName, int p_ID) {
+	Node* l_node = NULL;
+	if (p_nodeName == node_name::FINAL_NODE) {
+		l_node = new FinalNode(p_ID);
+	}
+	else if (p_nodeName == node_name::OBJECT_NODE) {
+		l_node = new ObjectNode(p_ID);
+	}
+	else if (p_nodeName == node_name::INTERSECTION_NODE) {
+		l_node = new IntersectionNode(p_ID);
+	}
+	else if (p_nodeName == node_name::UNION_NODE) {
+		l_node = new UnionNode(p_ID);
+	}
+	else if (p_nodeName == node_name::SPHERE_NODE) {
+		l_node = new SphereNode(p_ID);
+	}
+	else if (p_nodeName == node_name::BOX_NODE) {
+		l_node = new BoxNode(p_ID);
+	}
+	else if (p_nodeName == node_name::TORUS_NODE) {
+		l_node = new TorusNode(p_ID);
+	}
+	else if (p_nodeName == node_name::BOX_FRAME_NODE) {
+		l_node = new BoxFrameNode(p_ID);
+	}
+	else if (p_nodeName == node_name::TRANSLATION_NODE) {
+		l_node = new TranslationNode(p_ID);
+	}
+	else if (p_nodeName == node_name::ROTATIONX_NODE) {
+		l_node = new RotationNodeX(p_ID);
+	}
+	else if (p_nodeName == node_name::ROTATIONY_NODE) {
+		l_node = new RotationNodeY(p_ID);
+	}
+	else if (p_nodeName == node_name::ROTATIONZ_NODE) {
+		l_node == new RotationNodeZ(p_ID);
 	}
 
-	if (!value.isMember(save_project::CAMERA_SETTING) || !value.isMember(save_project::NODE_ID) || !value.isMember(save_project::NODE_LINK)
-		|| !value[save_project::NODE_ID].isArray()) {
-		return false;
-	}
-
-	Json::Value l_nodeIDList = value[save_project::NODE_ID];
-
-	for (int i = 0; i < l_nodeIDList.size(); i++) {
-		if (!value.isMember(std::to_string(l_nodeIDList[i].asInt()))) {
-			return false;
-		}
-	}
-	return true;
-
+	return l_node;
 }
 
 bool ProjectSaver::loadProject() {
@@ -111,11 +134,15 @@ bool ProjectSaver::loadProject() {
 		return false;
 	}
 
-	std::string l_jsonString = OS::fetchFileContent(l_filePath.second);
+	try {
+		std::string l_jsonString = OS::fetchFileContent(l_filePath.second);
 
-	NodeGraph::getSingleton()->clear();
-	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
-
+		NodeGraph::getSingleton()->clear();
+		NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	}
+	catch (...) {
+		return false;
+	}
 
 	return true;
 }

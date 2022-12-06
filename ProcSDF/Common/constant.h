@@ -74,6 +74,21 @@ namespace save_project {
 	const std::string NODE_ID = "nodeID";
 }
 
+namespace node_name {
+	const std::string FINAL_NODE = "Final node";
+	const std::string OBJECT_NODE = "Object node";
+	const std::string INTERSECTION_NODE = "Intersection";
+	const std::string UNION_NODE = "Union";
+	const std::string SPHERE_NODE = "Sphere";
+	const std::string BOX_NODE = "Box";
+	const std::string TORUS_NODE = "Torus";
+	const std::string BOX_FRAME_NODE = "BoxFrame";
+	const std::string TRANSLATION_NODE = "Translation";
+	const std::string ROTATIONX_NODE = "Rotation_X";
+	const std::string ROTATIONY_NODE = "Rotation_Y";
+	const std::string ROTATIONZ_NODE = "Rotation_Z";
+}
+
 namespace imgui_colors {
 	const int RED = IM_COL32(255, 50, 50, 255);
 	const int GREEN = IM_COL32(80, 190, 50, 255);
