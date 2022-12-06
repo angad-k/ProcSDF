@@ -2,6 +2,6 @@
 #include<json/json.h>
 class ProjectSaver {
 public:
-	static bool saveProject(std::string p_filePath);
-
+	static bool saveProject();
+	static bool loadProject();
 };

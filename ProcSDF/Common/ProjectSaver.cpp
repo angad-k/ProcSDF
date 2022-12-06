@@ -74,3 +74,7 @@ bool ProjectSaver::saveProject() {
 
 	return false;
 }
+
+bool ProjectSaver::loadProject() {
+
+}

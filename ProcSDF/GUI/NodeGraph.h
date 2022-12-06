@@ -36,6 +36,7 @@ public:
 	void printNodeGraph();
 	void recompileNodeGraph();
 	bool isIterable(int p_count, int p_inputPinSize);
+	void clear();
 
 	bool m_errorInCompilation;
 	std::string m_compilationError;

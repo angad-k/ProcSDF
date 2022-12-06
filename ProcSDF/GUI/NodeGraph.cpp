@@ -24,6 +24,16 @@ void NodeGraph::initialize()
 	m_nodes.push_back(l_on);
 }
 
+void NodeGraph::clear()
+{
+	for (int i = 0; i < m_nodes.size(); i++) {
+		delete(m_nodes[i]);
+	}
+	delete(m_finalNode);
+	delete(s_nodeGraph);
+	s_nodeGraph = NULL;
+}
+
 int NodeGraph::allocateID(Node* p_node)
 {
 	for (int i = 0; i < INT_MAX; i++)
