@@ -134,11 +134,90 @@ bool ProjectSaver::loadProject() {
 		return false;
 	}
 
+	// try catch included here only for safety in case any edge slips by
 	try {
 		std::string l_jsonString = OS::fetchFileContent(l_filePath.second);
 
 		NodeGraph::getSingleton()->clear();
 		NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+		Json::Value l_value, l_nodeIDList, l_nodeInfo;
+		Json::Reader l_reader;
+		bool l_isParseSucessful = l_reader.parse(l_jsonString, l_value);
+		if (!l_isParseSucessful || !l_value.isMember(save_project::NODE_ID) || !l_value[save_project::NODE_ID].isArray()) {
+			return false;
+		}
+		
+		l_nodeIDList = l_value[save_project::NODE_ID];
+
+		for (int i = 0; i < l_nodeIDList.size(); i++) {
+			
+			int l_nodeID = l_nodeIDList[i].asInt();
+			
+			if (!l_value.isMember(std::to_string(l_nodeID))) {
+				return false;
+			}
+
+			l_nodeInfo = l_value[std::to_string(l_nodeID)];
+
+			if (!l_nodeInfo.isMember(save_project::NODE_NAME) || !l_nodeInfo[save_project::NODE_NAME].isString()) {
+				return false;
+			}
+
+			Node* l_node = ProjectSaver::getNodeFromNodeName(l_nodeInfo[save_project::NODE_NAME].asString(), l_nodeID);
+
+			// populate input pin IDs
+			if (l_node->m_inputPins.size() > 0 && (!l_nodeInfo.isMember(save_project::INPUT_IDS) || !l_nodeInfo[save_project::INPUT_IDS].isArray())) {
+				return false;
+			}
+			for (int i = 0; i < l_node->m_inputPins.size(); i++) {
+				if (!l_nodeInfo[save_project::INPUT_IDS][i].isInt()) {
+					return false;
+				}
+				l_node->m_inputIDs[i] = l_nodeInfo[save_project::INPUT_IDS][i].asInt();
+			}
+
+			// populate output pin IDs
+			if (l_node->m_outputPins.size() > 0 && (!l_nodeInfo.isMember(save_project::OUTPUT_IDS) || !l_nodeInfo[save_project::OUTPUT_IDS].isArray())) {
+				return false;
+			}
+			for (int i = 0; i < l_node->m_outputIDs.size(); i++) {
+				if (!l_nodeInfo[save_project::OUTPUT_IDS][i].isInt()) {
+					return false;
+				}
+				l_node->m_outputIDs[i] = l_nodeInfo[save_project::OUTPUT_IDS][i].asInt();
+			}
+
+			// populate float inputs params
+			if (l_node->m_inputFloatLabels.size() > 0 && (!l_nodeInfo.isMember(save_project::INPUT_FLOAT) || !l_nodeInfo[save_project::INPUT_FLOAT].isArray())) {
+				return false;
+			}
+			for (int i = 0; i < l_node->m_inputFloatLabels.size(); i++) {
+				if (!l_nodeInfo[save_project::INPUT_FLOAT][i].isDouble()) {
+					return false;
+				}
+				l_node->m_inputFloats[i] = l_nodeInfo[save_project::INPUT_FLOAT][i].asDouble();
+			}
+
+			// populate float3 inputs params
+			if (l_node->m_inputFloat3Labels.size() > 0 && (!l_nodeInfo.isMember(save_project::INPUT_FLOAT3) || !l_nodeInfo[save_project::INPUT_FLOAT3].isArray())) {
+				return false;
+			}
+			for (int i = 0; i < l_node->m_inputFloat3Labels.size(); i++) {
+				if (!l_nodeInfo[save_project::INPUT_FLOAT3][i].isArray() || !(l_nodeInfo[save_project::INPUT_FLOAT3][i].size() == 3)) {
+					return false;
+				}
+
+				for (int j = 0; j < 3; j++) {
+					if (!l_nodeInfo[save_project::INPUT_FLOAT3][i][j].isDouble()) {
+						return false;
+					}
+					l_node->m_inputFloat3[i][j] = l_nodeInfo[save_project::INPUT_FLOAT][i][j].asDouble();
+				}
+				
+			}
+
+		}
 	}
 	catch (...) {
 		return false;
