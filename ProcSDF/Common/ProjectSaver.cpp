@@ -5,11 +5,7 @@
 #include "Common/os.h"
 #include "Rendering/Renderer.h"
 
-bool ProjectSaver::saveStringToFile(std::string p_filePath) {
-	return true;
-}
-
-bool ProjectSaver::saveProject(std::string p_filePath) {
+bool ProjectSaver::saveProject() {
 	
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	Renderer* l_renderer = Renderer::getSingleton();
@@ -72,8 +68,9 @@ bool ProjectSaver::saveProject(std::string p_filePath) {
 	std::pair<bool, std::string> l_filePathInfo = WindowsInterface::saveFile("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
 	
 	if(l_filePathInfo.first) {
-	    bool flag =	OS::saveFileContent(l_filePathInfo.second, std::string(styledWriter.write(l_jsonValue)));
+	    bool status =	OS::saveFileContent(l_filePathInfo.second, std::string(styledWriter.write(l_jsonValue)));
+		return status;
 	}
 
-	return true;
+	return false;
 }

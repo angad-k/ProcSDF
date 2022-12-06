@@ -6,7 +6,6 @@
 
 void NodeEditor::draw()
 {
-	ProjectSaver projectSaver;
 	ImGui::Begin("Nodes workspace");
 	if (ImGui::Button("Recompile"))
 	{
@@ -17,7 +16,7 @@ void NodeEditor::draw()
 
 	if (ImGui::Button("Save Project"))
 	{
-		projectSaver.saveProject("Sample");
+		ProjectSaver::saveProject();
 	}
 
 	ImGui::SameLine();
