@@ -150,6 +150,21 @@ bool ProjectSaver::loadProject() {
 		
 		l_nodeIDList = l_value[save_project::NODE_ID];
 
+		// restore link details
+
+		if (!l_value.isMember(save_project::NODE_LINK) || !l_value[save_project::NODE_LINK].isArray()) {
+			return false;
+		}
+
+		for (int i = 0; i < l_value[save_project::NODE_LINK].size(); i++) {
+			if (!l_value[save_project::NODE_LINK][i].isArray() || !(l_value[save_project::NODE_LINK][i].size() == 2)
+				|| !l_value[save_project::NODE_LINK][i][0].isInt() || !l_value[save_project::NODE_LINK][i][1].isInt()) {
+				return false;
+			}
+			l_nodeGraph->m_links.push_back(std::make_pair(l_value[save_project::NODE_LINK][i][0].asInt(), l_value[save_project::NODE_LINK][i][1].asInt()));
+		}
+
+		// restore node info 
 		for (int i = 0; i < l_nodeIDList.size(); i++) {
 			
 			int l_nodeID = l_nodeIDList[i].asInt();
@@ -217,7 +232,9 @@ bool ProjectSaver::loadProject() {
 				
 			}
 
+			l_nodeGraph->addNode(l_node);
 		}
+		l_nodeGraph->recompileNodeGraph();
 	}
 	catch (...) {
 		return false;
