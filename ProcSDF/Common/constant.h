@@ -68,6 +68,9 @@ namespace save_project {
 	const std::string INPUT_FLOAT3 = "inputFloat3";
 	const std::string INPUT_FLOAT = "inputFloat";
 	const std::string PROCSDF_EXTENSION = ".procsdf";
+	const std::string CAMERA_SETTING = "cameraSetting";
+	const std::string CAMERA_ORIGIN = "cameraOrigin";
+	const std::string CAMERA_FOCAL_LENGTH = "focalLength";
 }
 
 namespace imgui_colors {

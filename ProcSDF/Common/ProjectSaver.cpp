@@ -3,6 +3,7 @@
 #include "Common/constant.h"
 #include "Common/WindowsInterface.h"
 #include "Common/os.h"
+#include "Rendering/Renderer.h"
 
 bool ProjectSaver::saveStringToFile(std::string p_filePath) {
 	return true;
@@ -11,6 +12,7 @@ bool ProjectSaver::saveStringToFile(std::string p_filePath) {
 bool ProjectSaver::saveProject(std::string p_filePath) {
 	
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	Renderer* l_renderer = Renderer::getSingleton();
 	Json::Value l_jsonValue;
 
 	int index = 0;
@@ -19,6 +21,14 @@ bool ProjectSaver::saveProject(std::string p_filePath) {
 		l_jsonValue[save_project::NODE_LINK][index][1] = link.second;
 		index++;
 	}
+
+	// save camera details
+
+	for (int i = 0; i < 3; i++) {
+		l_jsonValue[save_project::CAMERA_SETTING][save_project::CAMERA_ORIGIN][i] = l_renderer->get_camera_origin()[i];
+	}
+
+	l_jsonValue[save_project::CAMERA_SETTING][save_project::CAMERA_FOCAL_LENGTH] = *(l_renderer->getFocalLength());
 
 	// save minimal details for each node
 	/*
@@ -62,7 +72,7 @@ bool ProjectSaver::saveProject(std::string p_filePath) {
 	std::pair<bool, std::string> l_filePathInfo = WindowsInterface::saveFile("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
 	
 	if(l_filePathInfo.first) {
-	    bool flag =	OS::saveFileContent(l_filePathInfo.second + save_project::PROCSDF_EXTENSION, std::string(styledWriter.write(l_jsonValue)));
+	    bool flag =	OS::saveFileContent(l_filePathInfo.second, std::string(styledWriter.write(l_jsonValue)));
 	}
 
 	return true;
