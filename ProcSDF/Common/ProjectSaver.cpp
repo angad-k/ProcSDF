@@ -65,10 +65,10 @@ bool ProjectSaver::saveProject() {
 
 	std::cout << styledWriter.write(l_jsonValue) << "\n";
 
-	std::pair<bool, std::string> l_filePathInfo = WindowsInterface::saveFile("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
+	std::pair<bool, std::string> l_filePathInfo = OS::pickSaveAsFile();
 	
 	if(l_filePathInfo.first) {
-	    bool status =	OS::saveFileContent(l_filePathInfo.second, std::string(styledWriter.write(l_jsonValue)));
+	    bool status = OS::saveFileContent(l_filePathInfo.second, std::string(styledWriter.write(l_jsonValue)));
 		return status;
 	}
 
@@ -76,5 +76,5 @@ bool ProjectSaver::saveProject() {
 }
 
 bool ProjectSaver::loadProject() {
-
+	return true;
 }

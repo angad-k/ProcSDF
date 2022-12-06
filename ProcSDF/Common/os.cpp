@@ -21,6 +21,19 @@ std::pair<bool, std::string> OS::pickFile() {
 	return l_filePath;
 }
 
+std::pair<bool, std::string> OS::pickSaveAsFile() {
+	std::pair<bool, std::string> l_filePath = WindowsInterface::saveFile("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
+	if (l_filePath.first)
+	{
+		PRINT("File picked : " + l_filePath.second);
+	}
+	else
+	{
+		PRINT("File not picked.");
+	}
+	return l_filePath;
+}
+
 // if file exists overwrite it else create it and save the file.
 bool OS::saveFileContent(std::string p_filePath, std::string p_fileContent) {
 	std::ofstream l_fileStream(p_filePath, std::ofstream::trunc);

@@ -14,7 +14,7 @@
       "outputIDS" : [ 6 ]
    },
    "cameraSetting" : {
-      "cameraOrigin" : [ 0.0, -1.0, 6.0 ],
+      "cameraOrigin" : [ 0.0, 0.0, 5.0 ],
       "focalLength" : 1.0
    },
    "nodeLink" : [
