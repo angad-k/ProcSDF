@@ -3,6 +3,7 @@
 #include "GUI/NodeGraph.h"
 #include "Common/constant.h"
 #include "Common/ProjectSaver.h"
+#include "Common/logger.h"
 
 void NodeEditor::draw()
 {
@@ -17,6 +18,16 @@ void NodeEditor::draw()
 	if (ImGui::Button("Save Project"))
 	{
 		ProjectSaver::saveProject();
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Load Project"))
+	{
+		bool isParseSucessful = ProjectSaver::loadProject();
+		if (!isParseSucessful) {
+			ERR("Error in parsing uploaded file");
+		}
 	}
 
 	ImGui::SameLine();

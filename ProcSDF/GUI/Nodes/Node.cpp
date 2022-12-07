@@ -32,6 +32,7 @@ void Node::init()
 void Node::init(int p_ID)
 {
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	m_ID = p_ID;
 	l_nodeGraph->setID(this, p_ID);
 	m_variableName = m_nodeName + "_" + std::to_string(m_ID);
 	m_inputIDs = std::vector<int>(m_inputPins.size());

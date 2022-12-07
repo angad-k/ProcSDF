@@ -218,6 +218,7 @@ bool ProjectSaver::loadProject() {
 					return false;
 				}
 				l_node->m_inputIDs[i] = l_nodeInfo[save_project::INPUT_IDS][i].asInt();
+				l_nodeGraph->setID(l_node, l_node->m_inputIDs[i]);
 			}
 
 			// populate output pin IDs
@@ -229,6 +230,7 @@ bool ProjectSaver::loadProject() {
 					return false;
 				}
 				l_node->m_outputIDs[i] = l_nodeInfo[save_project::OUTPUT_IDS][i].asInt();
+				l_nodeGraph->setID(l_node, l_node->m_outputIDs[i]);
 			}
 
 			// populate float inputs params
