@@ -140,15 +140,43 @@ bool ProjectSaver::loadProject() {
 
 		NodeGraph::getSingleton()->clear();
 		NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+		Renderer* l_renderer = Renderer::getSingleton();
 
-		Json::Value l_value, l_nodeIDList, l_nodeInfo;
+		Json::Value l_value, l_nodeIDList, l_nodeInfo, l_cameraDetails;
 		Json::Reader l_reader;
+		float l_cameraOrigin[3];
 		bool l_isParseSucessful = l_reader.parse(l_jsonString, l_value);
 		if (!l_isParseSucessful || !l_value.isMember(save_project::NODE_ID) || !l_value[save_project::NODE_ID].isArray()) {
 			return false;
 		}
 		
 		l_nodeIDList = l_value[save_project::NODE_ID];
+		// restore camera details
+
+		if (!l_value.isMember(save_project::CAMERA_SETTING) || !l_value[save_project::CAMERA_SETTING].isMember(save_project::CAMERA_ORIGIN)
+			|| !l_value[save_project::CAMERA_SETTING].isMember(save_project::CAMERA_FOCAL_LENGTH)) {
+			return false;
+		}
+
+		l_cameraDetails = l_value[save_project::CAMERA_SETTING];
+
+		if (!l_cameraDetails[save_project::CAMERA_FOCAL_LENGTH].isDouble() || !l_cameraDetails[save_project::CAMERA_ORIGIN].isArray()
+			|| !(l_cameraDetails[save_project::CAMERA_ORIGIN].size() == 3)) {
+			return false;
+		}
+
+		l_renderer->set_focal_length(l_cameraDetails[save_project::CAMERA_FOCAL_LENGTH].asDouble());
+
+		for (int i = 0; i < 3; i++) {
+			if (!l_cameraDetails[save_project::CAMERA_ORIGIN][i].isDouble()) {
+				return false;
+			}
+
+			l_cameraOrigin[i] = l_cameraDetails[save_project::CAMERA_ORIGIN][i].asDouble();
+			
+		}
+
+		l_renderer->setCameraOrigin(l_cameraOrigin);
 
 		// restore link details
 
