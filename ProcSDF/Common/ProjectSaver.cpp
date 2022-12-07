@@ -121,7 +121,7 @@ Node* ProjectSaver::getNodeFromNodeName(std::string p_nodeName, int p_ID) {
 		l_node = new RotationNodeY(p_ID);
 	}
 	else if (p_nodeName == node_name::ROTATIONZ_NODE) {
-		l_node == new RotationNodeZ(p_ID);
+		l_node = new RotationNodeZ(p_ID);
 	}
 
 	return l_node;
@@ -213,6 +213,7 @@ bool ProjectSaver::loadProject() {
 			if (l_node->m_inputPins.size() > 0 && (!l_nodeInfo.isMember(save_project::INPUT_IDS) || !l_nodeInfo[save_project::INPUT_IDS].isArray())) {
 				return false;
 			}
+
 			for (int i = 0; i < l_node->m_inputPins.size(); i++) {
 				if (!l_nodeInfo[save_project::INPUT_IDS][i].isInt()) {
 					return false;
