@@ -258,7 +258,7 @@ bool ProjectSaver::loadProject() {
 					if (!l_nodeInfo[save_project::INPUT_FLOAT3][i][j].isDouble()) {
 						return false;
 					}
-					l_node->m_inputFloat3[i][j] = l_nodeInfo[save_project::INPUT_FLOAT][i][j].asDouble();
+					l_node->m_inputFloat3[i][j] = l_nodeInfo[save_project::INPUT_FLOAT3][i][j].asDouble();
 				}
 				
 			}
