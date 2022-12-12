@@ -72,8 +72,7 @@ bool ProjectSaver::saveProject() {
 
 	Json::StyledWriter styledWriter;
 	Json::FastWriter fastWriter;
-
-	std::cout << styledWriter.write(l_jsonValue) << "\n";
+	//std::cout << styledWriter.write(l_jsonValue) << "\n";
 
 	std::pair<bool, std::string> l_filePathInfo = OS::pickSaveAsFile();
 	
