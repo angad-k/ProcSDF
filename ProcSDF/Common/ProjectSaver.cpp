@@ -78,7 +78,7 @@ bool ProjectSaver::saveProject() {
 	std::pair<bool, std::string> l_filePathInfo = OS::pickSaveAsFile();
 	
 	if(l_filePathInfo.first) {
-	    bool status = OS::saveFileContent(l_filePathInfo.second, std::string(styledWriter.write(l_jsonValue)));
+	    bool status = OS::saveFileContent(l_filePathInfo.second + save_project::PROCSDF_EXTENSION, std::string(styledWriter.write(l_jsonValue)));
 		return status;
 	}
 
