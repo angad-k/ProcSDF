@@ -56,12 +56,12 @@ public:
 		m_cameraOriginValue[2] = p_cameraOrigin[2];
 	}
 
-	float* get_camera_origin()
+	float* getCameraOrigin()
 	{
 		return m_cameraOriginValue;
 	}
 
-	void set_focal_length(float p_focalLength)
+	void setFocalLength(float p_focalLength)
 	{
 		m_focalLengthValue = p_focalLength;
 	}

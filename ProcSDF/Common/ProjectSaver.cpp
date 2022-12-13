@@ -16,17 +16,17 @@ bool ProjectSaver::saveProject() {
 	Renderer* l_renderer = Renderer::getSingleton();
 	Json::Value l_jsonValue;
 
-	int index = 0;
+	int l_index = 0;
 	for (std::pair<int, int> link : l_nodeGraph->m_links) {
-		l_jsonValue[save_project::NODE_LINK][index][0] = link.first;
-		l_jsonValue[save_project::NODE_LINK][index][1] = link.second;
-		index++;
+		l_jsonValue[save_project::NODE_LINK][l_index][0] = link.first;
+		l_jsonValue[save_project::NODE_LINK][l_index][1] = link.second;
+		l_index++;
 	}
 
 	// save camera details
 
 	for (int i = 0; i < 3; i++) {
-		l_jsonValue[save_project::CAMERA_SETTING][save_project::CAMERA_ORIGIN][i] = l_renderer->get_camera_origin()[i];
+		l_jsonValue[save_project::CAMERA_SETTING][save_project::CAMERA_ORIGIN][i] = l_renderer->getCameraOrigin()[i];
 	}
 
 	l_jsonValue[save_project::CAMERA_SETTING][save_project::CAMERA_FOCAL_LENGTH] = *(l_renderer->getFocalLength());
@@ -42,11 +42,11 @@ bool ProjectSaver::saveProject() {
 	  }
 	*/
 
-	index = 0;
+	l_index = 0;
 	for (Node* nd : l_nodeGraph->m_nodes) {
 		
 		l_jsonValue[std::to_string(nd->m_ID)][save_project::NODE_NAME] = nd->m_nodeName;
-		l_jsonValue[save_project::NODE_ID][index] = nd->m_ID;
+		l_jsonValue[save_project::NODE_ID][l_index] = nd->m_ID;
 
 		for (int i = 0; i < nd->m_inputIDs.size(); i++) {
 			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_IDS][i] = nd->m_inputIDs[i];
@@ -66,18 +66,18 @@ bool ProjectSaver::saveProject() {
 			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_FLOAT][i] = nd->m_inputFloats[i];
 		}
 
-		index++;
+		l_index++;
 
 	}
 
-	Json::StyledWriter styledWriter;
-	Json::FastWriter fastWriter;
+	Json::StyledWriter l_styledWriter;
+	Json::FastWriter l_fastWriter;
 	//std::cout << styledWriter.write(l_jsonValue) << "\n";
 
 	std::pair<bool, std::string> l_filePathInfo = OS::pickSaveAsFile();
 	
 	if(l_filePathInfo.first) {
-	    bool status = OS::saveFileContent(l_filePathInfo.second + save_project::PROCSDF_EXTENSION, std::string(styledWriter.write(l_jsonValue)));
+	    bool status = OS::saveFileContent(l_filePathInfo.second + save_project::PROCSDF_EXTENSION, std::string(l_styledWriter.write(l_jsonValue)));
 		return status;
 	}
 
@@ -164,7 +164,7 @@ bool ProjectSaver::loadProject() {
 			return false;
 		}
 
-		l_renderer->set_focal_length(l_cameraDetails[save_project::CAMERA_FOCAL_LENGTH].asDouble());
+		l_renderer->setFocalLength(l_cameraDetails[save_project::CAMERA_FOCAL_LENGTH].asDouble());
 
 		for (int i = 0; i < 3; i++) {
 			if (!l_cameraDetails[save_project::CAMERA_ORIGIN][i].isDouble()) {
