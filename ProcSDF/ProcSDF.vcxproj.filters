@@ -108,7 +108,7 @@
     <ClCompile Include="Vendor\dist\jsoncpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rendering\Material.cpp">
+    <ClCompile Include="Rendering\Materials\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,7 +167,10 @@
     <ClInclude Include="Common\ProjectSaver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\Material.h">
+    <ClInclude Include="Rendering\Materials\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rendering\Materials\Metal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

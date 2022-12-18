@@ -43,6 +43,11 @@ void ShaderGenerator::computeUniforms()
 		{
 			m_uniformVec3.push_back(label);
 		}
+
+		for (std::string label : material->getFloatUniforms())
+		{
+			m_uniformFloats.push_back(label);
+		}
 	}
 }
 

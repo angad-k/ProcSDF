@@ -7,6 +7,7 @@
 #include "GUI/Nodes/ObjectNode.h"
 #include "Common/logger.h"
 #include "Rendering/ShaderGenerator.h"
+#include "Rendering/Materials/Metal.h"
 #pragma once
 
 void NodeGraph::initialize()
@@ -362,6 +363,12 @@ std::vector<Material*> NodeGraph::getMaterials()
 void NodeGraph::addMaterial()
 {
 	Material* l_newMaterial = new Material();
+	m_materials.push_back(l_newMaterial);
+}
+
+void NodeGraph::addMetal()
+{
+	Material* l_newMaterial = new Metal();
 	m_materials.push_back(l_newMaterial);
 }
 

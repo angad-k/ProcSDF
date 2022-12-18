@@ -8,7 +8,7 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
 #include "Common/constant.h"
-#include "Material.h"
+#include "Rendering/Materials/Material.h"
 Renderer::Renderer()
 {
 	float l_vertices[] = {

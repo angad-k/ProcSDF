@@ -123,6 +123,10 @@ void Inspector::drawMaterialSettings()
 	{
 		NodeGraph::getSingleton()->addMaterial();
 	}
+	if (ImGui::Button("Add Metal Material"))
+	{
+		NodeGraph::getSingleton()->addMetal();
+	}
 }
 
 void Inspector::drawNodeGraphSettings()

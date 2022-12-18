@@ -1,7 +1,7 @@
 #pragma once
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeGraph.h"
-#include "Rendering/Material.h"
+#include "Rendering/Materials/Material.h"
 class ObjectNode : public Node {
 	int m_material_id = 0;
 public:
