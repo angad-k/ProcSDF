@@ -102,7 +102,7 @@ void Inspector::drawNodeGraphSettings()
 		if (l_pickFileResult.first)
 		{
 			std::string l_filePath = l_pickFileResult.second;
-			CustomNode* l_customNode = new CustomNode(l_filePath);
+			/*CustomNode* l_customNode = new CustomNode(l_filePath);
 			if (l_customNode->isMalformed())
 			{
 				delete(l_customNode);
@@ -110,7 +110,8 @@ void Inspector::drawNodeGraphSettings()
 			else
 			{
 				NodeGraph::getSingleton()->addNode(l_customNode);
-			}
+			}*/
+			CustomNode::AddCustomNodeAtFilePath(l_filePath);
 		}
 	}
 	ImGui::Separator();
@@ -206,6 +207,34 @@ void Inspector::drawNodeGraphSettings()
 			if (ImGui::Button("Rotation Around Z-Axis"))
 			{
 				addNode<RotationNodeZ>();
+			}
+			ImGui::PopStyleColor();
+			ImGui::Unindent();
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("Custom Nodes"))
+		{
+			ImGui::Indent();
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::TRANFSFORM);
+			std::vector <std::string> l_customNodeNames = NodeGraph::getSingleton()->getCustomNodeNames();
+			for (int i = 0; i < l_customNodeNames.size(); i++)
+			{
+				if (ImGui::Button(l_customNodeNames[i].c_str()))
+				{
+					CustomNode* l_customNode = new CustomNode(l_customNodeNames[i]);
+					if (l_customNode->isMalformed())
+					{
+						delete(l_customNode);
+					}
+					else
+					{
+						NodeGraph::getSingleton()->addNode(l_customNode);
+					}
+				}
+				if (i < l_customNodeNames.size() - 1)
+				{
+					GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+				}
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

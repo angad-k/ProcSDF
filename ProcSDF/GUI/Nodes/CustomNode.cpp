@@ -17,9 +17,9 @@ std::vector<std::string> CustomNode::tokenizeWithDelimiters(std::string p_string
 	return l_tokens;
 }
 
-CustomNode::CustomNode(std::string p_filePath)
+CustomNode::CustomNode(std::string p_nodeName)
 {
-	std::string l_fileContent = OS::fetchFileContent(p_filePath);
+	std::string l_fileContent = NodeGraph::getSingleton()->getCustomNodeFileContentsfromNodeName(p_nodeName);
 	std::vector<std::string> l_lines = tokenizeWithDelimiters(l_fileContent, "\n");
 	for (std::string line : l_lines)
 	{
@@ -74,7 +74,44 @@ CustomNode::CustomNode(std::string p_filePath)
 	}
 	m_outputPins.push_back("Output");
 
-	NodeGraph::getSingleton()->setCustomNodeFileContents(p_filePath, l_fileContent);
-
 	init();
+}
+
+void CustomNode::AddCustomNodeAtFilePath(std::string p_filePath)
+{
+	std::string l_fileContent = OS::fetchFileContent(p_filePath);
+	std::vector<std::string> l_lines = tokenizeWithDelimiters(l_fileContent, "\n");
+	bool l_isMalformed = false;
+	std::string l_nodeName = "";
+	for (std::string line : l_lines)
+	{
+		std::vector<std::string> l_tokens = tokenizeWithDelimiters(line, "\\s+");
+
+		if (l_tokens[0] == "//")
+		{
+			if (l_tokens[1] == "type")
+			{
+				if (l_tokens.size() <= 2)
+				{
+					ERR("type should be followed by an argument.");
+					l_isMalformed = true;
+					break;
+				}
+			}
+			else if (l_tokens[1] == "name")
+			{
+				if (l_tokens.size() <= 2)
+				{
+					ERR("type should be followed by an argument.");
+					l_isMalformed = true;
+					break;
+				}
+				l_nodeName = l_tokens[2];
+			}
+		}
+	}
+	if (!l_isMalformed)
+	{
+		NodeGraph::getSingleton()->setCustomNodeFileContents(l_nodeName, l_fileContent);
+	}
 }
