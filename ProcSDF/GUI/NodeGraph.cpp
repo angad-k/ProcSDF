@@ -24,6 +24,16 @@ void NodeGraph::initialize()
 	m_nodes.push_back(l_on);
 }
 
+void NodeGraph::clear()
+{
+	for (int i = 0; i < m_nodes.size(); i++) {
+		delete(m_nodes[i]);
+	}
+	//delete(m_finalNode);
+	delete(s_nodeGraph);
+	s_nodeGraph = NULL;
+}
+
 int NodeGraph::allocateID(Node* p_node)
 {
 	for (int i = 0; i < INT_MAX; i++)
@@ -38,17 +48,22 @@ int NodeGraph::allocateID(Node* p_node)
 	// TO DO : handle too many allocations
 }
 
-void NodeGraph::deallocateID(int p_id)
+void NodeGraph::setID(Node* p_node, int p_ID)
 {
-	if (m_allocatedIDs.find(p_id) != m_allocatedIDs.end())
+	m_allocatedIDs[p_ID] = p_node;
+}
+
+void NodeGraph::deallocateID(int p_ID)
+{
+	if (m_allocatedIDs.find(p_ID) != m_allocatedIDs.end())
 	{
-		m_allocatedIDs.erase(p_id);
+		m_allocatedIDs.erase(p_ID);
 	}
 }
 
-Node* NodeGraph::getNode(int p_id)
+Node* NodeGraph::getNode(int p_ID)
 {
-	return m_allocatedIDs[p_id];
+	return m_allocatedIDs[p_ID];
 }
 
 void NodeGraph::addLink(int p_src, int p_dest)

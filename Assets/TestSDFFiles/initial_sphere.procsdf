@@ -1,0 +1,25 @@
+{
+   "0" : {
+      "inputFloat" : [ 2.0 ],
+      "nodeName" : "Sphere",
+      "outputIDS" : [ 1 ]
+   },
+   "2" : {
+      "inputIDs" : [ 3 ],
+      "nodeName" : "Final node"
+   },
+   "4" : {
+      "inputIDs" : [ 5 ],
+      "nodeName" : "Object node",
+      "outputIDS" : [ 6 ]
+   },
+   "cameraSetting" : {
+      "cameraOrigin" : [ 0.0, 0.0, 5.0 ],
+      "focalLength" : 1.0
+   },
+   "nodeID" : [ 0, 2, 4 ],
+   "nodeLink" : [
+      [ 1, 5 ],
+      [ 6, 3 ]
+   ]
+}

@@ -38,6 +38,7 @@ public:
 		return m_variableName;
 	}
 	void init();
+	void init(int p_ID);
 
 	~Node();
 };

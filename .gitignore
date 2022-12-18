@@ -398,3 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 ProcSDF/Assets/Shaders/generated_fragment.glsl
+enc_temp_folder/

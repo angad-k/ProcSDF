@@ -60,6 +60,35 @@ namespace shader_generation {
 	}
 }
 
+namespace save_project {
+	const std::string NODE_LINK = "nodeLink";
+	const std::string NODE_NAME = "nodeName";
+	const std::string INPUT_IDS = "inputIDs";
+	const std::string OUTPUT_IDS = "outputIDS";
+	const std::string INPUT_FLOAT3 = "inputFloat3";
+	const std::string INPUT_FLOAT = "inputFloat";
+	const std::string PROCSDF_EXTENSION = ".procsdf";
+	const std::string CAMERA_SETTING = "cameraSetting";
+	const std::string CAMERA_ORIGIN = "cameraOrigin";
+	const std::string CAMERA_FOCAL_LENGTH = "focalLength";
+	const std::string NODE_ID = "nodeID";
+}
+
+namespace node_name {
+	const std::string FINAL_NODE = "Final node";
+	const std::string OBJECT_NODE = "Object node";
+	const std::string INTERSECTION_NODE = "Intersection";
+	const std::string UNION_NODE = "Union";
+	const std::string SPHERE_NODE = "Sphere";
+	const std::string BOX_NODE = "Box";
+	const std::string TORUS_NODE = "Torus";
+	const std::string BOX_FRAME_NODE = "BoxFrame";
+	const std::string TRANSLATION_NODE = "Translation";
+	const std::string ROTATIONX_NODE = "Rotation_X";
+	const std::string ROTATIONY_NODE = "Rotation_Y";
+	const std::string ROTATIONZ_NODE = "Rotation_Z";
+}
+
 namespace imgui_colors {
 	const int RED = IM_COL32(255, 50, 50, 255);
 	const int GREEN = IM_COL32(80, 190, 50, 255);

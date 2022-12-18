@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Common\os.cpp" />
+    <ClCompile Include="Common\ProjectSaver.cpp" />
     <ClCompile Include="Common\WindowsInterface.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="GUI\GUI.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\ShaderGenerator.cpp" />
     <ClCompile Include="Common\logger.h" />
+    <ClCompile Include="Vendor\dist\jsoncpp.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_demo.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_draw.cpp" />
@@ -179,6 +181,7 @@
   <ItemGroup>
     <ClInclude Include="Common\constant.h" />
     <ClInclude Include="Common\os.h" />
+    <ClInclude Include="Common\ProjectSaver.h" />
     <ClInclude Include="Common\WindowsInterface.h" />
     <ClInclude Include="GUI\GUI.h" />
     <ClInclude Include="GUI\Inspector.h" />

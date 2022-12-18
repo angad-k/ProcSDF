@@ -22,9 +22,10 @@ private:
 public:
 	void initialize();
 	int allocateID(Node* p_node);
-	void deallocateID(int p_id);
-	Node* getNode(int p_id);
-	void deleteNode(int p_id);
+	void setID(Node* p_node, int m_ID);
+	void deallocateID(int p_ID);
+	Node* getNode(int p_ID);
+	void deleteNode(int p_ID);
 	void addNode(Node* p_newNode);
 	void setAdjacencyList();
 	std::vector<int> getTopologicalSorting();
@@ -36,6 +37,7 @@ public:
 	void printNodeGraph();
 	void recompileNodeGraph();
 	bool isIterable(int p_count, int p_inputPinSize);
+	void clear();
 
 	bool m_errorInCompilation;
 	std::string m_compilationError;

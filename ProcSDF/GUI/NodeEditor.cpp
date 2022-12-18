@@ -2,6 +2,8 @@
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeGraph.h"
 #include "Common/constant.h"
+#include "Common/ProjectSaver.h"
+#include "Common/logger.h"
 
 void NodeEditor::draw()
 {
@@ -10,6 +12,24 @@ void NodeEditor::draw()
 	{
 		NodeGraph::getSingleton()->recompileNodeGraph();
 	}
+	
+	ImGui::SameLine();
+
+	if (ImGui::Button("Save Project"))
+	{
+		ProjectSaver::saveProject();
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Load Project"))
+	{
+		bool isParseSucessful = ProjectSaver::loadProject();
+		if (!isParseSucessful) {
+			ERR("Error in parsing uploaded file");
+		}
+	}
+
 	ImGui::SameLine();
 
 	if (m_selectedNodes.size() == 0)
