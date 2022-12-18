@@ -12,6 +12,7 @@
 void NodeGraph::initialize()
 {
 	m_errorInCompilation = false;
+	addMaterial();
 	SphereNode* l_sn = new SphereNode();
 	l_sn->m_inputFloats[0] = 2.0;
 	FinalNode* l_fn = new FinalNode();

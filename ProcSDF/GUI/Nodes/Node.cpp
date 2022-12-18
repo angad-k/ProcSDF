@@ -63,6 +63,13 @@ Node::~Node()
 
 void Node::draw()
 {
+	drawStartNode();
+	drawNodeContents();
+	drawEndNode();
+}
+
+void Node::drawStartNode()
+{
 	ImNodes::PushColorStyle(
 		ImNodesCol_TitleBar, m_titleColor);
 
@@ -79,7 +86,19 @@ void Node::draw()
 		ImGui::SetTooltip(m_variableName.c_str());
 	}
 	ImNodes::EndNodeTitleBar();
+}
 
+void Node::drawEndNode()
+{
+	ImGui::EndGroup();
+	ImNodes::EndNode();
+
+	//ImNodes::PopColorStyle();
+	ImNodes::PopColorStyle();
+}
+
+void Node::drawNodeContents()
+{
 	int l_idCounter = 0;
 
 	assert(m_inputIDs.size() == m_inputPins.size());
@@ -99,7 +118,7 @@ void Node::draw()
 		ImGui::Text(m_outputPins[i].c_str());
 		ImNodes::EndOutputAttribute();
 	}
-	
+
 	ImGui::PushItemWidth(80);
 
 	if (m_inputFloat3Labels.size() != 0 || m_inputFloatLabels.size() != 0)
@@ -147,12 +166,6 @@ void Node::draw()
 		);
 	}
 	ImGui::PopItemWidth();
-
-	ImGui::EndGroup();
-	ImNodes::EndNode();
-
-	//ImNodes::PopColorStyle();
-	ImNodes::PopColorStyle();
 }
 
 std::string Node::m_getString()

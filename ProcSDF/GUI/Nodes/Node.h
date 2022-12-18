@@ -12,7 +12,10 @@ public:
 	bool m_isObjectNode = false;
 	bool m_isTransformNode = false;
 	bool m_isOperationNode = false;
-	void draw();
+	virtual void draw();
+	void drawStartNode();
+	void drawEndNode();
+	void drawNodeContents();
 	std::string m_getString();
 
 	std::vector <std::string> m_inputPins;
