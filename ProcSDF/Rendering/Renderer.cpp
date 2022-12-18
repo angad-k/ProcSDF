@@ -3,12 +3,12 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
+#pragma once
+#include "GUI/NodeGraph.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
 #include "Common/constant.h"
-#pragma once
-
+#include "Material.h"
 Renderer::Renderer()
 {
 	float l_vertices[] = {
@@ -61,7 +61,10 @@ void Renderer::draw(float p_width, float p_height)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	float timeValue = glfwGetTime();
-
+	for (Material* l_material : NodeGraph::getSingleton()->getMaterials())
+	{
+		l_material->setUniforms();
+	}
 	glUniform3f(m_cameraOrigin, m_cameraOriginValue[0], m_cameraOriginValue[1], m_cameraOriginValue[2]);
 	glUniform2f(m_viewportSize, p_width, p_height);
 	glUniform1f(m_focalLength, m_focalLengthValue);

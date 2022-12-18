@@ -96,6 +96,7 @@ namespace node_name {
 }
 
 namespace imgui_colors {
+	const int BLACK = IM_COL32(0, 0, 0, 255);
 	const int RED = IM_COL32(255, 50, 50, 255);
 	const int GREEN = IM_COL32(80, 190, 50, 255);
 	const int BLUE = IM_COL32(50, 50, 255, 255);

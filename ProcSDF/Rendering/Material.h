@@ -37,8 +37,11 @@ public:
 		return l_vec3Uniforms;
 	}
 
+	void setUniforms();
+
 	Material()
 	{
 		m_ID = NodeGraph::getSingleton()->allocateMaterialID(this);
+		m_name = "Material#" + std::to_string(m_ID);
 	}
 };

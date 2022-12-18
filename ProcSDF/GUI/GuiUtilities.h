@@ -19,4 +19,9 @@ namespace GUI_Utilities {
 			ImGui::NewLine();
 		}
 	}
+
+	static bool isWhiteContrasting(float* color)
+	{
+		return !((color[0] * 0.299 * 255 + color[1] * 0.587 * 255 + color[2] * 0.114 * 255) > 186);
+	}
 }

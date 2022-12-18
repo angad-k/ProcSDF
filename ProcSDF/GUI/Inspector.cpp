@@ -113,7 +113,6 @@ void Inspector::drawRenderingSettings()
 void Inspector::drawMaterialSettings()
 {
 	std::vector<Material*> l_materials = NodeGraph::getSingleton()->getMaterials();
-
 	for (int i = 0; i < l_materials.size(); i++)
 	{
 		ImGui::PushID(i);
