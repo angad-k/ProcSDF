@@ -95,9 +95,12 @@ namespace imgui_colors {
 	const int BLUE = IM_COL32(50, 50, 255, 255);
 	const int PURPLE = IM_COL32(160, 32, 240, 255);
 	const int ORANGE = IM_COL32(255, 115, 29, 255);
+	const int CYAN = IM_COL32(55, 170, 156, 255);
+	const int GREY = IM_COL32(57, 62, 70, 255);
 	const int TRANFSFORM = ORANGE;
 	const int PRIMITIVE = RED;
 	const int FINAL = GREEN;
 	const int OPERATION = BLUE;
 	const int OBJECT = PURPLE;
+	const int CUSTOM_NODE = CYAN;
 }

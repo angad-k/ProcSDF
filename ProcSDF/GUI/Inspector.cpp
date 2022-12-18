@@ -102,15 +102,6 @@ void Inspector::drawNodeGraphSettings()
 		if (l_pickFileResult.first)
 		{
 			std::string l_filePath = l_pickFileResult.second;
-			/*CustomNode* l_customNode = new CustomNode(l_filePath);
-			if (l_customNode->isMalformed())
-			{
-				delete(l_customNode);
-			}
-			else
-			{
-				NodeGraph::getSingleton()->addNode(l_customNode);
-			}*/
 			CustomNode::AddCustomNodeAtFilePath(l_filePath);
 		}
 	}
@@ -215,7 +206,7 @@ void Inspector::drawNodeGraphSettings()
 		if (ImGui::TreeNode("Custom Nodes"))
 		{
 			ImGui::Indent();
-			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::TRANFSFORM);
+			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::CUSTOM_NODE);
 			std::vector <std::string> l_customNodeNames = NodeGraph::getSingleton()->getCustomNodeNames();
 			for (int i = 0; i < l_customNodeNames.size(); i++)
 			{

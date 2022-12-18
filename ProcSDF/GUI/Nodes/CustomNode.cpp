@@ -21,6 +21,7 @@ CustomNode::CustomNode(std::string p_nodeName)
 {
 	std::string l_fileContent = NodeGraph::getSingleton()->getCustomNodeFileContentsfromNodeName(p_nodeName);
 	std::vector<std::string> l_lines = tokenizeWithDelimiters(l_fileContent, "\n");
+	m_titleColor = imgui_colors::CUSTOM_NODE;
 	for (std::string line : l_lines)
 	{
 		std::vector<std::string> l_tokens = tokenizeWithDelimiters(line, "\\s+");
