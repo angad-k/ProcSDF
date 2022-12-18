@@ -15,12 +15,14 @@ private:
 	std::vector<std::string> m_uniformFloats;
 	std::map<int, int> m_objectIDToNodeIDMap;
 
+	std::string generateVec3StringFromFloatArray(float color[]);
 	
 	bool m_shaderModified = true;
 
 	std::string generateShaderFilePath(std::string p_fileName);
 	std::string generateUniformDeclarations();
 	std::string generateObjectFunctions();
+	std::string generateGetColorFunction();
 	std::string generateClosestObjectInfoFunction();
 	std::string generateCalculateNormalFunction();
 	std::string generateGetTargetRayFunction();
@@ -67,4 +69,3 @@ public:
 
 	void generateAndSetShader();
 };
-

@@ -5,10 +5,10 @@
 #include <set>
 #include <vector>
 #include <tuple>
-#include "Rendering/Material.h"
+#pragma once
 #include "GUI/Nodes/Node.h"
 #include "GUI/Nodes/FinalNode.h"
-#pragma once
+class Material;
 class NodeGraph
 {
 private:
@@ -20,9 +20,11 @@ private:
 	std::map <std::string, std::string> m_customNodeNameToContent;
 	bool m_dirty = false;
 	std::vector<Material*>m_materials;
+	std::map <int, Material*> m_allocatedMaterialIDs;
 public:
 	void initialize();
 	int allocateID(Node* p_node);
+	int allocateMaterialID(Material* p_material);
 	void setID(Node* p_node, int m_ID);
 	void deallocateID(int p_ID);
 	Node* getNode(int p_ID);
@@ -105,16 +107,11 @@ public:
 		m_dirty = true;
 	}
 
-	std::vector<Material*> getMaterials()
-	{
-		return m_materials;
-	}
+	std::vector<Material*> getMaterials();
 
-	void addMaterial()
-	{
-		Material* l_newMaterial = new Material();
-		m_materials.push_back(l_newMaterial);
-	}
+	void addMaterial();
+
+	Material* getMaterialFromMaterialID(int p_id);
 
 	static NodeGraph* getSingleton() {
 		if (!s_nodeGraph)

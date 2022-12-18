@@ -22,6 +22,7 @@ namespace shader_generation {
 	const std::string RETURN = "return $;\n";
 	const std::string SWITCH_STATEMENT = "\nswitch(object_index)\n{\n$\n}\n";
 	const std::string FLOAT = "float ";
+	const std::string VEC3 = "vec3($, $, $)";
 	namespace object_function {
 		const std::string FUNCTION_TEMPLATE = "\nfloat $(vec3 position)\n{\n#\n}\n";
 		const std::string INITIALIZATION = "\nmat3 rotation_transform_x = mat3(1.0);\nmat3 rotation_transform_y = mat3(1.0);\nmat3 rotation_transform_z = mat3(1.0);\nvec3 position_dup = position;\n";
@@ -57,6 +58,11 @@ namespace shader_generation {
 	namespace target_ray {
 		const std::string FUNCTION_TEMPLATE = "\nvec3 get_target_ray(vec3 position, int object_index, vec3 normal)\n{\nvec3 target = vec3(0.0, 0.0, 0.0);\n$\nreturn target;\n}\n";
 		const std::string CASE_STATEMENT = "\ncase $:\ntarget = diffuse_scatter(position, normal);\nbreak;\n";
+	}
+
+	namespace get_color {
+		const std::string FUNCTION_TEMPLATE = "\nvec3 get_color(vec3 position, int object_index)\n{\n$\nreturn vec3(1.0, 0, 0.0);\n}\n";
+		const std::string CASE_STATEMENT = "\ncase $:\nreturn $;\nbreak;\n";
 	}
 }
 

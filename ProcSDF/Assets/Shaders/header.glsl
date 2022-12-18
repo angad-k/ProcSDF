@@ -82,10 +82,10 @@ vec3 random_in_hemisphere(in vec3 normal, in vec3 intersection) {
         return -in_unit_sphere;
 }
 
-vec3 get_color(vec3 position, int object_index)
-{
-    return vec3(1.0, 0, 0.0);
-}
+//vec3 get_color(vec3 position, int object_index)
+//{
+//    return vec3(1.0, 0, 0.0);
+//}
 
 // END OF UTILS
 

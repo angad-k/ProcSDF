@@ -49,6 +49,18 @@ int NodeGraph::allocateID(Node* p_node)
 	// TO DO : handle too many allocations
 }
 
+int NodeGraph::allocateMaterialID(Material* p_material)
+{
+	for (int i = 0; i < INT_MAX; i++)
+	{
+		if (m_allocatedMaterialIDs.find(i) == m_allocatedMaterialIDs.end())
+		{
+			m_allocatedMaterialIDs[i] = p_material;
+			return i;
+		}
+	}
+}
+
 void NodeGraph::setID(Node* p_node, int p_ID)
 {
 	m_allocatedIDs[p_ID] = p_node;
@@ -340,4 +352,20 @@ void NodeGraph::recompileNodeGraph()
 	logger::log("\n");
 
 	ShaderGenerator::getSingleton()->generateAndSetShader();
+}
+
+std::vector<Material*> NodeGraph::getMaterials()
+{
+	return m_materials;
+}
+
+void NodeGraph::addMaterial()
+{
+	Material* l_newMaterial = new Material();
+	m_materials.push_back(l_newMaterial);
+}
+
+Material* NodeGraph::getMaterialFromMaterialID(int p_id)
+{
+	return m_allocatedMaterialIDs[p_id];
 }

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
+#include "GUI/Nodes/ObjectNode.h"
 #include "Common/constant.h"
 #include "GUI/NodeGraph.h"
 #include "Common/os.h"
@@ -47,6 +48,47 @@ void ShaderGenerator::appendCustomFunctions(std::string &p_shaderString)
 	}
 }
 
+std::string ShaderGenerator::generateVec3StringFromFloatArray(float color[])
+{
+	std::string l_vec3 = shader_generation::VEC3;
+	for (int i = 0; i < 3; i++)
+	{
+		l_vec3.replace(l_vec3.find('$'), 1, std::to_string(color[i]));
+	}
+	return l_vec3;
+}
+
+std::string ShaderGenerator::generateGetColorFunction()
+{
+	std::string l_getColorFunction = shader_generation::get_color::FUNCTION_TEMPLATE;
+
+	std::string l_switchStatement = shader_generation::SWITCH_STATEMENT;
+
+	std::string l_getColorCases = "";
+
+	for (Node* node : NodeGraph::getSingleton()->m_nodes) {
+		if (node->m_isObjectNode) {
+			ObjectNode* l_node = (ObjectNode*)node;
+			std::string l_caseStatement = shader_generation::get_color::CASE_STATEMENT;
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(ShaderGenerator::m_nodeIDToObjectIDMap[node->m_ID]));
+			l_caseStatement.replace
+			(
+				l_caseStatement.find('$'), 
+				1,
+				generateVec3StringFromFloatArray
+				(
+					NodeGraph::getSingleton()->getMaterialFromMaterialID(l_node->getMaterialID())->getColor()
+				)
+			);
+			l_getColorCases.append(l_caseStatement);
+		}
+	}
+	l_switchStatement.replace(l_switchStatement.find('$'), 1, l_getColorCases);
+	l_getColorFunction.replace(l_getColorFunction.find('$'), 1, l_switchStatement);
+	std::cout << l_getColorFunction;
+	return l_getColorFunction;
+}
+
 void ShaderGenerator::generateAndSetShader() {
 
 	computeAndSetObjectCount();
@@ -63,6 +105,8 @@ void ShaderGenerator::generateAndSetShader() {
 	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 	// Appends all the user defined functions.
 	appendCustomFunctions(l_shaderString);
+	// Generates the getColor function.
+	l_shaderString.append(generateGetColorFunction());
 	// Generates and appends the object distance functions.
 	l_shaderString.append(ShaderGenerator::generateObjectFunctions());
 	// Generates and appends the closest object info function.

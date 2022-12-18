@@ -1,10 +1,14 @@
 #pragma once
 #include "GUI/Nodes/Node.h"
 #include "GUI/NodeGraph.h"
-
+#include "Rendering/Material.h"
 class ObjectNode : public Node {
 	int m_material_id = 0;
 public:
+	int getMaterialID()
+	{
+		return m_material_id;
+	}
 	ObjectNode()
 	{
 		m_variableName = "object";
@@ -39,7 +43,7 @@ public:
 			{
 				const bool l_isSelected = (m_material_id == i);
 				if (ImGui::Selectable(l_materials[i]->get_name().c_str(), l_isSelected))
-					m_material_id = i;
+					m_material_id = l_materials[i]->getID();
 				if (l_isSelected)
 					ImGui::SetItemDefaultFocus();
 			}
