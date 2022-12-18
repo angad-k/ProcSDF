@@ -14,6 +14,7 @@ protected:
 	std::vector<std::string>m_inputFloat3Labels;
 	std::vector<std::vector<float>>m_inputFloat3s;
 public:
+	std::string m_materialType;
 	bool m_is_being_edited = false;
 	virtual void draw();
 	std::string get_name()

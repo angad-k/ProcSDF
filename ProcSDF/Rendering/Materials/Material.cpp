@@ -24,12 +24,13 @@ void Material::draw()
 		assert(m_inputFloat3s.size() == m_inputFloat3Labels.size());
 		for (unsigned int i = 0; i < m_inputFloat3Labels.size(); i++)
 		{
-			ImGui::Text(m_inputFloat3Labels[i].c_str());
 			ImGui::PushID(l_idCounter++);
-			ImGui::DragFloat("x", &m_inputFloat3s[i][0]);
-			ImGui::DragFloat("y", &m_inputFloat3s[i][1]);
-			ImGui::DragFloat("z", &m_inputFloat3s[i][2]);
+			float l_inputFloat3[3] = { m_inputFloat3s[i][0], m_inputFloat3s[i][1], m_inputFloat3s[i][2] };
+			ImGui::DragFloat3(m_inputFloat3Labels[i].c_str(), l_inputFloat3);
 			ImGui::PopID();
+			m_inputFloat3s[i][0] = l_inputFloat3[0];
+			m_inputFloat3s[i][1] = l_inputFloat3[1];
+			m_inputFloat3s[i][2] = l_inputFloat3[2];
 			Renderer::getSingleton()->setUniformFloat3(
 				ShaderGenerator::getUniformStringFromLabel(m_name, m_inputFloat3Labels[i]),
 				m_inputFloat3s[i][0],
@@ -40,9 +41,8 @@ void Material::draw()
 		assert(m_inputFloats.size() == m_inputFloatLabels.size());
 		for (unsigned int i = 0; i < m_inputFloatLabels.size(); i++)
 		{
-			ImGui::Text(m_inputFloatLabels[i].c_str());
 			ImGui::PushID(l_idCounter++);
-			ImGui::DragFloat("", &m_inputFloats[i]);
+			ImGui::DragFloat(m_inputFloatLabels[i].c_str(), &m_inputFloats[i], 0.01, 0.0, 1.0);
 			ImGui::PopID();
 			Renderer::getSingleton()->setUniformFloat(
 				ShaderGenerator::getUniformStringFromLabel(m_name, m_inputFloatLabels[i]),

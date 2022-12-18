@@ -95,6 +95,11 @@ namespace node_name {
 	const std::string ROTATIONZ_NODE = "Rotation_Z";
 }
 
+namespace material_type {
+	const std::string DIFFUSE = "Diffuse";
+	const std::string METAL = "Metal";
+}
+
 namespace imgui_colors {
 	const int BLACK = IM_COL32(0, 0, 0, 255);
 	const int RED = IM_COL32(255, 50, 50, 255);
