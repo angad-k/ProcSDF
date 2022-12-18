@@ -1,5 +1,5 @@
 #include"Rendering/Material.h"
-
+#include"Renderer.h"
 void Material::draw()
 {
 	if (m_is_being_edited)
@@ -11,6 +11,12 @@ void Material::draw()
 			m_name = l_inputBuffer;
 		}
 		ImGui::ColorEdit3("Material color", m_color);
+		Renderer::getSingleton()->setUniformFloat3(
+			"color_" + std::to_string(m_ID),
+			m_color[0],
+			m_color[1],
+			m_color[2]);
+
 		if (ImGui::Button("Done"))
 		{
 			m_is_being_edited = false;

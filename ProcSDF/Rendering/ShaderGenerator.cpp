@@ -37,6 +37,13 @@ void ShaderGenerator::computeUniforms()
 			m_uniformFloats.push_back(getUniformStringFromLabel(l_variableName, l_floatLabel));
 		}
 	}
+	for (Material* material : NodeGraph::getSingleton()->getMaterials())
+	{
+		for (std::string label : material->getVec3Uniforms())
+		{
+			m_uniformVec3.push_back(label);
+		}
+	}
 }
 
 void ShaderGenerator::appendCustomFunctions(std::string &p_shaderString)
@@ -73,12 +80,9 @@ std::string ShaderGenerator::generateGetColorFunction()
 			l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(ShaderGenerator::m_nodeIDToObjectIDMap[node->m_ID]));
 			l_caseStatement.replace
 			(
-				l_caseStatement.find('$'), 
+				l_caseStatement.find('$'),
 				1,
-				generateVec3StringFromFloatArray
-				(
-					NodeGraph::getSingleton()->getMaterialFromMaterialID(l_node->getMaterialID())->getColor()
-				)
+				NodeGraph::getSingleton()->getMaterialFromMaterialID(l_node->getMaterialID())->getColorName()
 			);
 			l_getColorCases.append(l_caseStatement);
 		}

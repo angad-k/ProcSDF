@@ -25,6 +25,18 @@ public:
 		return m_ID;
 	}
 
+	std::string getColorName()
+	{
+		return "color_" + std::to_string(m_ID);
+	}
+
+	std::vector<std::string> getVec3Uniforms()
+	{
+		std::vector<std::string> l_vec3Uniforms;
+		l_vec3Uniforms.push_back(getColorName());
+		return l_vec3Uniforms;
+	}
+
 	Material()
 	{
 		m_ID = NodeGraph::getSingleton()->allocateMaterialID(this);
