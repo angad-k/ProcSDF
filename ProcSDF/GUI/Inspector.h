@@ -16,6 +16,7 @@ private:
 		CAMERA_SETTINGS,
 		RENDERING_SETTINGS,
 		NODEGRAPH_SETTINGS,
+		MATERIAL_SETTINGS,
 	};
 
 	Tab m_openedTab;
@@ -35,4 +36,5 @@ public:
 	void drawCameraSettings();
 	void drawRenderingSettings();
 	void drawNodeGraphSettings();
+	void drawMaterialSettings();
 };

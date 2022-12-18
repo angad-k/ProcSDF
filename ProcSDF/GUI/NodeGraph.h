@@ -5,7 +5,7 @@
 #include <set>
 #include <vector>
 #include <tuple>
-
+#include "Rendering/Material.h"
 #include "GUI/Nodes/Node.h"
 #include "GUI/Nodes/FinalNode.h"
 #pragma once
@@ -19,6 +19,7 @@ private:
 	std::map <int, Node*> m_allocatedIDs;
 	std::map <std::string, std::string> m_customNodeNameToContent;
 	bool m_dirty = false;
+	std::vector<Material*>m_materials;
 public:
 	void initialize();
 	int allocateID(Node* p_node);
@@ -102,6 +103,17 @@ public:
 	void informModification()
 	{
 		m_dirty = true;
+	}
+
+	std::vector<Material*> getMaterials()
+	{
+		return m_materials;
+	}
+
+	void addMaterial()
+	{
+		Material* l_newMaterial = new Material();
+		m_materials.push_back(l_newMaterial);
 	}
 
 	static NodeGraph* getSingleton() {

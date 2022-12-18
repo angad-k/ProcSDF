@@ -34,11 +34,11 @@ void Inspector::draw()
 	}
 	if (ImGui::Button("Camera Settings"))
 		m_openedTab = Tab::CAMERA_SETTINGS;
-	ImGui::SameLine();
 	if (l_oldTab == Tab::CAMERA_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
+	ImGui::SameLine();
 
 	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
@@ -46,11 +46,11 @@ void Inspector::draw()
 	}
 	if (ImGui::Button("Rendering Settings"))
 		m_openedTab = Tab::RENDERING_SETTINGS;
-	ImGui::SameLine();
 	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
+	ImGui::SameLine();
 
 	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
 	{
@@ -59,6 +59,18 @@ void Inspector::draw()
 	if (ImGui::Button("Node graph settings"))
 		m_openedTab = Tab::NODEGRAPH_SETTINGS;
 	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
+	ImGui::SameLine();
+
+	if (l_oldTab == Tab::MATERIAL_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
+	if (ImGui::Button("Material settings"))
+		m_openedTab = Tab::MATERIAL_SETTINGS;
+	if (l_oldTab == Tab::MATERIAL_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
@@ -76,7 +88,11 @@ void Inspector::draw()
 	case Tab::NODEGRAPH_SETTINGS:
 		drawNodeGraphSettings();
 		break;
+	case Tab::MATERIAL_SETTINGS:
+		drawMaterialSettings();
+		break;
 	}
+	
 
 	ImGui::End();
 }
@@ -92,6 +108,22 @@ void Inspector::drawCameraSettings()
 void Inspector::drawRenderingSettings()
 {
 	ImGui::Text("Something will come here");
+}
+
+void Inspector::drawMaterialSettings()
+{
+	std::vector<Material*> l_materials = NodeGraph::getSingleton()->getMaterials();
+
+	for (int i = 0; i < l_materials.size(); i++)
+	{
+		ImGui::PushID(i);
+		l_materials[i]->draw();
+		ImGui::PopID();
+	}
+	if (ImGui::Button("Add Material"))
+	{
+		NodeGraph::getSingleton()->addMaterial();
+	}
 }
 
 void Inspector::drawNodeGraphSettings()
