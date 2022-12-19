@@ -109,7 +109,7 @@ public:
 
 	std::vector<Material*> getMaterials();
 
-	void addMaterial();
+	void addDiffuse();
 	void addMetal();
 
 	Material* getMaterialFromMaterialID(int p_id);

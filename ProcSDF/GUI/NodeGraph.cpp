@@ -8,12 +8,13 @@
 #include "Common/logger.h"
 #include "Rendering/ShaderGenerator.h"
 #include "Rendering/Materials/Metal.h"
+#include "Rendering/Materials/Diffuse.h"
 #pragma once
 
 void NodeGraph::initialize()
 {
 	m_errorInCompilation = false;
-	addMaterial();
+	addDiffuse();
 	SphereNode* l_sn = new SphereNode();
 	l_sn->m_inputFloats[0] = 2.0;
 	FinalNode* l_fn = new FinalNode();
@@ -360,9 +361,9 @@ std::vector<Material*> NodeGraph::getMaterials()
 	return m_materials;
 }
 
-void NodeGraph::addMaterial()
+void NodeGraph::addDiffuse()
 {
-	Material* l_newMaterial = new Material();
+	Material* l_newMaterial = new Diffuse();
 	m_materials.push_back(l_newMaterial);
 }
 

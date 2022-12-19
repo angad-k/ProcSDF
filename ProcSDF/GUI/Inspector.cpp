@@ -119,9 +119,9 @@ void Inspector::drawMaterialSettings()
 		l_materials[i]->draw();
 		ImGui::PopID();
 	}
-	if (ImGui::Button("Add Material"))
+	if (ImGui::Button("Add Diffuse Material"))
 	{
-		NodeGraph::getSingleton()->addMaterial();
+		NodeGraph::getSingleton()->addDiffuse();
 	}
 	if (ImGui::Button("Add Metal Material"))
 	{

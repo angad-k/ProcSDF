@@ -58,6 +58,11 @@ public:
 		return l_floatUniforms;
 	}
 
+	std::string get_uniform_label(std::string p_property)
+	{
+		return ShaderGenerator::getUniformStringFromLabel(m_name, p_property);
+	}
+
 	void setUniforms();
 
 	Material()

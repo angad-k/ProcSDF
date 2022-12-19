@@ -9,7 +9,7 @@ uniform float u_focal_length;
 out vec4 FragColor;
 
 const bool DEBUG = false;
-
+vec2 random_val = vec2(0.0);
 // END OF PREAMBLE
 
 // RANDOMIZATION CODE (Picked up from stackoverflow : https://stackoverflow.com/a/17479300) 
@@ -82,6 +82,10 @@ vec3 random_in_hemisphere(in vec3 normal, in vec3 intersection) {
         return -in_unit_sphere;
 }
 
+vec3 reflect(in vec3 v, in vec3 normal) {
+    return v - 2*dot(v,normal)*normal;
+}
+
 //vec3 get_color(vec3 position, int object_index)
 //{
 //    return vec3(1.0, 0, 0.0);
@@ -111,13 +115,30 @@ struct closest_object_info
     int object_index;
 };
 
+struct scatter_info
+{
+    vec3 scattered_ray;
+    bool is_scattered;
+};
+
 // END OF STRUCTS
 
 // SCATTER FNS
 
-vec3 diffuse_scatter(in vec3 intersection, in vec3 normal)
+scatter_info diffuse_scatter(in vec3 intersection, in vec3 normal)
 {
-    return intersection + random_in_hemisphere(normal, intersection);
+    vec3 scattered = intersection + random_in_hemisphere(normal, intersection);
+    return scatter_info(scattered, true);
+}
+
+scatter_info metallic_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in, float roughness)
+{
+    if(roughness > 1.0)
+    {
+        roughness = 1.0;
+    }
+    vec3 reflected = reflect(normalize(r_in), normal) + roughness*random_in_unit_sphere(random_val);
+    return scatter_info(reflected, (dot(reflected, normal) > 0));
 }
 
 // END OF SCATTER FNS

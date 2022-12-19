@@ -56,8 +56,13 @@ namespace shader_generation {
 	}
 	
 	namespace target_ray {
-		const std::string FUNCTION_TEMPLATE = "\nvec3 get_target_ray(vec3 position, int object_index, vec3 normal)\n{\nvec3 target = vec3(0.0, 0.0, 0.0);\n$\nreturn target;\n}\n";
-		const std::string CASE_STATEMENT = "\ncase $:\ntarget = diffuse_scatter(position, normal);\nbreak;\n";
+		const std::string FUNCTION_TEMPLATE = "\scatter_info get_target_ray(vec3 position, int object_index, vec3 normal, vec3 r_in)\n{\nscatter_info target = scatter_info(vec3(0.0,0.0,0.0), true);\n$\nreturn target;\n}\n";
+		const std::string CASE_STATEMENT = "\ncase $:\ntarget = $;\nbreak;\n";
+	}
+
+	namespace scatter_calls {
+		const std::string DIFFUSE = "diffuse_scatter(position, normal)";
+		const std::string METTALIC = "metallic_scatter(position, normal, r_in, $)";
 	}
 
 	namespace get_color {
@@ -98,6 +103,7 @@ namespace node_name {
 namespace material_type {
 	const std::string DIFFUSE = "Diffuse";
 	const std::string METAL = "Metal";
+	const std::string DIELECTRIC = "Dielectric";
 }
 
 namespace imgui_colors {

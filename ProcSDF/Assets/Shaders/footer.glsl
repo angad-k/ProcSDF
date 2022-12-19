@@ -29,7 +29,15 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             {
                 vec3 normal = calculate_normal(current_position, closest.object_index);
 
-                vec3 target = get_target_ray(current_position, closest.object_index, normal);
+                scatter_info info = get_target_ray(current_position, closest.object_index, normal, ray_direction);
+                vec3 target = info.scattered_ray;
+                
+                if(!info.is_scattered)
+                {
+                    output_color = vec3(0.0, 0.0, 0.0);
+                    break_loop = true;
+                    break;
+                }
 
                 output_color *= get_color(current_position, closest.object_index);
                 ray_origin = current_position;
@@ -75,7 +83,7 @@ void main()
 
     vec3 output_color = vec3(0.0);
 
-    vec2 random_val = random2(gl_FragCoord.xy);
+    random_val = random2(gl_FragCoord.xy);
 
     for(int i = 0; i < SAMPLES; i++)
     {

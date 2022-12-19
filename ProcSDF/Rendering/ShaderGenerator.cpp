@@ -169,6 +169,19 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 	for (int i = 1; i <= ShaderGenerator::m_objectCount; i++) {
 		l_caseStatement = shader_generation::target_ray::CASE_STATEMENT;
 		l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(i));
+
+		ObjectNode* l_obj = (ObjectNode*)NodeGraph::getSingleton()->getNode(m_objectIDToNodeIDMap[i]);
+		Material* l_mat = NodeGraph::getSingleton()->getMaterialFromMaterialID(l_obj->getMaterialID());
+		if (l_mat->m_materialType == material_type::METAL)
+		{
+			std::string l_mettalic_scatter = shader_generation::scatter_calls::METTALIC;
+			l_mettalic_scatter = l_mettalic_scatter.replace(l_mettalic_scatter.find('$'), 1, l_mat->get_uniform_label("Roughness"));
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_mettalic_scatter);
+		}
+		else if (l_mat->m_materialType == material_type::DIFFUSE)
+		{
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, shader_generation::scatter_calls::DIFFUSE);
+		}
 		l_switchContent.append(l_caseStatement);
 	}
 
@@ -320,6 +333,10 @@ std::string ShaderGenerator::getUniformStringFromLabel(std::string p_variable_na
 	while (l_uniformString.find(' ') != std::string::npos)
 	{
 		l_uniformString.replace(l_uniformString.find(' '), 1, "_");
+	}
+	while (l_uniformString.find('#') != std::string::npos)
+	{
+		l_uniformString.replace(l_uniformString.find('#'), 1, "_");
 	}
 	return l_uniformString;
 }

@@ -195,6 +195,8 @@
     <ClInclude Include="GUI\Nodes\OperationNodes.h" />
     <ClInclude Include="GUI\Nodes\PrimitiveNodes.h" />
     <ClInclude Include="GUI\Nodes\TransformNodes.h" />
+    <ClInclude Include="Rendering\Materials\Dielectric.h" />
+    <ClInclude Include="Rendering\Materials\Diffuse.h" />
     <ClInclude Include="Rendering\Materials\Material.h" />
     <ClInclude Include="Rendering\Materials\Metal.h" />
     <ClInclude Include="Rendering\ShaderGenerator.h" />
