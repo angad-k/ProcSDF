@@ -70,7 +70,7 @@ namespace shader_generation {
 	namespace scatter_calls {
 		const std::string DIFFUSE = "diffuse_scatter(position, normal)";
 		const std::string METTALIC = "metallic_scatter(position, normal, r_in, $)";
-		const std::string DIELECTRIC = "dielectric_scatter(position, normal, r_in, is_front_face, $)";
+		const std::string DIELECTRIC = "dielectric_scatter(position, normal, r_in, is_front_face, $, $)";
 	}
 
 	namespace get_color {

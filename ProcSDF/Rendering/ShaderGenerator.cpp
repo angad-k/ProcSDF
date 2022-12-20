@@ -189,6 +189,7 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 		{
 			std::string l_dielectric_scatter = shader_generation::scatter_calls::DIELECTRIC;
 			l_dielectric_scatter = l_dielectric_scatter.replace(l_dielectric_scatter.find('$'), 1, l_mat->get_uniform_label("IOR"));
+			l_dielectric_scatter = l_dielectric_scatter.replace(l_dielectric_scatter.find('$'), 1, l_mat->get_uniform_label("Roughness"));
 			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_dielectric_scatter);
 		}
 		l_switchContent.append(l_caseStatement);

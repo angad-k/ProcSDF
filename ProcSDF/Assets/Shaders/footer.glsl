@@ -1,9 +1,9 @@
 vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
 {
     float total_distance_traveled = 0.0;
-    const int NUMBER_OF_STEPS = 16;
+    int NUMBER_OF_STEPS = u_r_Number_of_steps;
     const float MINIMUM_HIT_DISTANCE = 0.001;
-    const float MAXIMUM_TRACE_DISTANCE = 1000.0;
+    float MAXIMUM_TRACE_DISTANCE = u_r_Maximum_Trace_Distance;
     vec3 output_color = vec3(1.0);
     
    while(depth >= 0)
@@ -12,14 +12,14 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
         if(depth == 0)
         {
             output_color *= 0.0;
-            if(DEBUG)
+            if(DEBUG && DEBUG_DEPTH)
             {
-                output_color = vec3(1.0, 0.0, 0.0);
+                return vec3(1.0, 0.0, 0.0);
             }
             break;
         }
-
-        for (int i = 0; i < NUMBER_OF_STEPS; ++i)
+        int i;
+        for (i = 0; i < NUMBER_OF_STEPS; ++i)
         {
             vec3 current_position = ray_origin + total_distance_traveled * ray_direction;
 
@@ -66,6 +66,11 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             total_distance_traveled += closest.closest_distance;
         }
 
+        if(i == NUMBER_OF_STEPS && DEBUG && DEBUG_STEPS_END)
+        {
+            return vec3(0.0, 0.0, 1.0);
+        }
+
         if(break_loop)
         {
             break;
@@ -79,7 +84,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
 void main()
 {
     int MAX_DEPTH = u_r_Max_Depth;
-    int SAMPLES = 10;
+    int SAMPLES = u_r_Samples;
 
     vec2 v_size = vec2(2.0*u_viewport_size.x/u_viewport_size.y, 2.0);
 

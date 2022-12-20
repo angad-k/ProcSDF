@@ -111,12 +111,23 @@ void Inspector::drawRenderingSettings()
 	for (int i = 0; i < l_render_uniforms.size(); i++)
 	{
 		ImGui::DragInt(l_render_uniforms[i].c_str(), &Renderer::getSingleton()->m_render_uniforms_values[i]);
-		Renderer::getSingleton()->setUniformInt(
-			ShaderGenerator::getUniformStringFromLabel("r", l_render_uniforms[i]),
-			Renderer::getSingleton()->m_render_uniforms_values[i]
-		);
-		
 	}
+	std::vector<std::string> l_render_uniforms_debug = Renderer::getSingleton()->getRenderUniformsDebug();
+	for (int i = 0; i < l_render_uniforms_debug.size(); i++)
+	{
+		bool value = Renderer::getSingleton()->m_render_uniforms_debug_values[i];
+		if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+		{
+			ImGui::BeginDisabled();
+		}
+		ImGui::Checkbox(l_render_uniforms_debug[i].c_str(), &value);
+		if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+		{
+			ImGui::EndDisabled();
+		}
+		Renderer::getSingleton()->m_render_uniforms_debug_values[i] = value;
+	}
+	Renderer::getSingleton()->setRenderUniforms();
 }
 
 void Inspector::drawMaterialSettings()

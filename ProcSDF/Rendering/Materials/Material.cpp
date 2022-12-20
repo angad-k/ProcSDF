@@ -41,9 +41,7 @@ void Material::draw()
 		assert(m_inputFloats.size() == m_inputFloatLabels.size());
 		for (unsigned int i = 0; i < m_inputFloatLabels.size(); i++)
 		{
-			ImGui::PushID(l_idCounter++);
 			ImGui::DragFloat(m_inputFloatLabels[i].c_str(), &m_inputFloats[i], 0.01, 0.0, 1.0);
-			ImGui::PopID();
 			Renderer::getSingleton()->setUniformFloat(
 				ShaderGenerator::getUniformStringFromLabel(m_name, m_inputFloatLabels[i]),
 				m_inputFloats[i]

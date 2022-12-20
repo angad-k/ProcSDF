@@ -200,6 +200,12 @@ void Renderer::setUniformFloat(std::string p_uniform_name, float p_val)
 	glUniform1f(l_uniform_location, p_val);
 }
 
+void Renderer::setUniformBool(std::string p_uniform_name, bool p_val)
+{
+	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
+	glUniform1i(l_uniform_location, p_val);
+}
+
 void Renderer::setUniformInt(std::string p_uniform_name, int p_val)
 {
 	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());

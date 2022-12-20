@@ -7,11 +7,17 @@ uniform vec2 u_viewport_size;
 uniform float u_focal_length;
 
 uniform int u_r_Max_Depth;
+uniform int u_r_Samples;
+uniform int u_r_Number_of_steps;
+uniform int u_r_Maximum_Trace_Distance;
 
 out vec4 FragColor;
 
-const bool DEBUG = true;
-const bool DEBUG_MAX_TRACE = false;
+uniform bool DEBUG;
+uniform bool DEBUG_DEPTH;
+uniform bool DEBUG_MAX_TRACE;
+uniform bool DEBUG_STEPS_END;
+
 vec2 random_val = vec2(0.0);
 // END OF PREAMBLE
 
@@ -160,8 +166,12 @@ scatter_info metallic_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in
     return scatter_info(reflected, (dot(reflected, normal) > 0));
 }
 
-scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in, bool is_front_face, float ior)
+scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in, bool is_front_face, float ior, float roughness)
 {
+     if(roughness > 1.0)
+     {
+        roughness = 1.0;
+     }
      //is_front_face = !is_front_face;
      float refraction_ratio = is_front_face ? (1.0/ior) : ior;
 
@@ -178,7 +188,7 @@ scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in vec3 r_
         direction = refract(unit_direction, normal, refraction_ratio);
 
 
-     return scatter_info(direction, true);
+     return scatter_info(direction + roughness*random_in_unit_sphere(random_val), true);
 }
 
 // END OF SCATTER FNS

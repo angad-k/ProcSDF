@@ -32,10 +32,12 @@ private:
 	void setupFrameBuffer();
 	void resizeRenderTexture(float p_height, float p_width);
 	//String generate_fragment_shader();
-	std::vector <std::string> m_render_uniforms = { "Max Depth" };
+	std::vector <std::string> m_render_uniforms = { "Max Depth", "Samples", "Number of steps", "Maximum Trace Distance"};
+	std::vector <std::string> m_render_uniforms_debug = { "DEBUG", "DEBUG_DEPTH", "DEBUG_MAX_TRACE", "DEBUG_STEPS_END" };
 
 public:
-	std::vector <int> m_render_uniforms_values = { 16 };
+	std::vector <int> m_render_uniforms_values = { 16, 10, 16, 1000 };
+	std::vector <bool> m_render_uniforms_debug_values = { false, false, false, false };
 	Renderer();
 	
 	static Renderer* getSingleton() {
@@ -52,11 +54,17 @@ public:
 	{
 		for (int i = 0; i < m_render_uniforms.size(); i++)
 		{
-			Renderer::getSingleton()->setUniformInt(
+			setUniformInt(
 				ShaderGenerator::getUniformStringFromLabel("r", m_render_uniforms[i]),
 				Renderer::getSingleton()->m_render_uniforms_values[i]
 			);
-
+		}
+		for (int i = 0; i < m_render_uniforms_debug.size(); i++)
+		{
+			setUniformBool(
+				m_render_uniforms_debug[i],
+				m_render_uniforms_debug_values[i]
+			);
 		}
 	}
 
@@ -68,6 +76,11 @@ public:
 	std::vector <std::string> getRenderUniforms()
 	{
 		return m_render_uniforms;
+	}
+
+	std::vector <std::string> getRenderUniformsDebug()
+	{
+		return m_render_uniforms_debug;
 	}
 
 	void setCameraOrigin(float p_cameraOrigin[3])
@@ -92,6 +105,7 @@ public:
 		return &m_focalLengthValue;
 	}
 	void setUniformInt(std::string p_uniform_name, int p_val);
+	void setUniformBool(std::string p_uniform_name, bool p_val);
 	void setUniformFloat(std::string p_uniform_name, float p_val);
 	void setUniformFloat2(std::string p_uniform_name, float p_x, float p_y);
 	void setUniformFloat3(std::string p_uniform_name, float p_x, float p_y, float p_z);
