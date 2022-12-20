@@ -28,8 +28,8 @@ Until we release this as a binary - the easiest way to run this is installing Vi
 
 - Features :
     - Primitives, Operations on them, translations and rotations.
+    - Adding your own SDFs
     - Materials (coming soon)
-    - Adding your own SDFs (coming soon)
     - and we'll figure the rest of the stuff out as we go.
 
 - The name doesn't have much thought to it. Though it does have a nice ring to it. We were working on making a procedural node based 3D edition software that uses SDFs and so, comes the name **ProcSDF**
