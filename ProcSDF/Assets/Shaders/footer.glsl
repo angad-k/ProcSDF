@@ -28,8 +28,9 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             if (closest.closest_distance < MINIMUM_HIT_DISTANCE)
             {
                 vec3 normal = calculate_normal(current_position, closest.object_index);
+                bool is_front_face = (get_distance_from(ray_origin, closest.object_index) > 0.0);
 
-                scatter_info info = get_target_ray(current_position, closest.object_index, normal, ray_direction);
+                scatter_info info = get_target_ray(current_position, closest.object_index, normal, ray_direction, is_front_face);
                 vec3 target = info.scattered_ray;
                 
                 if(!info.is_scattered)
@@ -50,7 +51,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
                 vec3 unit_direction = normalize(ray_direction);
                 float t = 0.5*(unit_direction.y + 1.0);
                 output_color *= t*vec3(1.0, 1.0, 1.0) + (1.0-t)*vec3(0.5, 0.7, 1.0);
-                if(DEBUG)
+                if(DEBUG && DEBUG_MAX_TRACE)
                 {
                     return vec3(0.0, 1.0, 0.0);
                 }

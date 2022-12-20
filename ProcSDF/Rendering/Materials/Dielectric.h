@@ -1,9 +1,9 @@
 #pragma once
 #include "Material.h"
-class Metal : public Material
+class Dielectric : public Material
 {
 public:
-	Metal()
+	Dielectric()
 	{
 		m_materialType = material_type::DIELECTRIC;
 		m_inputFloatLabels = { "IOR" };

@@ -118,6 +118,8 @@ void ShaderGenerator::generateAndSetShader() {
 	l_shaderString.append(generateGetColorFunction());
 	// Generates and appends the object distance functions.
 	l_shaderString.append(ShaderGenerator::generateObjectFunctions());
+	// Generates and appends the getDistanceFrom function.
+	l_shaderString.append(ShaderGenerator::generateGetDistanceFromFunction());
 	// Generates and appends the closest object info function.
 	l_shaderString.append(ShaderGenerator::generateClosestObjectInfoFunction());
 	// Generates and appends the calculate normal function.
@@ -127,6 +129,7 @@ void ShaderGenerator::generateAndSetShader() {
 	// Appends the raymarch and main function.
 	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 
+	std::cout << l_shaderString;
 	ShaderGenerator::setShader(l_shaderString);
 
 	m_shaderModified = true;
@@ -182,6 +185,12 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 		{
 			l_caseStatement.replace(l_caseStatement.find('$'), 1, shader_generation::scatter_calls::DIFFUSE);
 		}
+		else if (l_mat->m_materialType == material_type::DIELECTRIC)
+		{
+			std::string l_dielectric_scatter = shader_generation::scatter_calls::DIELECTRIC;
+			l_dielectric_scatter = l_dielectric_scatter.replace(l_dielectric_scatter.find('$'), 1, l_mat->get_uniform_label("IOR"));
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_dielectric_scatter);
+		}
 		l_switchContent.append(l_caseStatement);
 	}
 
@@ -190,6 +199,30 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 
 	return l_targetRayFunction;
 
+}
+
+std::string ShaderGenerator::generateGetDistanceFromFunction()
+{
+	std::string l_generateGetDistanceFromFunction = "\n";
+	l_generateGetDistanceFromFunction.append(shader_generation::get_distance_from::FUNCTION_TEMPLATE);
+	l_generateGetDistanceFromFunction.append("\n");
+
+	std::string l_switchStatement = shader_generation::SWITCH_STATEMENT, l_switchContent, l_caseStatement;
+
+	for (int i = 1; i <= ShaderGenerator::m_objectCount; i++)
+	{
+		l_caseStatement = shader_generation::get_distance_from::CASE_STATEMENT;
+		for (int j = 0; j < shader_generation::get_distance_from::FREQUENCY; j++) {
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(i));
+		}
+
+		l_switchContent.append(l_caseStatement);
+	}
+
+	l_switchStatement.replace(l_switchStatement.find('$'), 1, l_switchContent);
+	l_generateGetDistanceFromFunction.replace(l_generateGetDistanceFromFunction.find('$'), 1, l_switchStatement);
+
+	return l_generateGetDistanceFromFunction;
 }
 
 std::string ShaderGenerator::generateCalculateNormalFunction() {

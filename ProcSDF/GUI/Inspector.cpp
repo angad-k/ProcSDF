@@ -127,6 +127,10 @@ void Inspector::drawMaterialSettings()
 	{
 		NodeGraph::getSingleton()->addMetal();
 	}
+	if (ImGui::Button("Add Dielectric Material"))
+	{
+		NodeGraph::getSingleton()->addDielectric();
+	}
 }
 
 void Inspector::drawNodeGraphSettings()

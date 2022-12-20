@@ -111,6 +111,7 @@ public:
 
 	void addDiffuse();
 	void addMetal();
+	void addDielectric();
 
 	Material* getMaterialFromMaterialID(int p_id);
 

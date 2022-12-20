@@ -8,7 +8,8 @@ uniform float u_focal_length;
 
 out vec4 FragColor;
 
-const bool DEBUG = false;
+const bool DEBUG = true;
+const bool DEBUG_MAX_TRACE = false;
 vec2 random_val = vec2(0.0);
 // END OF PREAMBLE
 
@@ -86,6 +87,22 @@ vec3 reflect(in vec3 v, in vec3 normal) {
     return v - 2*dot(v,normal)*normal;
 }
 
+vec3 refract(in vec3 v, in vec3 n, in float etai_over_etat) {
+    float cos_theta = min(dot(-v, n), 1.0);
+    vec3 r_out_perp =  etai_over_etat * (v + cos_theta*n);
+    float r_out_perp_length = length(r_out_perp);
+    vec3 r_out_parallel = -sqrt(abs(1.0 - r_out_perp_length*r_out_perp_length)) * n;
+    return r_out_perp + r_out_parallel;
+}
+
+float reflectance(float cosine, float ref_idx) 
+{
+    // Use Schlick's approximation for reflectance.
+    float r0 = (1-ref_idx) / (1+ref_idx);
+    r0 = r0*r0;
+    return r0 + (1-r0)*pow((1 - cosine),5);
+}
+
 //vec3 get_color(vec3 position, int object_index)
 //{
 //    return vec3(1.0, 0, 0.0);
@@ -139,6 +156,27 @@ scatter_info metallic_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in
     }
     vec3 reflected = reflect(normalize(r_in), normal) + roughness*random_in_unit_sphere(random_val);
     return scatter_info(reflected, (dot(reflected, normal) > 0));
+}
+
+scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in, bool is_front_face, float ior)
+{
+     //is_front_face = !is_front_face;
+     float refraction_ratio = is_front_face ? (1.0/ior) : ior;
+
+     vec3 unit_direction = normalize(r_in);
+     float cos_theta = min(dot(-unit_direction, normal), 1.0);
+     float sin_theta = sqrt(1.0 - cos_theta*cos_theta);
+
+     bool cannot_refract = refraction_ratio * sin_theta > 1.0;
+     vec3 direction;
+
+     if (cannot_refract || reflectance(cos_theta, refraction_ratio) > random(random_val))
+        direction = reflect(unit_direction, normal);
+     else
+        direction = refract(unit_direction, normal, refraction_ratio);
+
+
+     return scatter_info(direction, true);
 }
 
 // END OF SCATTER FNS

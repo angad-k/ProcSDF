@@ -37,7 +37,7 @@ namespace shader_generation {
 	}
 	namespace closest_object_info {
 		const std::string FUNCTION_TEMPLATE = "\nclosest_object_info get_closest_object_info(vec3 position)\n{\n$\nreturn closest_object_info(min_dist, object_index);\n}\n";
-		const std::string DISTANCE_COMPUTATION = "\nfloat dist_$ = object_$(position);\n";
+		const std::string DISTANCE_COMPUTATION = "\nfloat dist_$ = abs(object_$(position));\n";
 		const std::string VARIABLE_INITIALIZATION = "\nfloat min_dist = 3e+38;\nint object_index = 1;\n";
 		const std::string MIN_DIST_COMPUTATION = "\nmin_dist = min(min_dist, dist_$);\n";
 		const std::string CONDITIONAL_OBJECT_INDEX_COMPUTATION = "\nif(dist_$ == min_dist)\n{\nobject_index = $;\n}\n";
@@ -54,15 +54,23 @@ namespace shader_generation {
 		const std::string CASE_STATEMENT = "case $:\ng_x = object_$(position + small_step.xyy) - object_$(position - small_step.xyy);\ng_y = object_$(position + small_step.yxy) - object_$(position - small_step.yxy);\ng_z = object_$(position + small_step.yyx) - object_$(position - small_step.yyx);\nnormal = normalize(vec3(g_x, g_y, g_z));\nbreak;\n";
 		const int FREQUENCY = 7;
 	}
+
+	namespace get_distance_from {
+		const std::string FUNCTION_TEMPLATE = "\nfloat get_distance_from(vec3 position, int object_index)\n{\nfloat d = 0.0;\n$\nreturn d;\n}\n";
+		const std::string CASE_STATEMENT = "case $:\nd = object_$(position);\nbreak;\n";
+		const int FREQUENCY = 2;
+
+	}
 	
 	namespace target_ray {
-		const std::string FUNCTION_TEMPLATE = "\scatter_info get_target_ray(vec3 position, int object_index, vec3 normal, vec3 r_in)\n{\nscatter_info target = scatter_info(vec3(0.0,0.0,0.0), true);\n$\nreturn target;\n}\n";
+		const std::string FUNCTION_TEMPLATE = "\scatter_info get_target_ray(vec3 position, int object_index, vec3 normal, vec3 r_in, bool is_front_face)\n{\nscatter_info target = scatter_info(vec3(0.0,0.0,0.0), true);\n$\nreturn target;\n}\n";
 		const std::string CASE_STATEMENT = "\ncase $:\ntarget = $;\nbreak;\n";
 	}
 
 	namespace scatter_calls {
 		const std::string DIFFUSE = "diffuse_scatter(position, normal)";
 		const std::string METTALIC = "metallic_scatter(position, normal, r_in, $)";
+		const std::string DIELECTRIC = "dielectric_scatter(position, normal, r_in, is_front_face, $)";
 	}
 
 	namespace get_color {

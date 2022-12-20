@@ -26,6 +26,8 @@ private:
 	std::string generateClosestObjectInfoFunction();
 	std::string generateCalculateNormalFunction();
 	std::string generateGetTargetRayFunction();
+	std::string generateGetDistanceFromFunction();
+
 	std::string getTransform(TransformNode* p_node);
 	void computeAndSetObjectCount();
 	void computeUniforms();

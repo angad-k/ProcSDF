@@ -9,6 +9,7 @@
 #include "Rendering/ShaderGenerator.h"
 #include "Rendering/Materials/Metal.h"
 #include "Rendering/Materials/Diffuse.h"
+#include "Rendering/Materials/Dielectric.h"
 #pragma once
 
 void NodeGraph::initialize()
@@ -370,6 +371,12 @@ void NodeGraph::addDiffuse()
 void NodeGraph::addMetal()
 {
 	Material* l_newMaterial = new Metal();
+	m_materials.push_back(l_newMaterial);
+}
+
+void NodeGraph::addDielectric()
+{
+	Material* l_newMaterial = new Dielectric();
 	m_materials.push_back(l_newMaterial);
 }
 
