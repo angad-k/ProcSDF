@@ -17,7 +17,7 @@ private:
 		std::vector<TransformNode*>& p_operationOrdering,
 		Node* p_previousNonTransformNode = NULL);
 	std::map <int, Node*> m_allocatedIDs;
-	std::map <std::string, std::string> m_customNodeFilePathToContent;
+	std::map <std::string, std::string> m_customNodeNameToContent;
 	bool m_dirty = false;
 public:
 	void initialize();
@@ -48,19 +48,33 @@ public:
 	std::vector<std::pair<int, int>> m_links;
 	std::map <int, std::set<int>> m_reachableObjects;
 
-	void setCustomNodeFileContents(std::string p_fileName, std::string p_fileContents)
+	void setCustomNodeFileContents(std::string p_nodeName, std::string p_fileContents)
 	{
-		m_customNodeFilePathToContent[p_fileName] = p_fileContents;
+		m_customNodeNameToContent[p_nodeName] = p_fileContents;
+	}
+	std::string getCustomNodeFileContentsfromNodeName(std::string p_nodeName)
+	{
+		return m_customNodeNameToContent[p_nodeName];
 	}
 
 	std::vector<std::string> getCustomNodeFileContents()
 	{
 		std::vector<std::string> l_customNodeFileContents;
-		for (auto path_content : m_customNodeFilePathToContent)
+		for (auto path_content : m_customNodeNameToContent)
 		{
 			l_customNodeFileContents.push_back(path_content.second);
 		}
 		return l_customNodeFileContents;
+	}
+
+	std::vector<std::string> getCustomNodeNames()
+	{
+		std::vector<std::string> l_customNodeNames;
+		for (auto path_content : m_customNodeNameToContent)
+		{
+			l_customNodeNames.push_back(path_content.first);
+		}
+		return l_customNodeNames;
 	}
 	
 	std::string getCompilationError()
