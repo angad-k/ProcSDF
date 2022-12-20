@@ -6,6 +6,8 @@ uniform vec3 u_camera_origin;
 uniform vec2 u_viewport_size;
 uniform float u_focal_length;
 
+uniform int u_r_Max_Depth;
+
 out vec4 FragColor;
 
 const bool DEBUG = true;

@@ -37,7 +37,7 @@ namespace shader_generation {
 	}
 	namespace closest_object_info {
 		const std::string FUNCTION_TEMPLATE = "\nclosest_object_info get_closest_object_info(vec3 position)\n{\n$\nreturn closest_object_info(min_dist, object_index);\n}\n";
-		const std::string DISTANCE_COMPUTATION = "\nfloat dist_$ = abs(object_$(position));\n";
+		const std::string DISTANCE_COMPUTATION = "\nfloat dist_$ = object_$(position);\n";
 		const std::string VARIABLE_INITIALIZATION = "\nfloat min_dist = 3e+38;\nint object_index = 1;\n";
 		const std::string MIN_DIST_COMPUTATION = "\nmin_dist = min(min_dist, dist_$);\n";
 		const std::string CONDITIONAL_OBJECT_INDEX_COMPUTATION = "\nif(dist_$ == min_dist)\n{\nobject_index = $;\n}\n";

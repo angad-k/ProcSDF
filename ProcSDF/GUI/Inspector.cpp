@@ -107,7 +107,16 @@ void Inspector::drawCameraSettings()
 
 void Inspector::drawRenderingSettings()
 {
-	ImGui::Text("Something will come here");
+	std::vector<std::string> l_render_uniforms = Renderer::getSingleton()->getRenderUniforms();
+	for (int i = 0; i < l_render_uniforms.size(); i++)
+	{
+		ImGui::DragInt(l_render_uniforms[i].c_str(), &Renderer::getSingleton()->m_render_uniforms_values[i]);
+		Renderer::getSingleton()->setUniformInt(
+			ShaderGenerator::getUniformStringFromLabel("r", l_render_uniforms[i]),
+			Renderer::getSingleton()->m_render_uniforms_values[i]
+		);
+		
+	}
 }
 
 void Inspector::drawMaterialSettings()

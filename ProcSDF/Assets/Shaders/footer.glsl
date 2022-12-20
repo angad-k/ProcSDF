@@ -28,7 +28,12 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             if (closest.closest_distance < MINIMUM_HIT_DISTANCE)
             {
                 vec3 normal = calculate_normal(current_position, closest.object_index);
-                bool is_front_face = (get_distance_from(ray_origin, closest.object_index) > 0.0);
+                float prev_dist = get_distance_from(ray_origin, closest.object_index);
+                bool is_front_face = (prev_dist > 0.0);
+                if(abs(prev_dist)<MINIMUM_HIT_DISTANCE)
+                {
+                    is_front_face = !is_front_face;
+                }
 
                 scatter_info info = get_target_ray(current_position, closest.object_index, normal, ray_direction, is_front_face);
                 vec3 target = info.scattered_ray;
@@ -73,7 +78,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
 
 void main()
 {
-    int MAX_DEPTH = 50;
+    int MAX_DEPTH = u_r_Max_Depth;
     int SAMPLES = 10;
 
     vec2 v_size = vec2(2.0*u_viewport_size.x/u_viewport_size.y, 2.0);

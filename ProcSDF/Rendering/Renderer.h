@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "ShaderGenerator.h"
 class Renderer
 {
 private:
@@ -31,9 +32,12 @@ private:
 	void setupFrameBuffer();
 	void resizeRenderTexture(float p_height, float p_width);
 	//String generate_fragment_shader();
-public:
-	Renderer();
+	std::vector <std::string> m_render_uniforms = { "Max Depth" };
 
+public:
+	std::vector <int> m_render_uniforms_values = { 16 };
+	Renderer();
+	
 	static Renderer* getSingleton() {
 		if (!s_renderer)
 		{
@@ -44,9 +48,26 @@ public:
 
 	void draw(float p_width, float p_height);
 
+	void setRenderUniforms()
+	{
+		for (int i = 0; i < m_render_uniforms.size(); i++)
+		{
+			Renderer::getSingleton()->setUniformInt(
+				ShaderGenerator::getUniformStringFromLabel("r", m_render_uniforms[i]),
+				Renderer::getSingleton()->m_render_uniforms_values[i]
+			);
+
+		}
+	}
+
 	unsigned int getRenderTexture()
 	{
 		return m_renderTexture;
+	}
+
+	std::vector <std::string> getRenderUniforms()
+	{
+		return m_render_uniforms;
 	}
 
 	void setCameraOrigin(float p_cameraOrigin[3])
@@ -70,7 +91,7 @@ public:
 	{
 		return &m_focalLengthValue;
 	}
-
+	void setUniformInt(std::string p_uniform_name, int p_val);
 	void setUniformFloat(std::string p_uniform_name, float p_val);
 	void setUniformFloat2(std::string p_uniform_name, float p_x, float p_y);
 	void setUniformFloat3(std::string p_uniform_name, float p_x, float p_y, float p_z);

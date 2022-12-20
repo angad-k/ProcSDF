@@ -65,6 +65,7 @@ void Renderer::draw(float p_width, float p_height)
 	{
 		l_material->setUniforms();
 	}
+	setRenderUniforms();
 	glUniform3f(m_cameraOrigin, m_cameraOriginValue[0], m_cameraOriginValue[1], m_cameraOriginValue[2]);
 	glUniform2f(m_viewportSize, p_width, p_height);
 	glUniform1f(m_focalLength, m_focalLengthValue);
@@ -197,6 +198,12 @@ void Renderer::setUniformFloat(std::string p_uniform_name, float p_val)
 {
 	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
 	glUniform1f(l_uniform_location, p_val);
+}
+
+void Renderer::setUniformInt(std::string p_uniform_name, int p_val)
+{
+	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
+	glUniform1i(l_uniform_location, p_val);
 }
 
 void Renderer::setUniformFloat2(std::string p_uniform_name, float p_x, float p_y)
