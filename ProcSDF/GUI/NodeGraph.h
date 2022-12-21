@@ -112,6 +112,7 @@ public:
 	void addDiffuse();
 	void addMetal();
 	void addDielectric();
+	void addLight();
 
 	Material* getMaterialFromMaterialID(int p_id);
 

@@ -27,6 +27,7 @@ private:
 	std::string generateCalculateNormalFunction();
 	std::string generateGetTargetRayFunction();
 	std::string generateGetDistanceFromFunction();
+	std::string generateIsLightFunction();
 
 	std::string getTransform(TransformNode* p_node);
 	void computeAndSetObjectCount();

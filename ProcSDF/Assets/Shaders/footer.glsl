@@ -11,7 +11,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
         bool break_loop = false;
         if(depth == 0)
         {
-            output_color *= 0.0;
+            //output_color *= 0.0;
             if(DEBUG && DEBUG_DEPTH)
             {
                 return vec3(1.0, 0.0, 0.0);
@@ -29,6 +29,15 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             {
                 vec3 normal = calculate_normal(current_position, closest.object_index);
                 float prev_dist = get_distance_from(ray_origin, closest.object_index);
+                bool is_mat_light = is_light(closest.object_index);
+                
+                output_color *= get_color(current_position, closest.object_index);
+                if(is_mat_light)
+                {
+                    break_loop = true;
+                    break;
+                }
+                
                 bool is_front_face = (prev_dist > 0.0);
                 if(abs(prev_dist)<MINIMUM_HIT_DISTANCE)
                 {
@@ -45,7 +54,6 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
                     break;
                 }
 
-                output_color *= get_color(current_position, closest.object_index);
                 ray_origin = current_position;
                 ray_direction = target;
                 break;

@@ -151,6 +151,10 @@ void Inspector::drawMaterialSettings()
 	{
 		NodeGraph::getSingleton()->addDielectric();
 	}
+	if (ImGui::Button("Add Light(Emissive) Material"))
+	{
+		NodeGraph::getSingleton()->addLight();
+	}
 }
 
 void Inspector::drawNodeGraphSettings()

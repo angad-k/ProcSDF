@@ -59,7 +59,11 @@ namespace shader_generation {
 		const std::string FUNCTION_TEMPLATE = "\nfloat get_distance_from(vec3 position, int object_index)\n{\nfloat d = 0.0;\n$\nreturn d;\n}\n";
 		const std::string CASE_STATEMENT = "case $:\nd = object_$(position);\nbreak;\n";
 		const int FREQUENCY = 2;
+	}
 
+	namespace is_light {
+		const std::string FUNCTION_TEMPLATE = "\nbool is_light(int object_index)\n{\nbool res = false;\n$\nreturn res;\n}\n";
+		const std::string CASE_STATEMENT = "case $:\nres = $;\nbreak;\n";
 	}
 	
 	namespace target_ray {
@@ -71,6 +75,7 @@ namespace shader_generation {
 		const std::string DIFFUSE = "diffuse_scatter(position, normal)";
 		const std::string METTALIC = "metallic_scatter(position, normal, r_in, $)";
 		const std::string DIELECTRIC = "dielectric_scatter(position, normal, r_in, is_front_face, $, $)";
+		const std::string LIGHT = "scatter_info(vec3(0.0, 0.0, 0.0), true)";
 	}
 
 	namespace get_color {
@@ -112,6 +117,7 @@ namespace material_type {
 	const std::string DIFFUSE = "Diffuse";
 	const std::string METAL = "Metal";
 	const std::string DIELECTRIC = "Dielectric";
+	const std::string LIGHT = "Light";
 }
 
 namespace imgui_colors {
