@@ -6,6 +6,9 @@ uniform vec3 u_camera_origin;
 uniform vec2 u_viewport_size;
 uniform float u_focal_length;
 
+uniform vec3 u_r_horizon_bottom_color;
+uniform vec3 u_r_horizon_top_color;
+
 uniform int u_r_Max_Depth;
 uniform int u_r_Samples;
 uniform int u_r_Number_of_steps;

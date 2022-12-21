@@ -38,6 +38,8 @@ private:
 public:
 	std::vector <int> m_render_uniforms_values = { 16, 10, 16, 1000 };
 	std::vector <bool> m_render_uniforms_debug_values = { false, false, false, false };
+	float m_horizon_top_color[3] = { 1.0, 1.0, 1.0 };
+	float m_horizon_bottom_color[3] = { 0.5, 0.7, 1.0 };
 	Renderer();
 	
 	static Renderer* getSingleton() {
@@ -66,6 +68,18 @@ public:
 				m_render_uniforms_debug_values[i]
 			);
 		}
+		setUniformFloat3(
+			"u_r_horizon_top_color",
+			m_horizon_top_color[0],
+			m_horizon_top_color[1],
+			m_horizon_top_color[2]
+		);
+		setUniformFloat3(
+			"u_r_horizon_bottom_color",
+			m_horizon_bottom_color[0],
+			m_horizon_bottom_color[1],
+			m_horizon_bottom_color[2]
+		);
 	}
 
 	unsigned int getRenderTexture()

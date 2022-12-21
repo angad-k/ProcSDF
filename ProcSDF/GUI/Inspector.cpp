@@ -28,13 +28,13 @@ void Inspector::draw()
 
 	Tab l_oldTab = m_openedTab;
 
-	if (l_oldTab == Tab::CAMERA_SETTINGS)
+	if (l_oldTab == Tab::WORLD_SETTINGS)
 	{
 		ImGui::BeginDisabled();
 	}
-	if (ImGui::Button("Camera Settings"))
-		m_openedTab = Tab::CAMERA_SETTINGS;
-	if (l_oldTab == Tab::CAMERA_SETTINGS)
+	if (ImGui::Button("World Settings"))
+		m_openedTab = Tab::WORLD_SETTINGS;
+	if (l_oldTab == Tab::WORLD_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
@@ -79,8 +79,8 @@ void Inspector::draw()
 
 	switch (m_openedTab)
 	{
-	case Tab::CAMERA_SETTINGS:
-		drawCameraSettings();
+	case Tab::WORLD_SETTINGS:
+		drawWorldSettings();
 		break;
 	case Tab::RENDERING_SETTINGS:
 		drawRenderingSettings();
@@ -93,16 +93,18 @@ void Inspector::draw()
 		break;
 	}
 	
-
 	ImGui::End();
 }
 
-void Inspector::drawCameraSettings()
+void Inspector::drawWorldSettings()
 {
 	float p_cameraOrigin[3] = { m_renderer->getCameraOrigin()[0], m_renderer->getCameraOrigin()[1], m_renderer->getCameraOrigin()[2] };
 	ImGui::DragFloat3("Camera Origin", p_cameraOrigin);
 	m_renderer->setCameraOrigin(p_cameraOrigin);
 	ImGui::DragFloat("Focal Length", m_renderer->getFocalLength());
+	ImGui::Separator();
+	ImGui::ColorEdit3("Horizon Top Color", m_renderer->m_horizon_top_color);
+	ImGui::ColorEdit3("Horizon Bottom Color", m_renderer->m_horizon_bottom_color);
 }
 
 void Inspector::drawRenderingSettings()

@@ -63,7 +63,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             {
                 vec3 unit_direction = normalize(ray_direction);
                 float t = 0.5*(unit_direction.y + 1.0);
-                output_color *= t*vec3(1.0, 1.0, 1.0) + (1.0-t)*vec3(0.5, 0.7, 1.0);
+                output_color *= t*u_r_horizon_top_color + (1.0-t)*u_r_horizon_bottom_color;
                 if(DEBUG && DEBUG_MAX_TRACE)
                 {
                     return vec3(0.0, 1.0, 0.0);

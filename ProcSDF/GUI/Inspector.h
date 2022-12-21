@@ -13,7 +13,7 @@ private:
 
 	enum class Tab
 	{
-		CAMERA_SETTINGS,
+		WORLD_SETTINGS,
 		RENDERING_SETTINGS,
 		NODEGRAPH_SETTINGS,
 		MATERIAL_SETTINGS,
@@ -33,7 +33,7 @@ public:
 	}
 	template <typename p_nodeType> Node* addNode();
 	void draw();
-	void drawCameraSettings();
+	void drawWorldSettings();
 	void drawRenderingSettings();
 	void drawNodeGraphSettings();
 	void drawMaterialSettings();
