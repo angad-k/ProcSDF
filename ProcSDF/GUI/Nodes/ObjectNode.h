@@ -9,6 +9,12 @@ public:
 	{
 		return m_material_id;
 	}
+
+	void setMaterialID(int p_id)
+	{
+		m_material_id = p_id;
+	}
+
 	ObjectNode()
 	{
 		m_variableName = "object";
@@ -35,7 +41,7 @@ public:
 		drawNodeContents();
 		static ImGuiComboFlags flags = 0;
 		std::vector<Material*> l_materials = NodeGraph::getSingleton()->getMaterials();
-		std::string l_comboPreviewValue = l_materials[m_material_id]->get_name();
+		std::string l_comboPreviewValue = NodeGraph::getSingleton()->getMaterialFromMaterialID(m_material_id)->get_name();
 		ImGui::PushItemWidth(100);
 		if (ImGui::BeginCombo("Material", l_comboPreviewValue.c_str(), flags))
 		{

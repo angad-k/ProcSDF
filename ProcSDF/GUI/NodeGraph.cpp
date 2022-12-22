@@ -78,6 +78,26 @@ void NodeGraph::deallocateID(int p_ID)
 	}
 }
 
+void NodeGraph::deallocateMaterialID(int p_ID)
+{
+	if (m_allocatedMaterialIDs.find(p_ID) != m_allocatedMaterialIDs.end())
+	{
+		m_allocatedMaterialIDs.erase(p_ID);
+	}
+}
+
+void NodeGraph::deleteMaterialAt(int p_pos)
+{
+	if (m_materials.size() <= 1)
+	{
+		ERR("Cannot remove all materials. Add another material before deleting this.");
+		return;
+	}
+	Material* l_mat = m_materials[p_pos];
+	m_materials.erase(std::find(m_materials.begin(), m_materials.end(), l_mat));
+	delete(l_mat);
+}
+
 Node* NodeGraph::getNode(int p_ID)
 {
 	return m_allocatedIDs[p_ID];
@@ -361,6 +381,22 @@ void NodeGraph::recompileNodeGraph()
 std::vector<Material*> NodeGraph::getMaterials()
 {
 	return m_materials;
+}
+
+void NodeGraph::fixMaterials()
+{
+	for (Node* node : m_nodes)
+	{
+		if (node->m_isObjectNode)
+		{
+			ObjectNode* l_obj = (ObjectNode*)node;
+			int l_matID = l_obj->getMaterialID();
+			if (!m_allocatedMaterialIDs[l_matID])
+			{
+				l_obj->setMaterialID(m_materials[0]->getID());
+			}
+		}
+	}
 }
 
 void NodeGraph::addDiffuse()

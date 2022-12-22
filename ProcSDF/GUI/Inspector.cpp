@@ -137,9 +137,16 @@ void Inspector::drawMaterialSettings()
 	std::vector<Material*> l_materials = NodeGraph::getSingleton()->getMaterials();
 	for (int i = 0; i < l_materials.size(); i++)
 	{
+		bool l_del = false;
 		ImGui::PushID(i);
-		l_materials[i]->draw();
+		l_materials[i]->draw(l_del);
 		ImGui::PopID();
+
+		if (l_del)
+		{
+			NodeGraph::getSingleton()->deleteMaterialAt(i);
+			NodeGraph::getSingleton()->fixMaterials();
+		}
 	}
 	if (ImGui::Button("Add Diffuse Material"))
 	{

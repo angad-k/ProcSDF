@@ -2,7 +2,7 @@
 #include"Renderer.h"
 #include"GUI/GuiUtilities.h"
 #include"Rendering/ShaderGenerator.h"
-void Material::draw()
+void Material::draw(bool &p_del)
 {
 	if (m_is_being_edited)
 	{
@@ -46,6 +46,19 @@ void Material::draw()
 				ShaderGenerator::getUniformStringFromLabel(m_name, m_inputFloatLabels[i]),
 				m_inputFloats[i]
 			);
+		}
+
+		if (!NodeGraph::getSingleton()->canDeleteMaterial())
+		{
+			ImGui::BeginDisabled();
+		}
+		if (ImGui::Button("Delete Material"))
+		{
+			p_del = true;
+		}
+		if (!NodeGraph::getSingleton()->canDeleteMaterial())
+		{
+			ImGui::EndDisabled();
 		}
 
 		if (ImGui::Button("Done"))

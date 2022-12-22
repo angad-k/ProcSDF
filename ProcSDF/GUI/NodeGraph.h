@@ -23,8 +23,16 @@ private:
 	std::map <int, Material*> m_allocatedMaterialIDs;
 public:
 	void initialize();
+	
 	int allocateID(Node* p_node);
 	int allocateMaterialID(Material* p_material);
+	void deallocateMaterialID(int p_ID);
+	void deleteMaterialAt(int p_pos);
+	void fixMaterials();
+	bool canDeleteMaterial()
+	{
+		return m_materials.size() > 1;
+	}
 	void setID(Node* p_node, int m_ID);
 	void deallocateID(int p_ID);
 	Node* getNode(int p_ID);

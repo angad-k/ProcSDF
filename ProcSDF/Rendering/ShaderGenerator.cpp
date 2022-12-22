@@ -105,7 +105,6 @@ void ShaderGenerator::generateAndSetShader() {
 
 	std::string l_shaderString;
 	int l_index = 0;
-	
 	// Appends the shader header which includes a number of utility functions.
 	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 	// Appends all the uniform declarations.

@@ -16,7 +16,7 @@ protected:
 public:
 	std::string m_materialType;
 	bool m_is_being_edited = false;
-	virtual void draw();
+	virtual void draw(bool &p_del);
 	std::string get_name()
 	{
 		return m_name;
@@ -69,6 +69,11 @@ public:
 	{
 		m_ID = NodeGraph::getSingleton()->allocateMaterialID(this);
 		m_name = "Material#" + std::to_string(m_ID);
+	}
+
+	~Material()
+	{
+		NodeGraph::getSingleton()->deallocateMaterialID(m_ID);
 	}
 
 	void init()
