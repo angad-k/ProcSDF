@@ -21,6 +21,8 @@ private:
 
 	Tab m_openedTab;
 
+	int m_renderSize[2] = { 600, 400 };
+
 public:
 	void initialize();
 

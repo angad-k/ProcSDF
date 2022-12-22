@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <LodePNG/lodepng.h>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -192,6 +193,51 @@ void Renderer::resizeRenderTexture(float p_width, float p_height)
 
 	m_cachedWidth = p_width;
 	m_cachedHeight = p_height;
+}
+
+void Renderer::exportImage(std::string p_fileName, int p_width, int p_height)
+{
+	std::vector<unsigned char> l_png;
+	std::vector<unsigned char> l_image = getRenderedImage(p_width, p_height);
+
+	int l_rowWidth = p_width * 4;
+	for (int i = 0; i < p_height/2; i++)
+	{
+		for (int j = 0; j < l_rowWidth; j++)
+		{
+			//unsigned char temp = l_image[i * l_rowWidth + j];
+			//l_image[i * l_rowWidth + j] = l_image[(p_height - i - 1) * l_rowWidth + j];
+			//l_image[(p_height - i - 1) * l_rowWidth + j] = temp;
+			std::swap(l_image[i * l_rowWidth + j], l_image[(p_height - i - 1) * l_rowWidth + j]);
+		}
+	}
+
+	unsigned error = lodepng::encode(l_png, l_image, p_width, p_height);
+
+	if (!error) lodepng::save_file(l_png, p_fileName);
+
+	// If there's an error, display it
+	if (error) std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+}
+
+std::vector<unsigned char> Renderer::getRenderedImage(int p_width, int p_height)
+{
+	// We first render the image with required size.
+	draw(p_width, p_height);
+
+	// Initializing the buffer.
+	std::vector <unsigned char> l_imageVec((double)p_width * p_height * 4, ' ');
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_renderTexture);
+
+	glGetTexImage(GL_TEXTURE_2D,
+		0,
+		GL_RGBA,
+		GL_UNSIGNED_BYTE,
+		l_imageVec.data());
+
+	return l_imageVec;
 }
 
 void Renderer::setUniformFloat(std::string p_uniform_name, float p_val)

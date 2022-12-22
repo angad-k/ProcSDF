@@ -123,4 +123,6 @@ public:
 	void setUniformFloat(std::string p_uniform_name, float p_val);
 	void setUniformFloat2(std::string p_uniform_name, float p_x, float p_y);
 	void setUniformFloat3(std::string p_uniform_name, float p_x, float p_y, float p_z);
+	std::vector<unsigned char> getRenderedImage(int p_width, int p_height);
+	void exportImage(std::string p_fileName, int p_width, int p_height);
 };

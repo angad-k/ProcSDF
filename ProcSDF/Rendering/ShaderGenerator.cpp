@@ -94,7 +94,6 @@ std::string ShaderGenerator::generateGetColorFunction()
 	}
 	l_switchStatement.replace(l_switchStatement.find('$'), 1, l_getColorCases);
 	l_getColorFunction.replace(l_getColorFunction.find('$'), 1, l_switchStatement);
-	std::cout << l_getColorFunction;
 	return l_getColorFunction;
 }
 
@@ -259,7 +258,6 @@ std::string ShaderGenerator::generateIsLightFunction()
 
 	l_switchStatement.replace(l_switchStatement.find('$'), 1, l_switchContent);
 	l_isLightFunction.replace(l_isLightFunction.find('$'), 1, l_switchStatement);
-	std::cout << l_isLightFunction;
 	return l_isLightFunction;
 }
 

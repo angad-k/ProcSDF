@@ -109,27 +109,60 @@ void Inspector::drawWorldSettings()
 
 void Inspector::drawRenderingSettings()
 {
-	std::vector<std::string> l_render_uniforms = Renderer::getSingleton()->getRenderUniforms();
-	for (int i = 0; i < l_render_uniforms.size(); i++)
+	if (ImGui::TreeNode("Rendering parameters"))
 	{
-		ImGui::DragInt(l_render_uniforms[i].c_str(), &Renderer::getSingleton()->m_render_uniforms_values[i]);
+		ImGui::Indent();
+		std::vector<std::string> l_render_uniforms = Renderer::getSingleton()->getRenderUniforms();
+		for (int i = 0; i < l_render_uniforms.size(); i++)
+		{
+			ImGui::DragInt(l_render_uniforms[i].c_str(), &Renderer::getSingleton()->m_render_uniforms_values[i]);
+		}
+		ImGui::Unindent();
+		ImGui::TreePop();
 	}
-	std::vector<std::string> l_render_uniforms_debug = Renderer::getSingleton()->getRenderUniformsDebug();
-	for (int i = 0; i < l_render_uniforms_debug.size(); i++)
+	if (ImGui::TreeNode("Debug Settings"))
 	{
-		bool value = Renderer::getSingleton()->m_render_uniforms_debug_values[i];
-		if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+		ImGui::Indent();
+		std::vector<std::string> l_render_uniforms_debug = Renderer::getSingleton()->getRenderUniformsDebug();
+		for (int i = 0; i < l_render_uniforms_debug.size(); i++)
 		{
-			ImGui::BeginDisabled();
+			bool value = Renderer::getSingleton()->m_render_uniforms_debug_values[i];
+			if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+			{
+				ImGui::BeginDisabled();
+			}
+			ImGui::Checkbox(l_render_uniforms_debug[i].c_str(), &value);
+			if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+			{
+				ImGui::EndDisabled();
+			}
+			Renderer::getSingleton()->m_render_uniforms_debug_values[i] = value;
 		}
-		ImGui::Checkbox(l_render_uniforms_debug[i].c_str(), &value);
-		if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
-		{
-			ImGui::EndDisabled();
-		}
-		Renderer::getSingleton()->m_render_uniforms_debug_values[i] = value;
+		ImGui::Unindent();
+		ImGui::TreePop();
 	}
-	Renderer::getSingleton()->setRenderUniforms();
+	if (ImGui::TreeNode("Image Export"))
+	{
+		ImGui::Indent();
+
+		ImGui::DragInt2("Render Size", m_renderSize);
+
+		if (ImGui::Button("Export"))
+		{
+			std::pair<bool, std::string> l_renderTo = OS::pickRenderToFile();
+			if (l_renderTo.first)
+			{
+				std::string l_suffix = ".png";
+				if (l_renderTo.second.compare(l_renderTo.second.length() - l_suffix.length(), l_suffix.length(), l_suffix) != 0)
+					l_renderTo.second += ".png";
+				Renderer::getSingleton()->exportImage(l_renderTo.second, m_renderSize[0], m_renderSize[1]);
+			}
+		}
+
+		ImGui::Unindent();
+		ImGui::TreePop();
+	}
+	
 }
 
 void Inspector::drawMaterialSettings()

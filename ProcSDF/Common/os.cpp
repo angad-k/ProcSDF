@@ -21,8 +21,9 @@ std::pair<bool, std::string> OS::pickFile() {
 	return l_filePath;
 }
 
-std::pair<bool, std::string> OS::pickSaveAsFile() {
-	std::pair<bool, std::string> l_filePath = WindowsInterface::saveFile("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
+std::pair<bool, std::string> OS::pickDestination(const char* p_filter)
+{
+	std::pair<bool, std::string> l_filePath = WindowsInterface::saveFile(p_filter);
 	if (l_filePath.first)
 	{
 		PRINT("File picked : " + l_filePath.second);
@@ -31,6 +32,16 @@ std::pair<bool, std::string> OS::pickSaveAsFile() {
 	{
 		PRINT("File not picked.");
 	}
+	return l_filePath;
+}
+
+std::pair<bool, std::string> OS::pickSaveAsFile() {
+	std::pair<bool, std::string> l_filePath = pickDestination("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
+	return l_filePath;
+}
+
+std::pair<bool, std::string> OS::pickRenderToFile() {
+	std::pair<bool, std::string> l_filePath = pickDestination("ProcSDF Node Space (*.png)\0*.png\0");
 	return l_filePath;
 }
 

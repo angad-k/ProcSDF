@@ -178,6 +178,7 @@
     <ClCompile Include="Vendor\Include\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Vendor\Include\ImGUI\imnodes.cpp" />
+    <ClCompile Include="Vendor\Include\LodePNG\lodepng.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\constant.h" />
