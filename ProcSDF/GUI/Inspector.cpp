@@ -152,9 +152,6 @@ void Inspector::drawRenderingSettings()
 			std::pair<bool, std::string> l_renderTo = OS::pickRenderToFile();
 			if (l_renderTo.first)
 			{
-				std::string l_suffix = ".png";
-				if (l_renderTo.second.compare(l_renderTo.second.length() - l_suffix.length(), l_suffix.length(), l_suffix) != 0)
-					l_renderTo.second += ".png";
 				Renderer::getSingleton()->exportImage(l_renderTo.second, m_renderSize[0], m_renderSize[1]);
 			}
 		}

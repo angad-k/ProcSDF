@@ -37,11 +37,19 @@ std::pair<bool, std::string> OS::pickDestination(const char* p_filter)
 
 std::pair<bool, std::string> OS::pickSaveAsFile() {
 	std::pair<bool, std::string> l_filePath = pickDestination("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
+	if (l_filePath.first)
+	{
+		l_filePath.second = fixExtension(l_filePath.second, ".procsdf");
+	}
 	return l_filePath;
 }
 
 std::pair<bool, std::string> OS::pickRenderToFile() {
 	std::pair<bool, std::string> l_filePath = pickDestination("ProcSDF Node Space (*.png)\0*.png\0");
+	if (l_filePath.first)
+	{
+		l_filePath.second = fixExtension(l_filePath.second, ".png");
+	}
 	return l_filePath;
 }
 
