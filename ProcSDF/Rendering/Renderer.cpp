@@ -4,7 +4,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <chrono>
 #pragma once
+#include "Common/logger.h"
 #include "GUI/NodeGraph.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
@@ -222,8 +224,13 @@ void Renderer::exportImage(std::string p_fileName, int p_width, int p_height)
 
 std::vector<unsigned char> Renderer::getRenderedImage(int p_width, int p_height)
 {
+	
+	auto start = std::chrono::high_resolution_clock::now();
 	// We first render the image with required size.
 	draw(p_width, p_height);
+	auto stop = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+	PRINT("Time taken for render : " + std::to_string(duration.count()) + " microseconds")
 
 	// Initializing the buffer.
 	std::vector <unsigned char> l_imageVec((double)p_width * p_height * 4, ' ');

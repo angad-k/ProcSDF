@@ -10,7 +10,7 @@ namespace logger
 {
 	static void log(std::string p_message)
 	{
-		printf(p_message.c_str());
+		std::cout << p_message + "\n";
 	}
 	static void logWarning(std::string p_message)
 	{
