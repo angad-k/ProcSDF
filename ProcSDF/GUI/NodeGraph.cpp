@@ -423,6 +423,11 @@ void NodeGraph::addLight()
 	m_materials.push_back(l_newMaterial);
 }
 
+void NodeGraph::addMaterial(Material* p_material)
+{
+	m_materials.push_back(p_material);
+}
+
 Material* NodeGraph::getMaterialFromMaterialID(int p_id)
 {
 	return m_allocatedMaterialIDs[p_id];

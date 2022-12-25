@@ -8,6 +8,7 @@
 #include "GUI/Nodes/CustomNode.h"
 #include "GuiUtilities.h"
 #include "Common/os.h"
+#include "Rendering/Materials/CustomMaterial.h"
 
 void Inspector::initialize()
 {
@@ -193,6 +194,38 @@ void Inspector::drawMaterialSettings()
 	if (ImGui::Button("Add Light(Emissive) Material"))
 	{
 		NodeGraph::getSingleton()->addLight();
+	}
+	ImGui::Separator();
+	if (ImGui::Button("Add custom material"))
+	{
+		std::pair<bool, std::string> l_pickFileResult = OS::pickFile();
+		if (l_pickFileResult.first)
+		{
+			std::string l_filePath = l_pickFileResult.second;
+			CustomMaterial::AddCustomMaterialAtFilePath(l_filePath);
+		}
+	}
+	if (ImGui::TreeNode("Add Custom Materials"))
+	{
+		ImGui::Indent();
+		std::vector <std::string> l_customMaterialNames = NodeGraph::getSingleton()->getCustomMaterialNames();
+		for (int i = 0; i < l_customMaterialNames.size(); i++)
+		{
+			if (ImGui::Button(l_customMaterialNames[i].c_str()))
+			{
+				CustomMaterial* l_customMaterial = new CustomMaterial(l_customMaterialNames[i]);
+				if (l_customMaterial->isMalformed())
+				{
+					delete(l_customMaterial);
+				}
+				else
+				{
+					NodeGraph::getSingleton()->addMaterial(l_customMaterial);
+				}
+			}
+		}
+		ImGui::Unindent();
+		ImGui::TreePop();
 	}
 }
 

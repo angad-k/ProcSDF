@@ -67,19 +67,20 @@ namespace shader_generation {
 	}
 	
 	namespace target_ray {
-		const std::string FUNCTION_TEMPLATE = "\scatter_info get_target_ray(vec3 position, int object_index, vec3 normal, vec3 r_in, bool is_front_face)\n{\nscatter_info target = scatter_info(vec3(0.0,0.0,0.0), true);\n$\nreturn target;\n}\n";
+		const std::string FUNCTION_TEMPLATE = "\scatter_info get_target_ray(vec3 position, int object_index, vec3 normal, vec3 r_in, bool is_front_face)\n{\nscatter_info target = scatter_info(vec3(0.0,0.0,0.0), true, vec3(1.0, 1.0, 1.0));\n$\nreturn target;\n}\n";
 		const std::string CASE_STATEMENT = "\ncase $:\ntarget = $;\nbreak;\n";
 	}
 
 	namespace scatter_calls {
-		const std::string DIFFUSE = "diffuse_scatter(position, normal)";
-		const std::string METTALIC = "metallic_scatter(position, normal, r_in, $)";
-		const std::string DIELECTRIC = "dielectric_scatter(position, normal, r_in, is_front_face, $, $)";
-		const std::string LIGHT = "scatter_info(vec3(0.0, 0.0, 0.0), true)";
+		const std::string DIFFUSE = "diffuse_scatter(position, normal, object_index)";
+		const std::string METTALIC = "metallic_scatter(position, normal, object_index, r_in, $)";
+		const std::string DIELECTRIC = "dielectric_scatter(position, normal, object_index, r_in, is_front_face, $)";
+		const std::string CUSTOM = "$_scatter(position, normal, r_in, is_front_face, $)";
+		const std::string LIGHT = "scatter_info(vec3(0.0, 0.0, 0.0), true, vec3(0.0, 0.0, 0.0))"; //light's scatter will never be used.
 	}
 
 	namespace get_color {
-		const std::string FUNCTION_TEMPLATE = "\nvec3 get_color(vec3 position, int object_index)\n{\n$\nreturn vec3(1.0, 0, 0.0);\n}\n";
+		const std::string FUNCTION_TEMPLATE = "\nvec3 get_color(int object_index)\n{\n$\nreturn vec3(1.0, 0, 0.0);\n}\n";
 		const std::string CASE_STATEMENT = "\ncase $:\nreturn $;\nbreak;\n";
 	}
 }
@@ -117,6 +118,7 @@ namespace material_type {
 	const std::string DIFFUSE = "Diffuse";
 	const std::string METAL = "Metal";
 	const std::string DIELECTRIC = "Dielectric";
+	const std::string CUSTOM = "Custom";
 	const std::string LIGHT = "Light";
 }
 

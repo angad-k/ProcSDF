@@ -18,6 +18,7 @@ private:
 		Node* p_previousNonTransformNode = NULL);
 	std::map <int, Node*> m_allocatedIDs;
 	std::map <std::string, std::string> m_customNodeNameToContent;
+	std::map <std::string, std::string> m_customMaterialNameToContent;
 	bool m_dirty = false;
 	std::vector<Material*>m_materials;
 	std::map <int, Material*> m_allocatedMaterialIDs;
@@ -87,6 +88,35 @@ public:
 		}
 		return l_customNodeNames;
 	}
+
+	void setCustomMaterialFileContents(std::string p_materialName, std::string p_fileContents)
+	{
+		m_customMaterialNameToContent[p_materialName] = p_fileContents;
+	}
+	std::string getCustomMaterialFileContentsfromMaterialName(std::string p_materialName)
+	{
+		return m_customMaterialNameToContent[p_materialName];
+	}
+
+	std::vector<std::string> getCustomMaterialFileContents()
+	{
+		std::vector<std::string> l_customMaterialFileContents;
+		for (auto path_content : m_customMaterialNameToContent)
+		{
+			l_customMaterialFileContents.push_back(path_content.second);
+		}
+		return l_customMaterialFileContents;
+	}
+
+	std::vector<std::string> getCustomMaterialNames()
+	{
+		std::vector<std::string> l_customMaterialNames;
+		for (auto path_content : m_customMaterialNameToContent)
+		{
+			l_customMaterialNames.push_back(path_content.first);
+		}
+		return l_customMaterialNames;
+	}
 	
 	std::string getCompilationError()
 	{
@@ -121,6 +151,7 @@ public:
 	void addMetal();
 	void addDielectric();
 	void addLight();
+	void addMaterial(Material* p_material);
 
 	Material* getMaterialFromMaterialID(int p_id);
 

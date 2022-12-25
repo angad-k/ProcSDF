@@ -114,7 +114,7 @@ float reflectance(float cosine, float ref_idx)
     return r0 + (1-r0)*pow((1 - cosine),5);
 }
 
-//vec3 get_color(vec3 position, int object_index)
+vec3 get_color(int object_index);
 //{
 //    return vec3(1.0, 0, 0.0);
 //}
@@ -147,29 +147,30 @@ struct scatter_info
 {
     vec3 scattered_ray;
     bool is_scattered;
+    vec3 attenuation;
 };
 
 // END OF STRUCTS
 
 // SCATTER FNS
 
-scatter_info diffuse_scatter(in vec3 intersection, in vec3 normal)
+scatter_info diffuse_scatter(in vec3 intersection, in vec3 normal, in int object_index)
 {
     vec3 scattered = intersection + random_in_hemisphere(normal, intersection);
-    return scatter_info(scattered, true);
+    return scatter_info(scattered, true, get_color(object_index));
 }
 
-scatter_info metallic_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in, float roughness)
+scatter_info metallic_scatter(in vec3 intersection, in vec3 normal, in int object_index, in vec3 r_in, float roughness)
 {
     if(roughness > 1.0)
     {
         roughness = 1.0;
     }
     vec3 reflected = reflect(normalize(r_in), normal) + roughness*random_in_unit_sphere(random_val);
-    return scatter_info(reflected, (dot(reflected, normal) > 0));
+    return scatter_info(reflected, (dot(reflected, normal) > 0), get_color(object_index));
 }
 
-scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in vec3 r_in, bool is_front_face, float ior, float roughness)
+scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in int object_index, in vec3 r_in, bool is_front_face, float ior, float roughness)
 {
      if(roughness > 1.0)
      {
@@ -190,8 +191,7 @@ scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in vec3 r_
      else
         direction = refract(unit_direction, normal, refraction_ratio);
 
-
-     return scatter_info(direction + roughness*random_in_unit_sphere(random_val), true);
+     return scatter_info(direction + roughness*random_in_unit_sphere(random_val), true, get_color(object_index));
 }
 
 // END OF SCATTER FNS

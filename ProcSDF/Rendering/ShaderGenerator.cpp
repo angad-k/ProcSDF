@@ -8,6 +8,7 @@
 #include "Common/constant.h"
 #include "GUI/NodeGraph.h"
 #include "Common/os.h"
+#include "Rendering/Materials/CustomMaterial.h"
 void ShaderGenerator::computeAndSetObjectCount() {
 	
 	int l_objectCount = 0;
@@ -55,6 +56,12 @@ void ShaderGenerator::appendCustomFunctions(std::string &p_shaderString)
 {
 	std::vector<std::string> l_customNodeFileContents = NodeGraph::getSingleton()->getCustomNodeFileContents();
 	for (std::string l_fileContent : l_customNodeFileContents)
+	{
+		p_shaderString.append(l_fileContent);
+	}
+
+	std::vector<std::string> l_customMaterialFileContents = NodeGraph::getSingleton()->getCustomMaterialFileContents();
+	for (std::string l_fileContent : l_customMaterialFileContents)
 	{
 		p_shaderString.append(l_fileContent);
 	}
@@ -178,7 +185,7 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 		if (l_mat->m_materialType == material_type::METAL)
 		{
 			std::string l_mettalic_scatter = shader_generation::scatter_calls::METTALIC;
-			l_mettalic_scatter = l_mettalic_scatter.replace(l_mettalic_scatter.find('$'), 1, l_mat->get_uniform_label("Roughness"));
+			l_mettalic_scatter = l_mettalic_scatter.replace(l_mettalic_scatter.find('$'), 1, l_mat->get_params_string());
 			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_mettalic_scatter);
 		}
 		else if (l_mat->m_materialType == material_type::DIFFUSE)
@@ -192,9 +199,16 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 		else if (l_mat->m_materialType == material_type::DIELECTRIC)
 		{
 			std::string l_dielectric_scatter = shader_generation::scatter_calls::DIELECTRIC;
-			l_dielectric_scatter = l_dielectric_scatter.replace(l_dielectric_scatter.find('$'), 1, l_mat->get_uniform_label("IOR"));
-			l_dielectric_scatter = l_dielectric_scatter.replace(l_dielectric_scatter.find('$'), 1, l_mat->get_uniform_label("Roughness"));
+			l_dielectric_scatter = l_dielectric_scatter.replace(l_dielectric_scatter.find('$'), 1, l_mat->get_params_string());
 			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_dielectric_scatter);
+		}
+		else if (l_mat->m_materialType == material_type::CUSTOM)
+		{
+			CustomMaterial* l_cmat = (CustomMaterial*)l_mat;
+			std::string l_custom_scatter = shader_generation::scatter_calls::CUSTOM;
+			l_custom_scatter = l_custom_scatter.replace(l_custom_scatter.find('$'), 1, l_cmat->getCustomName());
+			l_custom_scatter = l_custom_scatter.replace(l_custom_scatter.find('$'), 1, l_mat->get_params_string(true));
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_custom_scatter);
 		}
 		l_switchContent.append(l_caseStatement);
 	}

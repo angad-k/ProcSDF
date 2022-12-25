@@ -31,9 +31,9 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
                 float prev_dist = get_distance_from(ray_origin, closest.object_index);
                 bool is_mat_light = is_light(closest.object_index);
                 
-                output_color *= get_color(current_position, closest.object_index);
                 if(is_mat_light)
                 {
+                    output_color *= get_color(closest.object_index);
                     break_loop = true;
                     break;
                 }
@@ -45,6 +45,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
                 }
 
                 scatter_info info = get_target_ray(current_position, closest.object_index, normal, ray_direction, is_front_face);
+                output_color *= info.attenuation;
                 vec3 target = info.scattered_ray;
                 
                 if(!info.is_scattered)

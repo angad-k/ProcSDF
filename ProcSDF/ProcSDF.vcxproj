@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Common\custom.cpp" />
     <ClCompile Include="Common\os.cpp" />
     <ClCompile Include="Common\ProjectSaver.cpp" />
     <ClCompile Include="Common\WindowsInterface.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="GUI\Nodes\CustomNode.cpp" />
     <ClCompile Include="GUI\Nodes\Node.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Rendering\Materials\CustomMaterial.cpp" />
     <ClCompile Include="Rendering\Materials\Material.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Rendering\ShaderGenerator.cpp" />
@@ -182,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\constant.h" />
+    <ClInclude Include="Common\custom.h" />
     <ClInclude Include="Common\os.h" />
     <ClInclude Include="Common\ProjectSaver.h" />
     <ClInclude Include="Common\WindowsInterface.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="GUI\Nodes\OperationNodes.h" />
     <ClInclude Include="GUI\Nodes\PrimitiveNodes.h" />
     <ClInclude Include="GUI\Nodes\TransformNodes.h" />
+    <ClInclude Include="Rendering\Materials\CustomMaterial.h" />
     <ClInclude Include="Rendering\Materials\Dielectric.h" />
     <ClInclude Include="Rendering\Materials\Diffuse.h" />
     <ClInclude Include="Rendering\Materials\Light.h" />

@@ -37,10 +37,11 @@ public:
 		return "color_" + std::to_string(m_ID);
 	}
 
-	std::vector<std::string> getVec3Uniforms()
+	std::vector<std::string> getVec3Uniforms(bool p_includeColors = true)
 	{
 		std::vector<std::string> l_vec3Uniforms;
-		l_vec3Uniforms.push_back(getColorName());
+		if(p_includeColors)
+			l_vec3Uniforms.push_back(getColorName());
 		for (std::string label : m_inputFloat3Labels)
 		{
 			l_vec3Uniforms.push_back(ShaderGenerator::getUniformStringFromLabel(m_name, label));
@@ -74,6 +75,35 @@ public:
 	~Material()
 	{
 		NodeGraph::getSingleton()->deallocateMaterialID(m_ID);
+	}
+
+	std::string get_params_string(bool p_includeColor = false)
+	{
+		std::string l_params_string = "";
+		std::string l_comma = ", ";
+		std::vector<std::string>l_floatUniforms = getFloatUniforms();
+		std::vector<std::string>l_vec3uniforms = getVec3Uniforms(p_includeColor);
+		for (int i = 0; i < l_vec3uniforms.size(); i++)
+		{
+			l_params_string.append(l_vec3uniforms[i]);
+			if (i != l_vec3uniforms.size() - 1)
+			{
+				l_params_string.append(l_comma);
+			}
+		}
+		if (l_floatUniforms.size() != 0 && l_vec3uniforms.size() != 0)
+		{
+			l_params_string.append(l_comma);
+		}
+		for (int i = 0; i < l_floatUniforms.size(); i++)
+		{
+			l_params_string.append(l_floatUniforms[i]);
+			if (i != l_floatUniforms.size() - 1)
+			{
+				l_params_string.append(l_comma);
+			}
+		}
+		return l_params_string;
 	}
 
 	void init()
