@@ -12,7 +12,11 @@ public:
 
 	void setMaterialID(int p_id)
 	{
-		m_material_id = p_id;
+		if (m_material_id != p_id)
+		{
+			m_material_id = p_id;
+			NodeGraph::getSingleton()->informModification();
+		}
 	}
 
 	ObjectNode()
@@ -50,7 +54,7 @@ public:
 				const bool l_isSelected = (m_material_id == i);
 				ImGui::PushID(i);
 				if (ImGui::Selectable(l_materials[i]->get_name().c_str(), l_isSelected))
-					m_material_id = l_materials[i]->getID();
+					setMaterialID(l_materials[i]->getID());
 				ImGui::PopID();
 				if (l_isSelected)
 					ImGui::SetItemDefaultFocus();
