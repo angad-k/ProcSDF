@@ -38,6 +38,7 @@ private:
 public:
 	std::vector <int> m_render_uniforms_values = { 16, 10, 16, 1000 };
 	std::vector <bool> m_render_uniforms_debug_values = { false, false, false, false };
+	std::vector<std::vector<float>> m_render_uniform_debug_cols = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
 	float m_horizon_top_color[3] = { 1.0, 1.0, 1.0 };
 	float m_horizon_bottom_color[3] = { 0.5, 0.7, 1.0 };
 	Renderer();
@@ -66,6 +67,15 @@ public:
 			setUniformBool(
 				m_render_uniforms_debug[i],
 				m_render_uniforms_debug_values[i]
+			);
+		}
+		for (int i = 1; i < m_render_uniforms_debug.size(); i++)
+		{
+			setUniformFloat3(
+				m_render_uniforms_debug[i] + "_COL",
+				m_render_uniform_debug_cols[i-1][0],
+				m_render_uniform_debug_cols[i-1][1],
+				m_render_uniform_debug_cols[i-1][2]
 			);
 		}
 		setUniformFloat3(

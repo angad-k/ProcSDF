@@ -14,7 +14,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
             //output_color *= 0.0;
             if(DEBUG && DEBUG_DEPTH)
             {
-                return vec3(1.0, 0.0, 0.0);
+                return DEBUG_DEPTH_COL;
             }
             break;
         }
@@ -67,7 +67,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
                 output_color *= t*u_r_horizon_top_color + (1.0-t)*u_r_horizon_bottom_color;
                 if(DEBUG && DEBUG_MAX_TRACE)
                 {
-                    return vec3(0.0, 1.0, 0.0);
+                    return DEBUG_MAX_TRACE_COL;
                 }
                 break_loop = true;
                 break;
@@ -77,7 +77,7 @@ vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
 
         if(i == NUMBER_OF_STEPS && DEBUG && DEBUG_STEPS_END)
         {
-            return vec3(0.0, 0.0, 1.0);
+            return DEBUG_STEPS_END_COL;
         }
 
         if(break_loop)

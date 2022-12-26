@@ -34,7 +34,9 @@ void Inspector::draw()
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("World Settings"))
+	{
 		m_openedTab = Tab::WORLD_SETTINGS;
+	}
 	if (l_oldTab == Tab::WORLD_SETTINGS)
 	{
 		ImGui::EndDisabled();
@@ -46,7 +48,9 @@ void Inspector::draw()
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Rendering Settings"))
+	{
 		m_openedTab = Tab::RENDERING_SETTINGS;
+	}
 	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::EndDisabled();
@@ -58,7 +62,9 @@ void Inspector::draw()
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Node graph settings"))
+	{
 		m_openedTab = Tab::NODEGRAPH_SETTINGS;
+	}
 	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
 	{
 		ImGui::EndDisabled();
@@ -70,7 +76,9 @@ void Inspector::draw()
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Material settings"))
+	{
 		m_openedTab = Tab::MATERIAL_SETTINGS;
+	}
 	if (l_oldTab == Tab::MATERIAL_SETTINGS)
 	{
 		ImGui::EndDisabled();
@@ -133,6 +141,11 @@ void Inspector::drawRenderingSettings()
 				ImGui::BeginDisabled();
 			}
 			ImGui::Checkbox(l_render_uniforms_debug[i].c_str(), &value);
+			if (i > 0) {
+				std::string l_colorString = l_render_uniforms_debug[i] + "_COL";
+				float* l_color = Renderer::getSingleton()->m_render_uniform_debug_cols[i-1].data();
+				ImGui::ColorEdit3(l_colorString.c_str(), l_color);
+			}
 			if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
 			{
 				ImGui::EndDisabled();

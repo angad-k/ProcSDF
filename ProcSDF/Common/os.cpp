@@ -1,4 +1,5 @@
 #include "os.h"
+#include "constant.h"
 
 std::string OS::fetchFileContent(std::string p_filePath) {
 	std::string l_fileContent = "\n";
@@ -36,7 +37,7 @@ std::pair<bool, std::string> OS::pickDestination(const char* p_filter)
 }
 
 std::pair<bool, std::string> OS::pickSaveAsFile() {
-	std::pair<bool, std::string> l_filePath = pickDestination("ProcSDF Node Space (*.procsdf)\0*.procsdf\0");
+	std::pair<bool, std::string> l_filePath = pickDestination(filter::PROCSDF.c_str());
 	if (l_filePath.first)
 	{
 		l_filePath.second = fixExtension(l_filePath.second, ".procsdf");
@@ -45,7 +46,7 @@ std::pair<bool, std::string> OS::pickSaveAsFile() {
 }
 
 std::pair<bool, std::string> OS::pickRenderToFile() {
-	std::pair<bool, std::string> l_filePath = pickDestination("ProcSDF Node Space (*.png)\0*.png\0");
+	std::pair<bool, std::string> l_filePath = pickDestination(filter::PNG.c_str());
 	if (l_filePath.first)
 	{
 		l_filePath.second = fixExtension(l_filePath.second, ".png");

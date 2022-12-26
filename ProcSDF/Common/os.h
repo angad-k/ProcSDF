@@ -8,7 +8,11 @@ class OS {
 private:
 	static std::string fixExtension(std::string p_str, std::string p_suffix)
 	{
-		if (p_str.compare(p_str.length() - p_suffix.length(), p_suffix.length(), p_suffix) != 0)
+		if (p_str.length() < p_suffix.length())
+		{
+			p_str += p_suffix;
+		}
+		else if (p_str.compare(p_str.length() - p_suffix.length(), p_suffix.length(), p_suffix) != 0)
 			p_str += p_suffix;
 		return p_str;
 	}

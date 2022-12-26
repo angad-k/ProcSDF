@@ -20,6 +20,9 @@ uniform bool DEBUG;
 uniform bool DEBUG_DEPTH;
 uniform bool DEBUG_MAX_TRACE;
 uniform bool DEBUG_STEPS_END;
+uniform vec3 DEBUG_DEPTH_COL;
+uniform vec3 DEBUG_MAX_TRACE_COL;
+uniform vec3 DEBUG_STEPS_END_COL;
 
 vec2 random_val = vec2(0.0);
 // END OF PREAMBLE

@@ -138,3 +138,8 @@ namespace imgui_colors {
 	const int OBJECT = PURPLE;
 	const int CUSTOM_NODE = CYAN;
 }
+
+namespace filter {
+	const std::string PNG = "PNG images (*.png)\0 * .png\0";
+	const std::string PROCSDF = "ProcSDF Node Space (*.procsdf)\0*.procsdf\0";
+}
