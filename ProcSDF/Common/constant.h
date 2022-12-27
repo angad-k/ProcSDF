@@ -86,6 +86,19 @@ namespace shader_generation {
 }
 
 namespace save_project {
+	namespace world_settings {
+		const std::string WORLD_SETTINGS = "worldSettings";
+		const std::string CAMERA_ORIGIN = "cameraOrigin";
+		const std::string CAMERA_FOCAL_LENGTH = "focalLength";
+		const std::string TOP_COLOR = "horizonTopColor";
+		const std::string BOTTOM_COLOR = "horizonBottomColor";
+	}
+	namespace render_settings {
+		const std::string RENDER_SETTINGS = "renderSettings";
+		const std::string RENDER_VALUES = "renderValues";
+		const std::string RENDER_DEBUG_VALUES = "renderDebugValues";
+		const std::string RENDER_DEBUG_COLORS = "renderDebugColor";
+	}
 	const std::string NODE_LINK = "nodeLink";
 	const std::string NODE_NAME = "nodeName";
 	const std::string INPUT_IDS = "inputIDs";
@@ -93,9 +106,7 @@ namespace save_project {
 	const std::string INPUT_FLOAT3 = "inputFloat3";
 	const std::string INPUT_FLOAT = "inputFloat";
 	const std::string PROCSDF_EXTENSION = ".procsdf";
-	const std::string CAMERA_SETTING = "cameraSetting";
-	const std::string CAMERA_ORIGIN = "cameraOrigin";
-	const std::string CAMERA_FOCAL_LENGTH = "focalLength";
+	
 	const std::string NODE_ID = "nodeID";
 	const std::string SDF_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomSDFs";
 }
