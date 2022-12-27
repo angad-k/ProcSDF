@@ -1,14 +1,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <LodePNG/lodepng.h>
 #include <string>
 #include <iostream>
 #include <fstream>
-
+#include <chrono>
+#pragma once
+#include "Common/logger.h"
+#include "GUI/NodeGraph.h"
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
 #include "Common/constant.h"
-#pragma once
-
+#include "Rendering/Materials/Material.h"
 Renderer::Renderer()
 {
 	float l_vertices[] = {
@@ -61,7 +64,11 @@ void Renderer::draw(float p_width, float p_height)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	float timeValue = glfwGetTime();
-
+	for (Material* l_material : NodeGraph::getSingleton()->getMaterials())
+	{
+		l_material->setUniforms();
+	}
+	setRenderUniforms();
 	glUniform3f(m_cameraOrigin, m_cameraOriginValue[0], m_cameraOriginValue[1], m_cameraOriginValue[2]);
 	glUniform2f(m_viewportSize, p_width, p_height);
 	glUniform1f(m_focalLength, m_focalLengthValue);
@@ -190,10 +197,72 @@ void Renderer::resizeRenderTexture(float p_width, float p_height)
 	m_cachedHeight = p_height;
 }
 
+void Renderer::exportImage(std::string p_fileName, int p_width, int p_height)
+{
+	std::vector<unsigned char> l_png;
+	std::vector<unsigned char> l_image = getRenderedImage(p_width, p_height);
+
+	int l_rowWidth = p_width * 4;
+	for (int i = 0; i < p_height/2; i++)
+	{
+		for (int j = 0; j < l_rowWidth; j++)
+		{
+			//unsigned char temp = l_image[i * l_rowWidth + j];
+			//l_image[i * l_rowWidth + j] = l_image[(p_height - i - 1) * l_rowWidth + j];
+			//l_image[(p_height - i - 1) * l_rowWidth + j] = temp;
+			std::swap(l_image[i * l_rowWidth + j], l_image[(p_height - i - 1) * l_rowWidth + j]);
+		}
+	}
+
+	unsigned error = lodepng::encode(l_png, l_image, p_width, p_height);
+
+	if (!error) lodepng::save_file(l_png, p_fileName);
+
+	// If there's an error, display it
+	if (error) std::cout << "encoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+}
+
+std::vector<unsigned char> Renderer::getRenderedImage(int p_width, int p_height)
+{
+	
+	auto start = std::chrono::high_resolution_clock::now();
+	// We first render the image with required size.
+	draw(p_width, p_height);
+	auto stop = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+	PRINT("Time taken for render : " + std::to_string(duration.count()) + " microseconds")
+
+	// Initializing the buffer.
+	std::vector <unsigned char> l_imageVec((double)p_width * p_height * 4, ' ');
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_renderTexture);
+
+	glGetTexImage(GL_TEXTURE_2D,
+		0,
+		GL_RGBA,
+		GL_UNSIGNED_BYTE,
+		l_imageVec.data());
+
+	return l_imageVec;
+}
+
 void Renderer::setUniformFloat(std::string p_uniform_name, float p_val)
 {
 	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
 	glUniform1f(l_uniform_location, p_val);
+}
+
+void Renderer::setUniformBool(std::string p_uniform_name, bool p_val)
+{
+	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
+	glUniform1i(l_uniform_location, p_val);
+}
+
+void Renderer::setUniformInt(std::string p_uniform_name, int p_val)
+{
+	unsigned int l_uniform_location = glGetUniformLocation(m_shaderProgram, p_uniform_name.c_str());
+	glUniform1i(l_uniform_location, p_val);
 }
 
 void Renderer::setUniformFloat2(std::string p_uniform_name, float p_x, float p_y)

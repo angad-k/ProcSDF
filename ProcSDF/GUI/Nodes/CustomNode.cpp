@@ -5,26 +5,15 @@
 #include <regex>
 #include <string>
 #include <vector>
-std::vector<std::string> CustomNode::tokenizeWithDelimiters(std::string p_string, std::string p_delimiter)
-{
-	std::regex l_reg(p_delimiter);
-
-	std::sregex_token_iterator l_iter(p_string.begin(), p_string.end(), l_reg, -1);
-	std::sregex_token_iterator l_end;
-
-	std::vector<std::string> l_tokens(l_iter, l_end);
-
-	return l_tokens;
-}
 
 CustomNode::CustomNode(std::string p_nodeName)
 {
 	std::string l_fileContent = NodeGraph::getSingleton()->getCustomNodeFileContentsfromNodeName(p_nodeName);
-	std::vector<std::string> l_lines = tokenizeWithDelimiters(l_fileContent, "\n");
+	std::vector<std::string> l_lines = custom::tokenizeWithDelimiters(l_fileContent, "\n");
 	m_titleColor = imgui_colors::CUSTOM_NODE;
 	for (std::string line : l_lines)
 	{
-		std::vector<std::string> l_tokens = tokenizeWithDelimiters(line, "\\s+");
+		std::vector<std::string> l_tokens = custom::tokenizeWithDelimiters(line, "\\s+");
 
 		if (l_tokens[0] == "//")
 		{
@@ -81,12 +70,12 @@ CustomNode::CustomNode(std::string p_nodeName)
 void CustomNode::AddCustomNodeAtFilePath(std::string p_filePath)
 {
 	std::string l_fileContent = OS::fetchFileContent(p_filePath);
-	std::vector<std::string> l_lines = tokenizeWithDelimiters(l_fileContent, "\n");
+	std::vector<std::string> l_lines = custom::tokenizeWithDelimiters(l_fileContent, "\n");
 	bool l_isMalformed = false;
 	std::string l_nodeName = "";
 	for (std::string line : l_lines)
 	{
-		std::vector<std::string> l_tokens = tokenizeWithDelimiters(line, "\\s+");
+		std::vector<std::string> l_tokens = custom::tokenizeWithDelimiters(line, "\\s+");
 
 		if (l_tokens[0] == "//")
 		{

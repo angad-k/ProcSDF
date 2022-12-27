@@ -5,10 +5,10 @@
 #include <set>
 #include <vector>
 #include <tuple>
-
+#pragma once
 #include "GUI/Nodes/Node.h"
 #include "GUI/Nodes/FinalNode.h"
-#pragma once
+class Material;
 class NodeGraph
 {
 private:
@@ -18,10 +18,22 @@ private:
 		Node* p_previousNonTransformNode = NULL);
 	std::map <int, Node*> m_allocatedIDs;
 	std::map <std::string, std::string> m_customNodeNameToContent;
+	std::map <std::string, std::string> m_customMaterialNameToContent;
 	bool m_dirty = false;
+	std::vector<Material*>m_materials;
+	std::map <int, Material*> m_allocatedMaterialIDs;
 public:
 	void initialize();
+	
 	int allocateID(Node* p_node);
+	int allocateMaterialID(Material* p_material);
+	void deallocateMaterialID(int p_ID);
+	void deleteMaterialAt(int p_pos);
+	void fixMaterials();
+	bool canDeleteMaterial()
+	{
+		return m_materials.size() > 1;
+	}
 	void setID(Node* p_node, int m_ID);
 	void deallocateID(int p_ID);
 	Node* getNode(int p_ID);
@@ -76,6 +88,35 @@ public:
 		}
 		return l_customNodeNames;
 	}
+
+	void setCustomMaterialFileContents(std::string p_materialName, std::string p_fileContents)
+	{
+		m_customMaterialNameToContent[p_materialName] = p_fileContents;
+	}
+	std::string getCustomMaterialFileContentsfromMaterialName(std::string p_materialName)
+	{
+		return m_customMaterialNameToContent[p_materialName];
+	}
+
+	std::vector<std::string> getCustomMaterialFileContents()
+	{
+		std::vector<std::string> l_customMaterialFileContents;
+		for (auto path_content : m_customMaterialNameToContent)
+		{
+			l_customMaterialFileContents.push_back(path_content.second);
+		}
+		return l_customMaterialFileContents;
+	}
+
+	std::vector<std::string> getCustomMaterialNames()
+	{
+		std::vector<std::string> l_customMaterialNames;
+		for (auto path_content : m_customMaterialNameToContent)
+		{
+			l_customMaterialNames.push_back(path_content.first);
+		}
+		return l_customMaterialNames;
+	}
 	
 	std::string getCompilationError()
 	{
@@ -103,6 +144,16 @@ public:
 	{
 		m_dirty = true;
 	}
+
+	std::vector<Material*> getMaterials();
+
+	void addDiffuse();
+	void addMetal();
+	void addDielectric();
+	void addLight();
+	void addMaterial(Material* p_material);
+
+	Material* getMaterialFromMaterialID(int p_id);
 
 	static NodeGraph* getSingleton() {
 		if (!s_nodeGraph)

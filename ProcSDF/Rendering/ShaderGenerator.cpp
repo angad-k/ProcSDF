@@ -4,9 +4,11 @@
 #include <algorithm>
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
+#include "GUI/Nodes/ObjectNode.h"
 #include "Common/constant.h"
 #include "GUI/NodeGraph.h"
 #include "Common/os.h"
+#include "Rendering/Materials/CustomMaterial.h"
 void ShaderGenerator::computeAndSetObjectCount() {
 	
 	int l_objectCount = 0;
@@ -36,6 +38,18 @@ void ShaderGenerator::computeUniforms()
 			m_uniformFloats.push_back(getUniformStringFromLabel(l_variableName, l_floatLabel));
 		}
 	}
+	for (Material* material : NodeGraph::getSingleton()->getMaterials())
+	{
+		for (std::string label : material->getVec3Uniforms())
+		{
+			m_uniformVec3.push_back(label);
+		}
+
+		for (std::string label : material->getFloatUniforms())
+		{
+			m_uniformFloats.push_back(label);
+		}
+	}
 }
 
 void ShaderGenerator::appendCustomFunctions(std::string &p_shaderString)
@@ -45,6 +59,49 @@ void ShaderGenerator::appendCustomFunctions(std::string &p_shaderString)
 	{
 		p_shaderString.append(l_fileContent);
 	}
+
+	std::vector<std::string> l_customMaterialFileContents = NodeGraph::getSingleton()->getCustomMaterialFileContents();
+	for (std::string l_fileContent : l_customMaterialFileContents)
+	{
+		p_shaderString.append(l_fileContent);
+	}
+}
+
+std::string ShaderGenerator::generateVec3StringFromFloatArray(float color[])
+{
+	std::string l_vec3 = shader_generation::VEC3;
+	for (int i = 0; i < 3; i++)
+	{
+		l_vec3.replace(l_vec3.find('$'), 1, std::to_string(color[i]));
+	}
+	return l_vec3;
+}
+
+std::string ShaderGenerator::generateGetColorFunction()
+{
+	std::string l_getColorFunction = shader_generation::get_color::FUNCTION_TEMPLATE;
+
+	std::string l_switchStatement = shader_generation::SWITCH_STATEMENT;
+
+	std::string l_getColorCases = "";
+
+	for (Node* node : NodeGraph::getSingleton()->m_nodes) {
+		if (node->m_isObjectNode) {
+			ObjectNode* l_node = (ObjectNode*)node;
+			std::string l_caseStatement = shader_generation::get_color::CASE_STATEMENT;
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(ShaderGenerator::m_nodeIDToObjectIDMap[node->m_ID]));
+			l_caseStatement.replace
+			(
+				l_caseStatement.find('$'),
+				1,
+				NodeGraph::getSingleton()->getMaterialFromMaterialID(l_node->getMaterialID())->getColorName()
+			);
+			l_getColorCases.append(l_caseStatement);
+		}
+	}
+	l_switchStatement.replace(l_switchStatement.find('$'), 1, l_getColorCases);
+	l_getColorFunction.replace(l_getColorFunction.find('$'), 1, l_switchStatement);
+	return l_getColorFunction;
 }
 
 void ShaderGenerator::generateAndSetShader() {
@@ -54,7 +111,6 @@ void ShaderGenerator::generateAndSetShader() {
 
 	std::string l_shaderString;
 	int l_index = 0;
-	
 	// Appends the shader header which includes a number of utility functions.
 	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 	// Appends all the uniform declarations.
@@ -63,8 +119,14 @@ void ShaderGenerator::generateAndSetShader() {
 	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 	// Appends all the user defined functions.
 	appendCustomFunctions(l_shaderString);
+	// Generates the getColor function.
+	l_shaderString.append(generateGetColorFunction());
+	// Generates the isLight function.
+	l_shaderString.append(generateIsLightFunction());
 	// Generates and appends the object distance functions.
 	l_shaderString.append(ShaderGenerator::generateObjectFunctions());
+	// Generates and appends the getDistanceFrom function.
+	l_shaderString.append(ShaderGenerator::generateGetDistanceFromFunction());
 	// Generates and appends the closest object info function.
 	l_shaderString.append(ShaderGenerator::generateClosestObjectInfoFunction());
 	// Generates and appends the calculate normal function.
@@ -74,6 +136,7 @@ void ShaderGenerator::generateAndSetShader() {
 	// Appends the raymarch and main function.
 	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
 
+	//std::cout << l_shaderString;
 	ShaderGenerator::setShader(l_shaderString);
 
 	m_shaderModified = true;
@@ -116,6 +179,37 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 	for (int i = 1; i <= ShaderGenerator::m_objectCount; i++) {
 		l_caseStatement = shader_generation::target_ray::CASE_STATEMENT;
 		l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(i));
+
+		ObjectNode* l_obj = (ObjectNode*)NodeGraph::getSingleton()->getNode(m_objectIDToNodeIDMap[i]);
+		Material* l_mat = NodeGraph::getSingleton()->getMaterialFromMaterialID(l_obj->getMaterialID());
+		if (l_mat->m_materialType == material_type::METAL)
+		{
+			std::string l_mettalic_scatter = shader_generation::scatter_calls::METTALIC;
+			l_mettalic_scatter = l_mettalic_scatter.replace(l_mettalic_scatter.find('$'), 1, l_mat->get_params_string());
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_mettalic_scatter);
+		}
+		else if (l_mat->m_materialType == material_type::DIFFUSE)
+		{
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, shader_generation::scatter_calls::DIFFUSE);
+		}
+		else if (l_mat->m_materialType == material_type::LIGHT)
+		{
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, shader_generation::scatter_calls::LIGHT);
+		}
+		else if (l_mat->m_materialType == material_type::DIELECTRIC)
+		{
+			std::string l_dielectric_scatter = shader_generation::scatter_calls::DIELECTRIC;
+			l_dielectric_scatter = l_dielectric_scatter.replace(l_dielectric_scatter.find('$'), 1, l_mat->get_params_string());
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_dielectric_scatter);
+		}
+		else if (l_mat->m_materialType == material_type::CUSTOM)
+		{
+			CustomMaterial* l_cmat = (CustomMaterial*)l_mat;
+			std::string l_custom_scatter = shader_generation::scatter_calls::CUSTOM;
+			l_custom_scatter = l_custom_scatter.replace(l_custom_scatter.find('$'), 1, l_cmat->getCustomName());
+			l_custom_scatter = l_custom_scatter.replace(l_custom_scatter.find('$'), 1, l_mat->get_params_string(true));
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, l_custom_scatter);
+		}
 		l_switchContent.append(l_caseStatement);
 	}
 
@@ -124,6 +218,61 @@ std::string ShaderGenerator::generateGetTargetRayFunction() {
 
 	return l_targetRayFunction;
 
+}
+
+std::string ShaderGenerator::generateGetDistanceFromFunction()
+{
+	std::string l_generateGetDistanceFromFunction = "\n";
+	l_generateGetDistanceFromFunction.append(shader_generation::get_distance_from::FUNCTION_TEMPLATE);
+	l_generateGetDistanceFromFunction.append("\n");
+
+	std::string l_switchStatement = shader_generation::SWITCH_STATEMENT, l_switchContent, l_caseStatement;
+
+	for (int i = 1; i <= ShaderGenerator::m_objectCount; i++)
+	{
+		l_caseStatement = shader_generation::get_distance_from::CASE_STATEMENT;
+		for (int j = 0; j < shader_generation::get_distance_from::FREQUENCY; j++) {
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(i));
+		}
+
+		l_switchContent.append(l_caseStatement);
+	}
+
+	l_switchStatement.replace(l_switchStatement.find('$'), 1, l_switchContent);
+	l_generateGetDistanceFromFunction.replace(l_generateGetDistanceFromFunction.find('$'), 1, l_switchStatement);
+
+	return l_generateGetDistanceFromFunction;
+}
+
+std::string ShaderGenerator::generateIsLightFunction()
+{
+	std::string l_isLightFunction = "\n";
+	l_isLightFunction.append(shader_generation::is_light::FUNCTION_TEMPLATE);
+	l_isLightFunction.append("\n");
+
+	std::string l_switchStatement = shader_generation::SWITCH_STATEMENT, l_switchContent, l_caseStatement;
+
+	for (int i = 1; i <= ShaderGenerator::m_objectCount; i++)
+	{
+		ObjectNode* l_obj = (ObjectNode*)NodeGraph::getSingleton()->getNode(m_objectIDToNodeIDMap[i]);
+		Material* l_mat = NodeGraph::getSingleton()->getMaterialFromMaterialID(l_obj->getMaterialID());
+
+		l_caseStatement = shader_generation::is_light::CASE_STATEMENT;
+		l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(i));
+		if (l_mat->m_materialType == material_type::LIGHT)
+		{
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, "true");
+		}
+		else
+		{
+			l_caseStatement.replace(l_caseStatement.find('$'), 1, "false");
+		}
+		l_switchContent.append(l_caseStatement);
+	}
+
+	l_switchStatement.replace(l_switchStatement.find('$'), 1, l_switchContent);
+	l_isLightFunction.replace(l_isLightFunction.find('$'), 1, l_switchStatement);
+	return l_isLightFunction;
 }
 
 std::string ShaderGenerator::generateCalculateNormalFunction() {
@@ -267,6 +416,10 @@ std::string ShaderGenerator::getUniformStringFromLabel(std::string p_variable_na
 	while (l_uniformString.find(' ') != std::string::npos)
 	{
 		l_uniformString.replace(l_uniformString.find(' '), 1, "_");
+	}
+	while (l_uniformString.find('#') != std::string::npos)
+	{
+		l_uniformString.replace(l_uniformString.find('#'), 1, "_");
 	}
 	return l_uniformString;
 }

@@ -22,6 +22,7 @@ namespace shader_generation {
 	const std::string RETURN = "return $;\n";
 	const std::string SWITCH_STATEMENT = "\nswitch(object_index)\n{\n$\n}\n";
 	const std::string FLOAT = "float ";
+	const std::string VEC3 = "vec3($, $, $)";
 	namespace object_function {
 		const std::string FUNCTION_TEMPLATE = "\nfloat $(vec3 position)\n{\n#\n}\n";
 		const std::string INITIALIZATION = "\nmat3 rotation_transform_x = mat3(1.0);\nmat3 rotation_transform_y = mat3(1.0);\nmat3 rotation_transform_z = mat3(1.0);\nvec3 position_dup = position;\n";
@@ -53,10 +54,34 @@ namespace shader_generation {
 		const std::string CASE_STATEMENT = "case $:\ng_x = object_$(position + small_step.xyy) - object_$(position - small_step.xyy);\ng_y = object_$(position + small_step.yxy) - object_$(position - small_step.yxy);\ng_z = object_$(position + small_step.yyx) - object_$(position - small_step.yyx);\nnormal = normalize(vec3(g_x, g_y, g_z));\nbreak;\n";
 		const int FREQUENCY = 7;
 	}
+
+	namespace get_distance_from {
+		const std::string FUNCTION_TEMPLATE = "\nfloat get_distance_from(vec3 position, int object_index)\n{\nfloat d = 0.0;\n$\nreturn d;\n}\n";
+		const std::string CASE_STATEMENT = "case $:\nd = object_$(position);\nbreak;\n";
+		const int FREQUENCY = 2;
+	}
+
+	namespace is_light {
+		const std::string FUNCTION_TEMPLATE = "\nbool is_light(int object_index)\n{\nbool res = false;\n$\nreturn res;\n}\n";
+		const std::string CASE_STATEMENT = "case $:\nres = $;\nbreak;\n";
+	}
 	
 	namespace target_ray {
-		const std::string FUNCTION_TEMPLATE = "\nvec3 get_target_ray(vec3 position, int object_index, vec3 normal)\n{\nvec3 target = vec3(0.0, 0.0, 0.0);\n$\nreturn target;\n}\n";
-		const std::string CASE_STATEMENT = "\ncase $:\ntarget = diffuse_scatter(position, normal);\nbreak;\n";
+		const std::string FUNCTION_TEMPLATE = "\scatter_info get_target_ray(vec3 position, int object_index, vec3 normal, vec3 r_in, bool is_front_face)\n{\nscatter_info target = scatter_info(vec3(0.0,0.0,0.0), true, vec3(1.0, 1.0, 1.0));\n$\nreturn target;\n}\n";
+		const std::string CASE_STATEMENT = "\ncase $:\ntarget = $;\nbreak;\n";
+	}
+
+	namespace scatter_calls {
+		const std::string DIFFUSE = "diffuse_scatter(position, normal, object_index)";
+		const std::string METTALIC = "metallic_scatter(position, normal, object_index, r_in, $)";
+		const std::string DIELECTRIC = "dielectric_scatter(position, normal, object_index, r_in, is_front_face, $)";
+		const std::string CUSTOM = "$_scatter(position, normal, r_in, is_front_face, $)";
+		const std::string LIGHT = "scatter_info(vec3(0.0, 0.0, 0.0), true, vec3(0.0, 0.0, 0.0))"; //light's scatter will never be used.
+	}
+
+	namespace get_color {
+		const std::string FUNCTION_TEMPLATE = "\nvec3 get_color(int object_index)\n{\n$\nreturn vec3(1.0, 0, 0.0);\n}\n";
+		const std::string CASE_STATEMENT = "\ncase $:\nreturn $;\nbreak;\n";
 	}
 }
 
@@ -89,7 +114,16 @@ namespace node_name {
 	const std::string ROTATIONZ_NODE = "Rotation_Z";
 }
 
+namespace material_type {
+	const std::string DIFFUSE = "Diffuse";
+	const std::string METAL = "Metal";
+	const std::string DIELECTRIC = "Dielectric";
+	const std::string CUSTOM = "Custom";
+	const std::string LIGHT = "Light";
+}
+
 namespace imgui_colors {
+	const int BLACK = IM_COL32(0, 0, 0, 255);
 	const int RED = IM_COL32(255, 50, 50, 255);
 	const int GREEN = IM_COL32(80, 190, 50, 255);
 	const int BLUE = IM_COL32(50, 50, 255, 255);
@@ -103,4 +137,9 @@ namespace imgui_colors {
 	const int OPERATION = BLUE;
 	const int OBJECT = PURPLE;
 	const int CUSTOM_NODE = CYAN;
+}
+
+namespace filter {
+	const std::string PNG = "PNG images (*.png)\0 * .png\0";
+	const std::string PROCSDF = "ProcSDF Node Space (*.procsdf)\0*.procsdf\0";
 }

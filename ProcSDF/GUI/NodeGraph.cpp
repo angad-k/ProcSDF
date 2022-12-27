@@ -7,11 +7,16 @@
 #include "GUI/Nodes/ObjectNode.h"
 #include "Common/logger.h"
 #include "Rendering/ShaderGenerator.h"
+#include "Rendering/Materials/Metal.h"
+#include "Rendering/Materials/Diffuse.h"
+#include "Rendering/Materials/Dielectric.h"
+#include "Rendering/Materials/Light.h"
 #pragma once
 
 void NodeGraph::initialize()
 {
 	m_errorInCompilation = false;
+	addDiffuse();
 	SphereNode* l_sn = new SphereNode();
 	l_sn->m_inputFloats[0] = 2.0;
 	FinalNode* l_fn = new FinalNode();
@@ -48,6 +53,18 @@ int NodeGraph::allocateID(Node* p_node)
 	// TO DO : handle too many allocations
 }
 
+int NodeGraph::allocateMaterialID(Material* p_material)
+{
+	for (int i = 0; i < INT_MAX; i++)
+	{
+		if (m_allocatedMaterialIDs.find(i) == m_allocatedMaterialIDs.end())
+		{
+			m_allocatedMaterialIDs[i] = p_material;
+			return i;
+		}
+	}
+}
+
 void NodeGraph::setID(Node* p_node, int p_ID)
 {
 	m_allocatedIDs[p_ID] = p_node;
@@ -59,6 +76,26 @@ void NodeGraph::deallocateID(int p_ID)
 	{
 		m_allocatedIDs.erase(p_ID);
 	}
+}
+
+void NodeGraph::deallocateMaterialID(int p_ID)
+{
+	if (m_allocatedMaterialIDs.find(p_ID) != m_allocatedMaterialIDs.end())
+	{
+		m_allocatedMaterialIDs.erase(p_ID);
+	}
+}
+
+void NodeGraph::deleteMaterialAt(int p_pos)
+{
+	if (m_materials.size() <= 1)
+	{
+		ERR("Cannot remove all materials. Add another material before deleting this.");
+		return;
+	}
+	Material* l_mat = m_materials[p_pos];
+	m_materials.erase(std::find(m_materials.begin(), m_materials.end(), l_mat));
+	delete(l_mat);
 }
 
 Node* NodeGraph::getNode(int p_ID)
@@ -339,4 +376,59 @@ void NodeGraph::recompileNodeGraph()
 	logger::log("\n");
 
 	ShaderGenerator::getSingleton()->generateAndSetShader();
+}
+
+std::vector<Material*> NodeGraph::getMaterials()
+{
+	return m_materials;
+}
+
+void NodeGraph::fixMaterials()
+{
+	for (Node* node : m_nodes)
+	{
+		if (node->m_isObjectNode)
+		{
+			ObjectNode* l_obj = (ObjectNode*)node;
+			int l_matID = l_obj->getMaterialID();
+			if (!m_allocatedMaterialIDs[l_matID])
+			{
+				l_obj->setMaterialID(m_materials[0]->getID());
+			}
+		}
+	}
+}
+
+void NodeGraph::addDiffuse()
+{
+	Material* l_newMaterial = new Diffuse();
+	m_materials.push_back(l_newMaterial);
+}
+
+void NodeGraph::addMetal()
+{
+	Material* l_newMaterial = new Metal();
+	m_materials.push_back(l_newMaterial);
+}
+
+void NodeGraph::addDielectric()
+{
+	Material* l_newMaterial = new Dielectric();
+	m_materials.push_back(l_newMaterial);
+}
+
+void NodeGraph::addLight()
+{
+	Material* l_newMaterial = new Light();
+	m_materials.push_back(l_newMaterial);
+}
+
+void NodeGraph::addMaterial(Material* p_material)
+{
+	m_materials.push_back(p_material);
+}
+
+Material* NodeGraph::getMaterialFromMaterialID(int p_id)
+{
+	return m_allocatedMaterialIDs[p_id];
 }

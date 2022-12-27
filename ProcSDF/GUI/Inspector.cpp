@@ -8,6 +8,7 @@
 #include "GUI/Nodes/CustomNode.h"
 #include "GuiUtilities.h"
 #include "Common/os.h"
+#include "Rendering/Materials/CustomMaterial.h"
 
 void Inspector::initialize()
 {
@@ -28,37 +29,57 @@ void Inspector::draw()
 
 	Tab l_oldTab = m_openedTab;
 
-	if (l_oldTab == Tab::CAMERA_SETTINGS)
+	if (l_oldTab == Tab::WORLD_SETTINGS)
 	{
 		ImGui::BeginDisabled();
 	}
-	if (ImGui::Button("Camera Settings"))
-		m_openedTab = Tab::CAMERA_SETTINGS;
-	ImGui::SameLine();
-	if (l_oldTab == Tab::CAMERA_SETTINGS)
+	if (ImGui::Button("World Settings"))
+	{
+		m_openedTab = Tab::WORLD_SETTINGS;
+	}
+	if (l_oldTab == Tab::WORLD_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
+	ImGui::SameLine();
 
 	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Rendering Settings"))
+	{
 		m_openedTab = Tab::RENDERING_SETTINGS;
-	ImGui::SameLine();
+	}
 	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
+	ImGui::SameLine();
 
 	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
 	{
 		ImGui::BeginDisabled();
 	}
 	if (ImGui::Button("Node graph settings"))
+	{
 		m_openedTab = Tab::NODEGRAPH_SETTINGS;
+	}
 	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
+	{
+		ImGui::EndDisabled();
+	}
+	ImGui::SameLine();
+
+	if (l_oldTab == Tab::MATERIAL_SETTINGS)
+	{
+		ImGui::BeginDisabled();
+	}
+	if (ImGui::Button("Material settings"))
+	{
+		m_openedTab = Tab::MATERIAL_SETTINGS;
+	}
+	if (l_oldTab == Tab::MATERIAL_SETTINGS)
 	{
 		ImGui::EndDisabled();
 	}
@@ -67,8 +88,8 @@ void Inspector::draw()
 
 	switch (m_openedTab)
 	{
-	case Tab::CAMERA_SETTINGS:
-		drawCameraSettings();
+	case Tab::WORLD_SETTINGS:
+		drawWorldSettings();
 		break;
 	case Tab::RENDERING_SETTINGS:
 		drawRenderingSettings();
@@ -76,22 +97,149 @@ void Inspector::draw()
 	case Tab::NODEGRAPH_SETTINGS:
 		drawNodeGraphSettings();
 		break;
+	case Tab::MATERIAL_SETTINGS:
+		drawMaterialSettings();
+		break;
 	}
-
+	
 	ImGui::End();
 }
 
-void Inspector::drawCameraSettings()
+void Inspector::drawWorldSettings()
 {
 	float p_cameraOrigin[3] = { m_renderer->getCameraOrigin()[0], m_renderer->getCameraOrigin()[1], m_renderer->getCameraOrigin()[2] };
 	ImGui::DragFloat3("Camera Origin", p_cameraOrigin);
 	m_renderer->setCameraOrigin(p_cameraOrigin);
 	ImGui::DragFloat("Focal Length", m_renderer->getFocalLength());
+	ImGui::Separator();
+	ImGui::ColorEdit3("Horizon Top Color", m_renderer->m_horizon_top_color);
+	ImGui::ColorEdit3("Horizon Bottom Color", m_renderer->m_horizon_bottom_color);
 }
 
 void Inspector::drawRenderingSettings()
 {
-	ImGui::Text("Something will come here");
+	if (ImGui::TreeNode("Rendering parameters"))
+	{
+		ImGui::Indent();
+		std::vector<std::string> l_render_uniforms = Renderer::getSingleton()->getRenderUniforms();
+		for (int i = 0; i < l_render_uniforms.size(); i++)
+		{
+			ImGui::DragInt(l_render_uniforms[i].c_str(), &Renderer::getSingleton()->m_render_uniforms_values[i]);
+		}
+		ImGui::Unindent();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Debug Settings"))
+	{
+		ImGui::Indent();
+		std::vector<std::string> l_render_uniforms_debug = Renderer::getSingleton()->getRenderUniformsDebug();
+		for (int i = 0; i < l_render_uniforms_debug.size(); i++)
+		{
+			bool value = Renderer::getSingleton()->m_render_uniforms_debug_values[i];
+			if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+			{
+				ImGui::BeginDisabled();
+			}
+			ImGui::Checkbox(l_render_uniforms_debug[i].c_str(), &value);
+			if (i > 0) {
+				std::string l_colorString = l_render_uniforms_debug[i] + "_COL";
+				float* l_color = Renderer::getSingleton()->m_render_uniform_debug_cols[i-1].data();
+				ImGui::ColorEdit3(l_colorString.c_str(), l_color);
+			}
+			if (i > 0 && !Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+			{
+				ImGui::EndDisabled();
+			}
+			Renderer::getSingleton()->m_render_uniforms_debug_values[i] = value;
+		}
+		ImGui::Unindent();
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("Image Export"))
+	{
+		ImGui::Indent();
+
+		ImGui::DragInt2("Render Size", m_renderSize);
+
+		if (ImGui::Button("Export"))
+		{
+			std::pair<bool, std::string> l_renderTo = OS::pickRenderToFile();
+			if (l_renderTo.first)
+			{
+				Renderer::getSingleton()->exportImage(l_renderTo.second, m_renderSize[0], m_renderSize[1]);
+			}
+		}
+
+		ImGui::Unindent();
+		ImGui::TreePop();
+	}
+	
+}
+
+void Inspector::drawMaterialSettings()
+{
+	std::vector<Material*> l_materials = NodeGraph::getSingleton()->getMaterials();
+	for (int i = 0; i < l_materials.size(); i++)
+	{
+		bool l_del = false;
+		ImGui::PushID(i);
+		l_materials[i]->draw(l_del);
+		ImGui::PopID();
+
+		if (l_del)
+		{
+			NodeGraph::getSingleton()->deleteMaterialAt(i);
+			NodeGraph::getSingleton()->fixMaterials();
+		}
+	}
+	if (ImGui::Button("Add Diffuse Material"))
+	{
+		NodeGraph::getSingleton()->addDiffuse();
+	}
+	if (ImGui::Button("Add Metal Material"))
+	{
+		NodeGraph::getSingleton()->addMetal();
+	}
+	if (ImGui::Button("Add Dielectric Material"))
+	{
+		NodeGraph::getSingleton()->addDielectric();
+	}
+	if (ImGui::Button("Add Light(Emissive) Material"))
+	{
+		NodeGraph::getSingleton()->addLight();
+	}
+	ImGui::Separator();
+	if (ImGui::Button("Add custom material"))
+	{
+		std::pair<bool, std::string> l_pickFileResult = OS::pickFile();
+		if (l_pickFileResult.first)
+		{
+			std::string l_filePath = l_pickFileResult.second;
+			CustomMaterial::AddCustomMaterialAtFilePath(l_filePath);
+		}
+	}
+	if (ImGui::TreeNode("Add Custom Materials"))
+	{
+		ImGui::Indent();
+		std::vector <std::string> l_customMaterialNames = NodeGraph::getSingleton()->getCustomMaterialNames();
+		for (int i = 0; i < l_customMaterialNames.size(); i++)
+		{
+			if (ImGui::Button(l_customMaterialNames[i].c_str()))
+			{
+				CustomMaterial* l_customMaterial = new CustomMaterial(l_customMaterialNames[i]);
+				if (l_customMaterial->isMalformed())
+				{
+					delete(l_customMaterial);
+				}
+				else
+				{
+					NodeGraph::getSingleton()->addMaterial(l_customMaterial);
+				}
+			}
+		}
+		ImGui::Unindent();
+		ImGui::TreePop();
+	}
 }
 
 void Inspector::drawNodeGraphSettings()
