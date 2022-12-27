@@ -97,6 +97,7 @@ namespace save_project {
 	const std::string CAMERA_ORIGIN = "cameraOrigin";
 	const std::string CAMERA_FOCAL_LENGTH = "focalLength";
 	const std::string NODE_ID = "nodeID";
+	const std::string SDF_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomSDFs";
 }
 
 namespace node_name {
