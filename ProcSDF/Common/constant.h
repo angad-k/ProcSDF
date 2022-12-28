@@ -118,6 +118,7 @@ namespace save_project {
 		const std::string MATERIAL_TYPE = "materialType";
 		const std::string INPUT_FLOAT3 = "inputFloat3";
 		const std::string INPUT_FLOAT = "inputFloat";
+		const std::string MATERIAL_ID = "materialID";
 	}
 	
 	const std::string PROCSDF_EXTENSION = ".procsdf";

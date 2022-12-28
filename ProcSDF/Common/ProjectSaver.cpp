@@ -179,8 +179,19 @@ void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom,
 void ProjectSaver::saveMaterialSettings(Json::Value& p_value) {
 
 	ProjectSaver::saveMaterialList(p_value);
+	ProjectSaver::saveMaterialIDs(p_value[save_project::material_settings::MATERIAL_ID]);
 }
 
+void ProjectSaver::saveMaterialIDs(Json::Value& p_value) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	int l_index = 0;
+	for (Material* material : l_nodeGraph->getMaterials()) {
+		p_value[l_index] = material->getID();
+		l_index++;
+	}
+}
 void ProjectSaver::saveMaterialList(Json::Value& p_value) {
 
 

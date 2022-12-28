@@ -3,7 +3,8 @@
       "0" : {
          "color" : [ 1.0, 0.0, 0.0 ],
          "materialType" : "Diffuse"
-      }
+      },
+      "materialID" : [ 0 ]
    },
    "nodeGraphSettings" : {
       "0" : {
