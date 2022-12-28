@@ -109,6 +109,15 @@ namespace save_project {
 		const std::string INPUT_FLOAT3 = "inputFloat3";
 		const std::string INPUT_FLOAT = "inputFloat";
 		const std::string FILE_NAME = "fileName";
+		const std::string MATERIAL_ID = "materialID";
+	}
+
+	namespace material_settings {
+		const std::string MATERIAL_SETTINGS = "materialSettings";
+		const std::string COLOR = "color";
+		const std::string MATERIAL_TYPE = "materialType";
+		const std::string INPUT_FLOAT3 = "inputFloat3";
+		const std::string INPUT_FLOAT = "inputFloat";
 	}
 	
 	const std::string PROCSDF_EXTENSION = ".procsdf";

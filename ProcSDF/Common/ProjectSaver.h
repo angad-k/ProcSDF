@@ -1,6 +1,7 @@
 #pragma once
 #include<json/json.h>
 #include "GUI/Nodes/Node.h"
+#include "Rendering/Materials/Material.h"
 class ProjectSaver {
 private:
 	static Node* getNodeFromNodeName(std::string p_nodeName, int p_ID);
@@ -10,8 +11,12 @@ private:
 	static void saveNodeIDs(Json::Value& p_value);
 	static void saveNodeLinks(Json::Value& p_value);
 	static void saveNodeList(Json::Value& p_value);
-	static void saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom, std::string p_filePath);
+	static void saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom, std::string p_filePath, int p_materialID);
+	static void saveMaterialSettings(Json::Value& p_value);
+	static void saveMaterialList(Json::Value& p_value);
+	static void saveMaterial(Json::Value& p_value, Material* p_material);
 	static std::string getFileNameFromFilePath(std::string p_filePath);
+	static bool saveProjectToFile(Json::Value& p_value);
 public:
 	static bool saveProject();
 	static bool loadProject();

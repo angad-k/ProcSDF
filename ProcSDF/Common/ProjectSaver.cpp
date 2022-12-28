@@ -9,6 +9,7 @@
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/TransformNodes.h"
+#include "Rendering/Materials/Material.h"
 
 bool ProjectSaver::saveProject() {
 	
@@ -22,68 +23,21 @@ bool ProjectSaver::saveProject() {
 
 	ProjectSaver::saveNodeGraphSettings(l_jsonValue[save_project::node_graph_settings::NODE_GRAPH_SETTINGS]);
 
-	/*int l_index = 0;
-	for (std::pair<int, int> link : l_nodeGraph->m_links) {
-		l_jsonValue[save_project::NODE_LINK][l_index][0] = link.first;
-		l_jsonValue[save_project::NODE_LINK][l_index][1] = link.second;
-		l_index++;
-	}
+	ProjectSaver::saveMaterialSettings(l_jsonValue[save_project::material_settings::MATERIAL_SETTINGS]);
 
-	// save camera details
+	bool l_status = ProjectSaver::saveProjectToFile(l_jsonValue);
 
-	for (int i = 0; i < 3; i++) {
-		l_jsonValue[save_project::CAMERA_SETTING][save_project::CAMERA_ORIGIN][i] = l_renderer->getCameraOrigin()[i];
-	}
+	return l_status;
+}
 
-	l_jsonValue[save_project::CAMERA_SETTING][save_project::CAMERA_FOCAL_LENGTH] = *(l_renderer->getFocalLength());
-
-	// save minimal details for each node
-	/*
-	  "$(m_ID) : {
-	   "nodeName" : $(m_nodeName),
-	   "inputIDs" : $(m_inputIDs),
-	   "outputIDS": $(m_outputIDs),
-	   "inputFloat3" : $(m_inputFloat3),
-	   "inputFloat" : $(m_inputFloat)
-	   "filePath" : $(filePath) - if node is a custom Node
-	  }
-	*/
-
-	/*
-	l_index = 0;
-	for (Node* nd : l_nodeGraph->m_nodes) {
-		
-		l_jsonValue[std::to_string(nd->m_ID)][save_project::NODE_NAME] = nd->m_nodeName;
-		l_jsonValue[save_project::NODE_ID][l_index] = nd->m_ID;
-
-		for (int i = 0; i < nd->m_inputIDs.size(); i++) {
-			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_IDS][i] = nd->m_inputIDs[i];
-		}
-
-		for (int i = 0; i < nd->m_outputIDs.size(); i++) {
-			l_jsonValue[std::to_string(nd->m_ID)][save_project::OUTPUT_IDS][i] = nd->m_outputIDs[i];
-		}
-
-		for (int i = 0; i < nd->m_inputFloat3.size(); i++) {
-			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_FLOAT3][i][0] = nd->m_inputFloat3[i][0];
-			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_FLOAT3][i][1] = nd->m_inputFloat3[i][1];
-			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_FLOAT3][i][2] = nd->m_inputFloat3[i][2];
-		}
-
-		for (int i = 0; i < nd->m_inputFloats.size(); i++) {
-			l_jsonValue[std::to_string(nd->m_ID)][save_project::INPUT_FLOAT][i] = nd->m_inputFloats[i];
-		}
-
-		l_index++;
-
-	}
-	*/
+bool ProjectSaver::saveProjectToFile(Json::Value& p_value) {
+	
 	Json::StyledWriter l_styledWriter;
 
 	std::pair<bool, std::string> l_filePathInfo = OS::pickSaveAsFile();
-	
-	if(l_filePathInfo.first) {
-	    bool status = OS::saveFileContent(l_filePathInfo.second, std::string(l_styledWriter.write(l_jsonValue)));
+
+	if (l_filePathInfo.first) {
+		bool status = OS::saveFileContent(l_filePathInfo.second, std::string(l_styledWriter.write(p_value)));
 		return status;
 	}
 
@@ -154,7 +108,28 @@ void ProjectSaver::saveNodeLinks(Json::Value& p_value) {
 
 void ProjectSaver::saveNodeList(Json::Value& p_value) {
 
+	// save minimal details for each node
+	/*
+	  "$(m_ID) : {
+	   "nodeName" : $(m_nodeName),
+	   "inputIDs" : $(m_inputIDs),
+	   "outputIDS": $(m_outputIDs),
+	   "inputFloat3" : $(m_inputFloat3),
+	   "inputFloat" : $(m_inputFloat)
+	   "filePath" : $(filePath) - if node is a custom Node
+	  }
+	*/
+	
+	std::map<int, int> l_nodeIDToMaterialID;
+
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	for (Node* node : l_nodeGraph->m_nodes) {
+		if (node->m_isObjectNode) {
+			ObjectNode* l_objectNode = (ObjectNode*)node;
+			l_nodeIDToMaterialID[l_objectNode->m_ID] = l_objectNode->getMaterialID();
+		}
+	}
 
 	for (Node* node : l_nodeGraph->m_nodes) {
 		
@@ -165,12 +140,12 @@ void ProjectSaver::saveNodeList(Json::Value& p_value) {
 			l_isCustom = true;
 		}
 
-		ProjectSaver::saveNode(p_value[std::to_string(node->m_ID)], node, l_isCustom, l_filePath);
+		ProjectSaver::saveNode(p_value[std::to_string(node->m_ID)], node, l_isCustom, l_filePath, l_nodeIDToMaterialID[node->m_ID]);
 	}
 
 }
 
-void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom, std::string p_filePath) {
+void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom, std::string p_filePath, int p_materialID) {
 
 	p_value[save_project::node_graph_settings::NODE_NAME] = p_node->m_nodeName;
 
@@ -195,6 +170,54 @@ void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom,
 	if (p_isCustom) {
 		p_value[save_project::node_graph_settings::FILE_NAME] = ProjectSaver::getFileNameFromFilePath(p_filePath);
 	}
+
+	if (p_node->m_isObjectNode) {
+		p_value[save_project::node_graph_settings::MATERIAL_ID] = std::to_string(p_materialID);
+	}
+}
+
+void ProjectSaver::saveMaterialSettings(Json::Value& p_value) {
+
+	ProjectSaver::saveMaterialList(p_value);
+}
+
+void ProjectSaver::saveMaterialList(Json::Value& p_value) {
+
+
+	/*
+	   Save minimal Material info
+	   {
+		 "color" : [r,g,b],
+		 "inputFloats" : [],
+		 "inputFloat3s" : [[],[]],
+		 "materialType" : $(type)
+	   }
+	*/
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	for (Material* material : l_nodeGraph->getMaterials()) {
+		ProjectSaver::saveMaterial(p_value[std::to_string(material->getID())], material);
+	}
+}
+
+void ProjectSaver::saveMaterial(Json::Value& p_value, Material* p_material) {
+
+	p_value[save_project::material_settings::MATERIAL_TYPE] = p_material->m_materialType;
+	
+	for (int i = 0; i < 3; i++) {
+		p_value[save_project::material_settings::COLOR][i] = p_material->getColor()[i];
+	}
+
+	for (int i = 0; i < p_material->getInputFloats().size(); i++) {
+		p_value[save_project::material_settings::INPUT_FLOAT][i] = p_material->getInputFloats()[i];
+	}
+
+	for (int i = 0; i < p_material->getInputFloat3s().size(); i++) {
+		for (int j = 0; j < 3; j++) {
+			p_value[save_project::material_settings::INPUT_FLOAT3][i][j] = p_material->getInputFloat3s()[i][j];
+		}
+	}
+
+
 }
 
 std::string ProjectSaver::getFileNameFromFilePath(std::string p_filePath) {

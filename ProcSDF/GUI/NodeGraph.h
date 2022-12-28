@@ -35,7 +35,8 @@ public:
 	{
 		return m_materials.size() > 1;
 	}
-	void setID(Node* p_node, int m_ID);
+	void setID(Node* p_node, int p_ID);
+	void setMaterialID(Material* p_material, int p_ID);
 	void deallocateID(int p_ID);
 	Node* getNode(int p_ID);
 	void deleteNode(int p_ID);

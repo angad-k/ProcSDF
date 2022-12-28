@@ -37,6 +37,16 @@ public:
 		return "color_" + std::to_string(m_ID);
 	}
 
+	std::vector<float> getInputFloats()
+	{
+		return m_inputFloats;
+	}
+
+	std::vector<std::vector<float>> getInputFloat3s()
+	{
+		return m_inputFloat3s;
+	}
+
 	std::vector<std::string> getVec3Uniforms(bool p_includeColors = true)
 	{
 		std::vector<std::string> l_vec3Uniforms;
@@ -69,6 +79,12 @@ public:
 	Material()
 	{
 		m_ID = NodeGraph::getSingleton()->allocateMaterialID(this);
+		m_name = "Material#" + std::to_string(m_ID);
+	}
+
+	Material(int p_ID) 
+	{
+		m_ID = p_ID;
 		m_name = "Material#" + std::to_string(m_ID);
 	}
 

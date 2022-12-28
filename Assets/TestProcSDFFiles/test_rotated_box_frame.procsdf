@@ -3,13 +3,27 @@
       "0" : {
          "color" : [ 1.0, 0.0, 0.0 ],
          "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.79607844352722168, 0.15686275064945221, 0.21176470816135406 ],
+         "inputFloat" : [ 0.74000000953674316, 0.090000003576278687 ],
+         "materialType" : "Dielectric"
       }
    },
    "nodeGraphSettings" : {
       "0" : {
-         "inputFloat" : [ 2.0 ],
-         "nodeName" : "Sphere",
+         "inputFloat" : [ 0.30000001192092896 ],
+         "inputFloat3" : [
+            [ 3.0, 3.0, 3.0 ]
+         ],
+         "nodeName" : "BoxFrame",
          "outputIDS" : [ 1 ]
+      },
+      "10" : {
+         "inputFloat" : [ 46.0 ],
+         "inputIDs" : [ 11 ],
+         "nodeName" : "Rotation_Y",
+         "outputIDS" : [ 12 ]
       },
       "2" : {
          "inputIDs" : [ 3 ],
@@ -17,14 +31,22 @@
       },
       "4" : {
          "inputIDs" : [ 5 ],
-         "materialID" : "0",
+         "materialID" : "1",
          "nodeName" : "Object node",
          "outputIDS" : [ 6 ]
       },
-      "nodeID" : [ 0, 2, 4 ],
+      "7" : {
+         "inputFloat" : [ 49.0 ],
+         "inputIDs" : [ 8 ],
+         "nodeName" : "Rotation_Z",
+         "outputIDS" : [ 9 ]
+      },
+      "nodeID" : [ 2, 4, 0, 7, 10 ],
       "nodeLink" : [
-         [ 1, 5 ],
-         [ 6, 3 ]
+         [ 6, 3 ],
+         [ 9, 5 ],
+         [ 1, 11 ],
+         [ 12, 8 ]
       ]
    },
    "renderSettings" : {
@@ -37,7 +59,7 @@
       "renderValues" : [ 16, 10, 16, 1000 ]
    },
    "worldSettings" : {
-      "cameraOrigin" : [ 0.0, 0.0, 5.0 ],
+      "cameraOrigin" : [ 0.0, 0.0, 10.0 ],
       "focalLength" : 1.0,
       "horizonBottomColor" : [ 0.5, 0.69999998807907104, 1.0 ],
       "horizonTopColor" : [ 1.0, 1.0, 1.0 ]
