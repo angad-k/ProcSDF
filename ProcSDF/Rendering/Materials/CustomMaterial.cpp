@@ -63,5 +63,6 @@ void CustomMaterial::AddCustomMaterialAtFilePath(std::string p_filePath)
 	if (!l_isMalformed)
 	{
 		NodeGraph::getSingleton()->setCustomMaterialFileContents(l_materialName, l_fileContent);
+		NodeGraph::getSingleton()->setCustomMaterialFilePath(l_materialName, p_filePath);
 	}
 }

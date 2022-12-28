@@ -10,6 +10,7 @@
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/TransformNodes.h"
 #include "Rendering/Materials/Material.h"
+#include "Rendering/Materials/CustomMaterial.h"
 
 bool ProjectSaver::saveProject() {
 	
@@ -212,6 +213,8 @@ void ProjectSaver::saveMaterialList(Json::Value& p_value) {
 
 void ProjectSaver::saveMaterial(Json::Value& p_value, Material* p_material) {
 
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
 	p_value[save_project::material_settings::MATERIAL_TYPE] = p_material->m_materialType;
 	
 	for (int i = 0; i < 3; i++) {
@@ -226,6 +229,12 @@ void ProjectSaver::saveMaterial(Json::Value& p_value, Material* p_material) {
 		for (int j = 0; j < 3; j++) {
 			p_value[save_project::material_settings::INPUT_FLOAT3][i][j] = p_material->getInputFloat3s()[i][j];
 		}
+	}
+
+	if (p_material->m_materialType == material_type::CUSTOM) {
+		CustomMaterial* l_customMaterial = (CustomMaterial*)p_material;
+		p_value[save_project::material_settings::FILE_NAME] = ProjectSaver::getFileNameFromFilePath(
+			l_nodeGraph->getCustomMaterialFilePathFromMaterialName(l_customMaterial->getCustomName()));
 	}
 
 

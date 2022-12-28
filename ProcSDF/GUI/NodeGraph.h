@@ -20,6 +20,7 @@ private:
 	std::map <std::string, std::string> m_customNodeNameToContent;
 	std::map <std::string, std::string> m_customNodeNameToFilePath;
 	std::map <std::string, std::string> m_customMaterialNameToContent;
+	std::map <std::string, std::string> m_customMaterialNameToFilePath;
 	bool m_dirty = false;
 	std::vector<Material*>m_materials;
 	std::map <int, Material*> m_allocatedMaterialIDs;
@@ -110,6 +111,16 @@ public:
 	void setCustomMaterialFileContents(std::string p_materialName, std::string p_fileContents)
 	{
 		m_customMaterialNameToContent[p_materialName] = p_fileContents;
+	}
+
+	void setCustomMaterialFilePath(std::string p_materialName, std::string p_filePath)
+	{
+		m_customMaterialNameToFilePath[p_materialName] = p_filePath;
+	}
+
+	std::string getCustomMaterialFilePathFromMaterialName(std::string p_materialName)
+	{
+		return m_customMaterialNameToFilePath[p_materialName];
 	}
 	std::string getCustomMaterialFileContentsfromMaterialName(std::string p_materialName)
 	{
