@@ -122,7 +122,8 @@ namespace save_project {
 	}
 	
 	const std::string PROCSDF_EXTENSION = ".procsdf";
-	const std::string SDF_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomSDFs";
+	const std::string CUSTOM_SDF_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomSDFs\\";
+	const std::string CUSTOM_MATERIAL_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomMaterials\\";
 }
 
 namespace node_name {
