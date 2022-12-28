@@ -99,15 +99,19 @@ namespace save_project {
 		const std::string RENDER_DEBUG_VALUES = "renderDebugValues";
 		const std::string RENDER_DEBUG_COLORS = "renderDebugColor";
 	}
-	const std::string NODE_LINK = "nodeLink";
-	const std::string NODE_NAME = "nodeName";
-	const std::string INPUT_IDS = "inputIDs";
-	const std::string OUTPUT_IDS = "outputIDS";
-	const std::string INPUT_FLOAT3 = "inputFloat3";
-	const std::string INPUT_FLOAT = "inputFloat";
-	const std::string PROCSDF_EXTENSION = ".procsdf";
+	namespace node_graph_settings {
+		const std::string NODE_GRAPH_SETTINGS = "nodeGraphSettings";
+		const std::string NODE_ID = "nodeID";
+		const std::string NODE_LINK = "nodeLink";
+		const std::string NODE_NAME = "nodeName";
+		const std::string INPUT_IDS = "inputIDs";
+		const std::string OUTPUT_IDS = "outputIDS";
+		const std::string INPUT_FLOAT3 = "inputFloat3";
+		const std::string INPUT_FLOAT = "inputFloat";
+		const std::string FILE_NAME = "fileName";
+	}
 	
-	const std::string NODE_ID = "nodeID";
+	const std::string PROCSDF_EXTENSION = ".procsdf";
 	const std::string SDF_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomSDFs";
 }
 

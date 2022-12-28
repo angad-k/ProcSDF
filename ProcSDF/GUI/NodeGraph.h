@@ -18,6 +18,7 @@ private:
 		Node* p_previousNonTransformNode = NULL);
 	std::map <int, Node*> m_allocatedIDs;
 	std::map <std::string, std::string> m_customNodeNameToContent;
+	std::map <std::string, std::string> m_customNodeNameToFilePath;
 	std::map <std::string, std::string> m_customMaterialNameToContent;
 	bool m_dirty = false;
 	std::vector<Material*>m_materials;
@@ -64,6 +65,22 @@ public:
 	{
 		m_customNodeNameToContent[p_nodeName] = p_fileContents;
 	}
+
+	void setCustomNodeFilePath(std::string p_nodeName, std::string p_filePath)
+	{
+		m_customNodeNameToFilePath[p_nodeName] = p_filePath;
+	}
+
+	std::string getCustomNodeFilePath(std::string p_nodeName)
+	{
+		if (m_customNodeNameToFilePath.find(p_nodeName) == m_customNodeNameToFilePath.end())
+		{
+			return "";
+		}
+
+		return m_customNodeNameToFilePath[p_nodeName];
+	}
+
 	std::string getCustomNodeFileContentsfromNodeName(std::string p_nodeName)
 	{
 		return m_customNodeNameToContent[p_nodeName];

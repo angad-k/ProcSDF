@@ -103,5 +103,6 @@ void CustomNode::AddCustomNodeAtFilePath(std::string p_filePath)
 	if (!l_isMalformed)
 	{
 		NodeGraph::getSingleton()->setCustomNodeFileContents(l_nodeName, l_fileContent);
+		NodeGraph::getSingleton()->setCustomNodeFilePath(l_nodeName, p_filePath);
 	}
 }

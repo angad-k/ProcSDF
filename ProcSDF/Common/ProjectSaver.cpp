@@ -16,9 +16,11 @@ bool ProjectSaver::saveProject() {
 	Renderer* l_renderer = Renderer::getSingleton();
 	Json::Value l_jsonValue;
 
-	ProjectSaver::saveWorldSettings(l_jsonValue);
+	ProjectSaver::saveWorldSettings(l_jsonValue[save_project::world_settings::WORLD_SETTINGS]);
 
-	ProjectSaver::saveRenderSettings(l_jsonValue);
+	ProjectSaver::saveRenderSettings(l_jsonValue[save_project::render_settings::RENDER_SETTINGS]);
+
+	ProjectSaver::saveNodeGraphSettings(l_jsonValue[save_project::node_graph_settings::NODE_GRAPH_SETTINGS]);
 
 	/*int l_index = 0;
 	for (std::pair<int, int> link : l_nodeGraph->m_links) {
@@ -92,31 +94,113 @@ void ProjectSaver::saveWorldSettings(Json::Value& p_value) {
 
 	Renderer* l_renderer = Renderer::getSingleton();
 	for (int i = 0; i < 3; i++) {
-		p_value[save_project::world_settings::WORLD_SETTINGS][save_project::world_settings::CAMERA_ORIGIN][i] = l_renderer->getCameraOrigin()[i];
-		p_value[save_project::world_settings::WORLD_SETTINGS][save_project::world_settings::TOP_COLOR][i] = l_renderer->m_horizon_top_color[i];
-		p_value[save_project::world_settings::WORLD_SETTINGS][save_project::world_settings::BOTTOM_COLOR][i] = l_renderer->m_horizon_bottom_color[i];
+		p_value[save_project::world_settings::CAMERA_ORIGIN][i] = l_renderer->getCameraOrigin()[i];
+		p_value[save_project::world_settings::TOP_COLOR][i] = l_renderer->m_horizon_top_color[i];
+		p_value[save_project::world_settings::BOTTOM_COLOR][i] = l_renderer->m_horizon_bottom_color[i];
 	}
-	p_value[save_project::world_settings::WORLD_SETTINGS][save_project::world_settings::CAMERA_FOCAL_LENGTH] = *(l_renderer->getFocalLength());
+	p_value[save_project::world_settings::CAMERA_FOCAL_LENGTH] = *(l_renderer->getFocalLength());
 }
 
 void ProjectSaver::saveRenderSettings(Json::Value& p_value) {
 	Renderer* l_renderer = Renderer::getSingleton();
 
 	for (int i = 0; i < l_renderer->m_render_uniforms_values.size(); i++) {
-		p_value[save_project::render_settings::RENDER_SETTINGS][save_project::render_settings::RENDER_VALUES][i] = l_renderer->m_render_uniforms_values[i];
+		p_value[save_project::render_settings::RENDER_VALUES][i] = l_renderer->m_render_uniforms_values[i];
 	}
 
 	for (int i = 0; i < l_renderer->m_render_uniforms_debug_values.size(); i++) {
-		p_value[save_project::render_settings::RENDER_SETTINGS][save_project::render_settings::RENDER_DEBUG_VALUES][i] = (bool)l_renderer->m_render_uniforms_debug_values[i];
+		p_value[save_project::render_settings::RENDER_DEBUG_VALUES][i] = (bool)l_renderer->m_render_uniforms_debug_values[i];
 	}
 
 	for (int i = 0; i < l_renderer->m_render_uniform_debug_cols.size(); i++) {
 		for (int j = 0; j < 3; j++) {
-			p_value[save_project::render_settings::RENDER_SETTINGS][save_project::render_settings::RENDER_DEBUG_COLORS][i][j] = l_renderer->m_render_uniform_debug_cols[i][j];
+			p_value[save_project::render_settings::RENDER_DEBUG_COLORS][i][j] = l_renderer->m_render_uniform_debug_cols[i][j];
 		}
 		
 	}
 
+}
+
+void ProjectSaver::saveNodeGraphSettings(Json::Value& p_value) {
+	
+	ProjectSaver::saveNodeIDs(p_value[save_project::node_graph_settings::NODE_ID]);
+	ProjectSaver::saveNodeLinks(p_value[save_project::node_graph_settings::NODE_LINK]);
+	ProjectSaver::saveNodeList(p_value);
+
+}
+
+void ProjectSaver::saveNodeIDs(Json::Value& p_value) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	int l_index = 0;
+	for (Node* nd : l_nodeGraph->m_nodes) {
+		p_value[l_index] = nd->m_ID;
+		l_index++;
+	}
+}
+
+void ProjectSaver::saveNodeLinks(Json::Value& p_value) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	int l_index = 0;
+	for (std::pair<int, int> link : l_nodeGraph->m_links) {
+		p_value[l_index][0] = link.first;
+		p_value[l_index][1] = link.second;
+		l_index++;
+	}
+}
+
+void ProjectSaver::saveNodeList(Json::Value& p_value) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	for (Node* node : l_nodeGraph->m_nodes) {
+		
+		bool l_isCustom = false;
+		std::string l_filePath = l_nodeGraph->getCustomNodeFilePath(node->m_nodeName);
+
+		if (l_filePath != "") {
+			l_isCustom = true;
+		}
+
+		ProjectSaver::saveNode(p_value[std::to_string(node->m_ID)], node, l_isCustom, l_filePath);
+	}
+
+}
+
+void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom, std::string p_filePath) {
+
+	p_value[save_project::node_graph_settings::NODE_NAME] = p_node->m_nodeName;
+
+	for (int i = 0; i < p_node->m_inputIDs.size(); i++) {
+		p_value[save_project::node_graph_settings::INPUT_IDS][i] = p_node->m_inputIDs[i];
+	}
+
+	for (int i = 0; i < p_node->m_outputIDs.size(); i++) {
+		p_value[save_project::node_graph_settings::OUTPUT_IDS][i] = p_node->m_outputIDs[i];
+	}
+
+	for (int i = 0; i < p_node->m_inputFloat3.size(); i++) {
+		p_value[save_project::node_graph_settings::INPUT_FLOAT3][i][0] = p_node->m_inputFloat3[i][0];
+		p_value[save_project::node_graph_settings::INPUT_FLOAT3][i][1] = p_node->m_inputFloat3[i][1];
+		p_value[save_project::node_graph_settings::INPUT_FLOAT3][i][2] = p_node->m_inputFloat3[i][2];
+	}
+
+	for (int i = 0; i < p_node->m_inputFloats.size(); i++) {
+		p_value[save_project::node_graph_settings::INPUT_FLOAT][i] = p_node->m_inputFloats[i];
+	}
+
+	if (p_isCustom) {
+		p_value[save_project::node_graph_settings::FILE_NAME] = ProjectSaver::getFileNameFromFilePath(p_filePath);
+	}
+}
+
+std::string ProjectSaver::getFileNameFromFilePath(std::string p_filePath) {
+
+	int l_index = p_filePath.find_last_of('\\') + 1;
+	return p_filePath.substr(l_index, p_filePath.length() - l_index);
 }
 
 Node* ProjectSaver::getNodeFromNodeName(std::string p_nodeName, int p_ID) {
