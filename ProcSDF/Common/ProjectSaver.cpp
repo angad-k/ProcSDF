@@ -12,6 +12,9 @@
 #include "Rendering/Materials/Material.h"
 #include "Rendering/Materials/CustomMaterial.h"
 
+#define __PARSE_SUCESS__(status) if (!status) { return false;}
+#define __IS_MEMBER_CHECK__(jsonValue, member) if (!jsonValue.isMember(member)) {return false;}
+
 bool ProjectSaver::saveProject() {
 	
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
@@ -289,6 +292,23 @@ Node* ProjectSaver::getNodeFromNodeName(std::string p_nodeName, int p_ID) {
 }
 
 bool ProjectSaver::loadProject() {
+	
+	std::string l_jsonString;
+	bool l_status = true;
+	Json::Value l_value;
+	l_status = ProjectSaver::fetchFileAndContent(l_jsonString);
+
+	__PARSE_SUCESS__(l_status)
+
+	ProjectSaver::clearNodeGraph();
+	l_status = ProjectSaver::parseFileContent(l_jsonString, l_value);
+
+	__PARSE_SUCESS__(l_status)
+
+	l_status = ProjectSaver::parseWorldSettings(l_value);
+
+	__PARSE_SUCESS__(l_status);
+
 	/*
 	std::pair<bool, std::string> l_filePath = OS::pickFile();
 
@@ -433,5 +453,106 @@ bool ProjectSaver::loadProject() {
 		return false;
 	}
 	*/
+	return true;
+}
+
+bool ProjectSaver::fetchFileAndContent(std::string& p_fileContent) {
+
+	std::pair<bool, std::string> l_filePath = OS::pickFile();
+
+	if (!l_filePath.first) {
+		return false;
+	}
+
+	p_fileContent = OS::fetchFileContent(l_filePath.second);
+	return true;
+}
+
+void ProjectSaver::clearNodeGraph() {
+	NodeGraph::getSingleton()->clear();
+}
+
+bool ProjectSaver::parseFileContent(std::string p_fileContent, Json::Value& p_value) {
+
+	Json::Reader l_reader;
+	return l_reader.parse(p_fileContent, p_value);
+}
+
+bool ProjectSaver::parseWorldSettings(const Json::Value& p_value) {
+
+	__IS_MEMBER_CHECK__(p_value, save_project::world_settings::WORLD_SETTINGS)
+
+	Json::Value l_worldSettings = p_value[save_project::world_settings::WORLD_SETTINGS];
+	Renderer* l_renderer = Renderer::getSingleton();
+	bool l_status = true;
+
+	__IS_MEMBER_CHECK__(l_worldSettings, save_project::world_settings::CAMERA_ORIGIN)
+
+	Json::Value l_cameraOrigin = l_worldSettings[save_project::world_settings::CAMERA_ORIGIN];
+
+	if (!l_cameraOrigin.isArray() && l_cameraOrigin.size() != 3) {
+		return false;
+	}
+
+	float l_cameraParams[3];
+	for (int i = 0; i < l_cameraOrigin.size(); i++) {
+		if (!l_cameraOrigin[i].isDouble()) {
+			return false;
+		}
+
+		l_cameraParams[i] = l_cameraOrigin[i].asFloat();
+	}
+
+	l_renderer->setCameraOrigin(l_cameraParams);
+
+	__IS_MEMBER_CHECK__(l_worldSettings, save_project::world_settings::CAMERA_FOCAL_LENGTH)
+
+	Json::Value l_focalLength = l_worldSettings[save_project::world_settings::CAMERA_FOCAL_LENGTH];
+
+	if (!l_focalLength.isDouble()) {
+		return false;
+	}
+
+	l_renderer->setFocalLength(l_focalLength.asFloat());
+
+	__IS_MEMBER_CHECK__(l_worldSettings, save_project::world_settings::TOP_COLOR)
+
+	float l_topColor[3];
+	l_status = ProjectSaver::parseColor(l_worldSettings[save_project::world_settings::TOP_COLOR], l_topColor);
+
+	__PARSE_SUCESS__(l_status)
+
+	for (int i = 0; i < 3; i++) {
+		l_renderer->m_horizon_top_color[i] = l_topColor[i];
+	}
+
+	__IS_MEMBER_CHECK__(l_worldSettings, save_project::world_settings::BOTTOM_COLOR)
+
+	float l_bottomColor[3];
+	l_status = ProjectSaver::parseColor(l_worldSettings[save_project::world_settings::BOTTOM_COLOR], l_bottomColor);
+
+	__PARSE_SUCESS__(l_status);
+
+	for (int i = 0; i < 3; i++) {
+		l_renderer->m_horizon_bottom_color[i] = l_bottomColor[i];
+	}
+
+	return true;
+}
+
+bool ProjectSaver::parseColor(const Json::Value& p_value, float* p_color) {
+
+	if (!p_value.isArray() && p_value.size() != 3) {
+		return false;
+	}
+
+	for (int i = 0; i < 3; i++) {
+		if (!p_value[i].isDouble() && p_value[i].asFloat() < 0.0 && p_value.asFloat() > 1.0) {
+			return false;
+		}
+
+		p_color[i] = p_value[i].asFloat();
+	}
+
 	return true;
 }

@@ -18,6 +18,12 @@ private:
 	static void saveMaterialIDs(Json::Value& p_value);
 	static std::string getFileNameFromFilePath(std::string p_filePath);
 	static bool saveProjectToFile(Json::Value& p_value);
+
+	static bool fetchFileAndContent(std::string &p_fileContent);
+	static void clearNodeGraph();
+	static bool parseFileContent(std::string p_fileContent, Json::Value& p_value);
+	static bool parseWorldSettings(const Json::Value& p_value);
+	static bool parseColor(const Json::Value& p_value, float* p_color);
 public:
 	static bool saveProject();
 	static bool loadProject();
