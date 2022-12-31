@@ -307,11 +307,11 @@ bool ProjectSaver::loadProject() {
 
 	l_status = ProjectSaver::parseWorldSettings(l_value);
 
-	__PARSE_SUCESS__(l_status);
+	__PARSE_SUCESS__(l_status)
 
 	l_status = ProjectSaver::parseRenderingSettings(l_value);
 
-	__PARSE_SUCESS__(l_status);
+	__PARSE_SUCESS__(l_status)
 
 	/*
 	std::pair<bool, std::string> l_filePath = OS::pickFile();
@@ -480,6 +480,45 @@ bool ProjectSaver::parseFileContent(std::string p_fileContent, Json::Value& p_va
 
 	Json::Reader l_reader;
 	return l_reader.parse(p_fileContent, p_value);
+}
+
+bool ProjectSaver::parseNodeGraphSettings(const Json::Value& p_value) {
+
+}
+
+bool ProjectSaver::parseNodes(const Json::Value& p_value) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	
+	__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::NODE_ID)
+
+	Json::Value l_nodeIDList = p_value[save_project::node_graph_settings::NODE_ID];
+
+	if (!l_nodeIDList.isArray()) {
+		return false;
+	}
+
+	bool l_status = true;
+	for (int i = 0; i < l_nodeIDList.size(); i++) {
+		if (!l_nodeIDList[i].isInt()) {
+			return false;
+		}
+
+		int l_ID = l_nodeIDList[i].asInt();
+
+		__IS_MEMBER_CHECK__(p_value, std::to_string(l_ID));
+
+		std::pair<bool, Node*> l_nodeInfo = ProjectSaver::parseNode(p_value[std::to_string(l_ID)], l_ID);
+		l_status = l_nodeInfo.first;
+		__PARSE_SUCESS__(l_status);
+		l_nodeGraph->m_nodes.push_back(l_nodeInfo.second);
+	}
+
+	return true;
+}
+
+std::pair<bool, Node*> ProjectSaver::parseNode(const Json::Value& p_value, int p_ID) {
+
 }
 
 bool ProjectSaver::parseRenderingSettings(const Json::Value& p_value) {

@@ -26,6 +26,9 @@ private:
 	template<typename T>
 	static bool parseColor(const Json::Value& p_value, T &p_color);
 	static bool parseRenderingSettings(const Json::Value& p_value);
+	static bool parseNodeGraphSettings(const Json::Value& p_value);
+	static bool parseNodes(const Json::Value& p_value);
+	static std::pair<bool, Node*> parseNode(const Json::Value& p_value, int p_ID);
 public:
 	static bool saveProject();
 	static bool loadProject();
