@@ -23,7 +23,9 @@ private:
 	static void clearNodeGraph();
 	static bool parseFileContent(std::string p_fileContent, Json::Value& p_value);
 	static bool parseWorldSettings(const Json::Value& p_value);
-	static bool parseColor(const Json::Value& p_value, float* p_color);
+	template<typename T>
+	static bool parseColor(const Json::Value& p_value, T &p_color);
+	static bool parseRenderingSettings(const Json::Value& p_value);
 public:
 	static bool saveProject();
 	static bool loadProject();

@@ -309,6 +309,10 @@ bool ProjectSaver::loadProject() {
 
 	__PARSE_SUCESS__(l_status);
 
+	l_status = ProjectSaver::parseRenderingSettings(l_value);
+
+	__PARSE_SUCESS__(l_status);
+
 	/*
 	std::pair<bool, std::string> l_filePath = OS::pickFile();
 
@@ -478,6 +482,71 @@ bool ProjectSaver::parseFileContent(std::string p_fileContent, Json::Value& p_va
 	return l_reader.parse(p_fileContent, p_value);
 }
 
+bool ProjectSaver::parseRenderingSettings(const Json::Value& p_value) {
+	
+	Renderer* l_renderer = Renderer::getSingleton();
+	
+	__IS_MEMBER_CHECK__(p_value, save_project::render_settings::RENDER_SETTINGS)
+
+	Json::Value l_renderingSettings = p_value[save_project::render_settings::RENDER_SETTINGS];
+
+	__IS_MEMBER_CHECK__(l_renderingSettings, save_project::render_settings::RENDER_DEBUG_VALUES)
+
+	Json::Value l_renderValues = l_renderingSettings[save_project::render_settings::RENDER_VALUES];
+
+	if (!l_renderValues.isArray() && l_renderValues.size() != l_renderer->m_render_uniforms_values.size()) {
+		return false;
+	}
+
+	for (int i = 0; i < l_renderValues.size(); i++) {
+		if (!l_renderValues[i].isInt()) {
+			return false;
+		}
+
+		l_renderer->m_render_uniforms_values[i] = l_renderValues[i].asInt();
+	}
+
+	__IS_MEMBER_CHECK__(l_renderingSettings, save_project::render_settings::RENDER_DEBUG_VALUES)
+
+	Json::Value l_debugValues = l_renderingSettings[save_project::render_settings::RENDER_DEBUG_VALUES];
+
+	if (!l_debugValues.isArray() && l_debugValues.size() != l_renderer->m_render_uniforms_debug_values.size()) {
+		return false;
+	}
+
+	for (int i = 0; i < l_debugValues.size(); i++) {
+		if (!l_debugValues[i].isBool()) {
+			return false;
+		}
+
+		l_renderer->m_render_uniforms_debug_values[i] = l_debugValues[i].asBool();
+	}
+
+	__IS_MEMBER_CHECK__(l_renderingSettings, save_project::render_settings::RENDER_DEBUG_COLORS)
+
+	Json::Value l_debugColor = l_renderingSettings[save_project::render_settings::RENDER_DEBUG_COLORS];
+
+	if (!l_debugColor.isArray() && l_debugColor.size() != l_renderer->m_render_uniform_debug_cols.size()) {
+		return false;
+	}
+
+	bool l_status = true;
+	for (int i = 0; i < l_debugColor.size(); i++) {
+		if (!l_debugColor[i].isArray()) {
+			return false;
+		}
+
+		std::vector<float> l_color;
+		l_status = ProjectSaver::parseColor(l_debugColor[i], l_color);
+
+		__PARSE_SUCESS__(l_status);
+
+		l_renderer->m_render_uniform_debug_cols[i] = l_color;
+	}
+
+	return true;
+}
+
 bool ProjectSaver::parseWorldSettings(const Json::Value& p_value) {
 
 	__IS_MEMBER_CHECK__(p_value, save_project::world_settings::WORLD_SETTINGS)
@@ -540,7 +609,8 @@ bool ProjectSaver::parseWorldSettings(const Json::Value& p_value) {
 	return true;
 }
 
-bool ProjectSaver::parseColor(const Json::Value& p_value, float* p_color) {
+template<typename T>
+bool ProjectSaver::parseColor(const Json::Value& p_value, T &p_color) {
 
 	if (!p_value.isArray() && p_value.size() != 3) {
 		return false;
