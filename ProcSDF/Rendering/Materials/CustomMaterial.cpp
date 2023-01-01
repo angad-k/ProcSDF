@@ -1,8 +1,20 @@
 #include "CustomMaterial.h"
 
-CustomMaterial::CustomMaterial(std::string p_materialName)
+CustomMaterial::CustomMaterial(std::string p_materialName) : Material()
 {
 	m_materialType = material_type::CUSTOM;
+	CustomMaterial::parseCustomMaterialFile(p_materialName);
+	init();
+}
+
+CustomMaterial::CustomMaterial(std::string p_materialName, int p_ID) : Material(p_ID)
+{
+	m_materialType = material_type::CUSTOM;
+	CustomMaterial::parseCustomMaterialFile(p_materialName);
+	init();
+}
+
+void CustomMaterial::parseCustomMaterialFile(std::string p_materialName) {
 
 	std::string l_fileContent = NodeGraph::getSingleton()->getCustomMaterialFileContentsfromMaterialName(p_materialName);
 	std::vector<std::string> l_lines = custom::tokenizeWithDelimiters(l_fileContent, "\n");
@@ -33,7 +45,6 @@ CustomMaterial::CustomMaterial(std::string p_materialName)
 			}
 		}
 	}
-	init();
 }
 
 void CustomMaterial::AddCustomMaterialAtFilePath(std::string p_filePath)

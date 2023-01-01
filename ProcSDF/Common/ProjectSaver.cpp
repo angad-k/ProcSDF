@@ -574,7 +574,7 @@ bool ProjectSaver::parseNode(const Json::Value& p_value, Node* p_node, int p_ID)
 	else {
 		std::string l_fileName = save_project::CUSTOM_SDF_FILE_PATH + p_value[save_project::node_graph_settings::FILE_NAME].asString();
 		CustomNode::AddCustomNodeAtFilePath(l_fileName);
-		CustomNode* l_customNode = new CustomNode(l_nodeName);
+		CustomNode* l_customNode = new CustomNode(l_nodeName, p_ID);
 		if (l_customNode->isMalformed()) {
 			delete(l_customNode);
 			return false;
