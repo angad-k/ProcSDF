@@ -5,6 +5,7 @@
 class ProjectSaver {
 private:
 	static Node* getNodeFromNodeName(std::string p_nodeName, int p_ID);
+	static Material* getMaterialFromName(std::string p_materialType, int p_ID);
 	static void saveWorldSettings(Json::Value& p_value);
 	static void saveRenderSettings(Json::Value& p_value);
 	static void saveNodeGraphSettings(Json::Value& p_value);
@@ -30,6 +31,9 @@ private:
 	static bool parseNodes(const Json::Value& p_value);
 	static bool parseNode(const Json::Value& p_value, Node* p_node, int p_ID);
 	static bool parseNodeLink(const Json::Value& p_value);
+	static bool parseMaterialSettings(const Json::Value& p_value);
+	static bool parseMaterials(const Json::Value& p_value);
+	static bool parseMaterial(const Json::Value& p_value, Material* p_material, int p_ID);
 public:
 	static bool saveProject();
 	static bool loadProject();

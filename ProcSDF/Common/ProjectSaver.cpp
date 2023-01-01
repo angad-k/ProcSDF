@@ -12,6 +12,10 @@
 #include "GUI/Nodes/CustomNode.h"
 #include "Rendering/Materials/Material.h"
 #include "Rendering/Materials/CustomMaterial.h"
+#include "Rendering/Materials/Dielectric.h"
+#include "Rendering/Materials/Diffuse.h"
+#include "Rendering/Materials/Light.h"
+#include "Rendering/Materials/Metal.h"
 
 #define __PARSE_SUCESS__(status) if (!status) { return false;}
 #define __IS_MEMBER_CHECK__(jsonValue, member) if (!jsonValue.isMember(member)) {return false;}
@@ -292,6 +296,26 @@ Node* ProjectSaver::getNodeFromNodeName(std::string p_nodeName, int p_ID) {
 	return l_node;
 }
 
+Material* ProjectSaver::getMaterialFromName(std::string p_materialType, int p_ID) {
+
+	Material* l_material = NULL;
+
+	if (p_materialType == material_type::DIFFUSE) {
+		l_material = new Diffuse(p_ID);
+	}
+	else if (p_materialType == material_type::DIELECTRIC) {
+		l_material = new Dielectric(p_ID);
+	}
+	else if (p_materialType == material_type::LIGHT) {
+		l_material = new Light(p_ID);
+	}
+	else if (p_materialType == material_type::METAL) {
+		l_material = new Metal(p_ID);
+	}
+
+	return l_material;
+}
+
 bool ProjectSaver::loadProject() {
 	
 	std::string l_jsonString;
@@ -489,6 +513,8 @@ bool ProjectSaver::parseFileContent(std::string p_fileContent, Json::Value& p_va
 
 bool ProjectSaver::parseNodeGraphSettings(const Json::Value& p_value) {
 
+	__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::NODE_GRAPH_SETTINGS)
+	
 	bool l_status = ProjectSaver::parseNodes(p_value);
 
 	__PARSE_SUCESS__(l_status)
@@ -497,7 +523,58 @@ bool ProjectSaver::parseNodeGraphSettings(const Json::Value& p_value) {
 
 	__PARSE_SUCESS__(l_status)
 
-		return true;
+	return true;
+}
+
+bool ProjectSaver::parseMaterialSettings(const Json::Value& p_value) {
+	bool l_status = true;
+
+	l_status = ProjectSaver::parseMaterials(p_value);
+
+	__PARSE_SUCESS__(l_status)
+
+	return true;
+}
+
+bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
+
+	__IS_MEMBER_CHECK__(p_value, save_project::material_settings::MATERIAL_SETTINGS)
+
+	Json::Value l_materialSettings = p_value[save_project::material_settings::MATERIAL_SETTINGS];
+
+	__IS_MEMBER_CHECK__(l_materialSettings, save_project::material_settings::MATERIAL_ID)
+
+	Json::Value l_materialIDs = l_materialSettings[save_project::material_settings::MATERIAL_ID];
+
+	if (!l_materialIDs.isArray()) {
+		return false;
+	}
+
+	bool l_status = true;
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	for (int i = 0; i < l_materialIDs.size(); i++) {
+		if (!l_materialIDs[i].isInt()) {
+			return false;
+		}
+
+		int l_ID = l_materialIDs[i].asInt();
+
+		__IS_MEMBER_CHECK__(l_materialSettings, std::to_string(l_ID));
+
+		Material* l_material = NULL;
+
+		l_status = ProjectSaver::parseMaterial(l_materialSettings[std::to_string(l_ID)], l_material, l_ID);
+
+		__PARSE_SUCESS__(l_status)
+
+		l_nodeGraph->addMaterial(l_material);
+	}
+
+	return true;
+}
+
+bool ProjectSaver::parseMaterial(const Json::Value& p_value, Material* p_material, int p_ID) {
+
 }
 
 bool ProjectSaver::parseNodeLink(const Json::Value& p_value) {
