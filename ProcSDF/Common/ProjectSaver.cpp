@@ -243,6 +243,7 @@ void ProjectSaver::saveMaterial(Json::Value& p_value, Material* p_material) {
 		CustomMaterial* l_customMaterial = (CustomMaterial*)p_material;
 		p_value[save_project::material_settings::FILE_NAME] = ProjectSaver::getFileNameFromFilePath(
 			l_nodeGraph->getCustomMaterialFilePathFromMaterialName(l_customMaterial->getCustomName()));
+		p_value[save_project::material_settings::CUSTOM_NAME] = l_customMaterial->getCustomName();
 	}
 
 
@@ -574,6 +575,46 @@ bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
 }
 
 bool ProjectSaver::parseMaterial(const Json::Value& p_value, Material* p_material, int p_ID) {
+
+	__IS_MEMBER_CHECK__(p_value, save_project::material_settings::MATERIAL_TYPE)
+	__IS_MEMBER_CHECK__(p_value, save_project::material_settings::COLOR)
+
+	if (!p_value[save_project::material_settings::MATERIAL_TYPE].isString()) {
+			return false;
+	}
+
+	std::string l_materialType = p_value[save_project::material_settings::MATERIAL_TYPE].asString();
+
+	if (l_materialType == material_type::CUSTOM) {
+		__IS_MEMBER_CHECK__(p_value, save_project::material_settings::FILE_NAME)
+		__IS_MEMBER_CHECK__(p_value, save_project::material_settings::CUSTOM_NAME)
+
+		if (!p_value[save_project::material_settings::FILE_NAME].isString()) {
+				return false;
+		}
+
+		std::string l_filePath = save_project::CUSTOM_MATERIAL_FILE_PATH + p_value[save_project::material_settings::FILE_NAME].asString();
+
+		if (!p_value[save_project::material_settings::CUSTOM_NAME].isString()) {
+			return false;
+		}
+
+		std::string l_customName = p_value[save_project::material_settings::CUSTOM_NAME].asString();
+
+		CustomMaterial::AddCustomMaterialAtFilePath(l_filePath);
+		CustomMaterial* l_customMaterial = new CustomMaterial(l_customName, p_ID);
+
+		if (l_customMaterial->isMalformed()) {
+			return false;
+		}
+
+		p_material = l_customMaterial;
+		
+	}
+	else {
+		p_material = ProjectSaver::getMaterialFromName(l_materialType, p_ID);
+	}
+
 
 }
 

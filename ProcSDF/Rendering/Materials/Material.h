@@ -27,6 +27,23 @@ public:
 		return m_color;
 	}
 
+	void setColor(float* p_color)
+	{
+		m_color[0] = p_color[0];
+		m_color[1] = p_color[1];
+		m_color[2] = p_color[2];
+	}
+
+	void setInputFloats(std::vector<float> p_inputFloats) 
+	{
+		m_inputFloats = p_inputFloats;
+	}
+
+	void setInputFloat3s(std::vector<std::vector<float>> p_inputFloat3s)
+	{
+		m_inputFloat3s = p_inputFloat3s;
+	}
+
 	int getID()
 	{
 		return m_ID;
