@@ -314,6 +314,10 @@ bool ProjectSaver::loadProject() {
 
 	__PARSE_SUCESS__(l_status)
 
+	l_status = ProjectSaver::parseNodeGraphSettings(l_value);
+
+	__PARSE_SUCESS__(l_status)
+
 	/*
 	std::pair<bool, std::string> l_filePath = OS::pickFile();
 
@@ -489,10 +493,30 @@ bool ProjectSaver::parseNodeGraphSettings(const Json::Value& p_value) {
 
 	__PARSE_SUCESS__(l_status)
 
-	
+	l_status = ProjectSaver::parseNodeLink(p_value);
+
+	__PARSE_SUCESS__(l_status)
+
+		return true;
 }
 
 bool ProjectSaver::parseNodeLink(const Json::Value& p_value) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::NODE_LINK)
+
+	Json::Value l_nodeLink = p_value[save_project::node_graph_settings::NODE_LINK];
+	if (!l_nodeLink.isArray()) {
+		return false;
+	}
+	for (int i = 0; i < l_nodeLink.size(); i++) {
+		if (!l_nodeLink[i].isArray() && l_nodeLink[i].size() != 2) {
+			return false;
+		}
+
+		l_nodeGraph->m_links.push_back(std::make_pair(l_nodeLink[i][0].asInt(), l_nodeLink[i][1].asInt()));
+	}
+	return true;
 
 }
 
