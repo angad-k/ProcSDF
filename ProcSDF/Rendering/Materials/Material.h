@@ -27,6 +27,16 @@ public:
 		return m_color;
 	}
 
+	int getFloatLabelsSize() 
+	{
+		return m_inputFloatLabels.size();
+	}
+
+	int getFloat3LabelsSize()
+	{
+		return m_inputFloat3Labels.size();
+	}
+
 	void setColor(float* p_color)
 	{
 		m_color[0] = p_color[0];
@@ -103,6 +113,7 @@ public:
 	{
 		m_ID = p_ID;
 		m_name = "Material#" + std::to_string(m_ID);
+		NodeGraph::getSingleton()->setMaterialID(this, p_ID);
 	}
 
 	~Material()

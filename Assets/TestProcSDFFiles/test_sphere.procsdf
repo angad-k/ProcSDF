@@ -1,7 +1,7 @@
 {
    "materialSettings" : {
       "0" : {
-         "color" : [ 1.0, 0.0, 0.0 ],
+         "color" : [ 0.2082802951335907, 0.081098601222038269, 0.22058820724487305 ],
          "materialType" : "Diffuse"
       },
       "materialID" : [ 0 ]
