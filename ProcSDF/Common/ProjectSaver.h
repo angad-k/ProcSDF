@@ -28,7 +28,8 @@ private:
 	static bool parseRenderingSettings(const Json::Value& p_value);
 	static bool parseNodeGraphSettings(const Json::Value& p_value);
 	static bool parseNodes(const Json::Value& p_value);
-	static std::pair<bool, Node*> parseNode(const Json::Value& p_value, int p_ID);
+	static bool parseNode(const Json::Value& p_value, Node* p_node, int p_ID);
+	static bool parseNodeLink(const Json::Value& p_value);
 public:
 	static bool saveProject();
 	static bool loadProject();

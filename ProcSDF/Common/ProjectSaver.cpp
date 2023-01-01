@@ -9,6 +9,7 @@
 #include "GUI/Nodes/OperationNodes.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/TransformNodes.h"
+#include "GUI/Nodes/CustomNode.h"
 #include "Rendering/Materials/Material.h"
 #include "Rendering/Materials/CustomMaterial.h"
 
@@ -484,6 +485,15 @@ bool ProjectSaver::parseFileContent(std::string p_fileContent, Json::Value& p_va
 
 bool ProjectSaver::parseNodeGraphSettings(const Json::Value& p_value) {
 
+	bool l_status = ProjectSaver::parseNodes(p_value);
+
+	__PARSE_SUCESS__(l_status)
+
+	
+}
+
+bool ProjectSaver::parseNodeLink(const Json::Value& p_value) {
+
 }
 
 bool ProjectSaver::parseNodes(const Json::Value& p_value) {
@@ -508,16 +518,115 @@ bool ProjectSaver::parseNodes(const Json::Value& p_value) {
 
 		__IS_MEMBER_CHECK__(p_value, std::to_string(l_ID));
 
-		std::pair<bool, Node*> l_nodeInfo = ProjectSaver::parseNode(p_value[std::to_string(l_ID)], l_ID);
-		l_status = l_nodeInfo.first;
+		Node* l_node = NULL;
+		l_status = ProjectSaver::parseNode(p_value[std::to_string(l_ID)], l_node, l_ID);
 		__PARSE_SUCESS__(l_status);
-		l_nodeGraph->m_nodes.push_back(l_nodeInfo.second);
+		l_nodeGraph->addNode(l_node);
 	}
 
 	return true;
 }
 
-std::pair<bool, Node*> ProjectSaver::parseNode(const Json::Value& p_value, int p_ID) {
+bool ProjectSaver::parseNode(const Json::Value& p_value, Node* p_node, int p_ID) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+	bool l_isCustomNode = false;
+
+	if (p_value.isMember(save_project::node_graph_settings::FILE_NAME)) {
+		l_isCustomNode = true;
+	}
+
+	__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::NODE_NAME)
+
+	if (!p_value[save_project::node_graph_settings::NODE_NAME].isString()) {
+			return false;
+	}
+
+	std::string l_nodeName = p_value[save_project::node_graph_settings::NODE_NAME].asString();
+
+	if (!l_isCustomNode) {
+		p_node = ProjectSaver::getNodeFromNodeName(l_nodeName, p_ID);
+	}
+	else {
+		std::string l_fileName = save_project::CUSTOM_SDF_FILE_PATH + p_value[save_project::node_graph_settings::FILE_NAME].asString();
+		CustomNode::AddCustomNodeAtFilePath(l_fileName);
+		CustomNode* l_customNode = new CustomNode(l_nodeName);
+		if (l_customNode->isMalformed()) {
+			delete(l_customNode);
+			return false;
+		}
+
+		p_node = l_customNode;
+	}
+
+	// populate input pin IDs
+	if (p_node->m_inputPins.size() > 0 && (!p_value.isMember(save_project::node_graph_settings::INPUT_IDS) || 
+		!p_value[save_project::node_graph_settings::INPUT_IDS].isArray())) {
+		return false;
+	}
+
+	for (int i = 0; i < p_node->m_inputPins.size(); i++) {
+		if (!p_value[save_project::node_graph_settings::INPUT_IDS][i].isInt()) {
+			return false;
+		}
+		p_node->m_inputIDs[i] = p_value[save_project::node_graph_settings::INPUT_IDS][i].asInt();
+		l_nodeGraph->setID(p_node, p_node->m_inputIDs[i]);
+	}
+
+	// populate output pin IDs
+	if (p_node->m_outputPins.size() > 0 && (!p_value.isMember(save_project::node_graph_settings::OUTPUT_IDS) || 
+		!p_value[save_project::node_graph_settings::OUTPUT_IDS].isArray())) {
+		return false;
+	}
+	for (int i = 0; i < p_node->m_outputIDs.size(); i++) {
+		if (!p_value[save_project::node_graph_settings::OUTPUT_IDS][i].isInt()) {
+			return false;
+		}
+		p_node->m_outputIDs[i] = p_value[save_project::node_graph_settings::OUTPUT_IDS][i].asInt();
+		l_nodeGraph->setID(p_node, p_node->m_outputIDs[i]);
+	}
+
+	// populate float inputs params
+	if (p_node->m_inputFloatLabels.size() > 0 && (!p_value.isMember(save_project::node_graph_settings::INPUT_FLOAT) || 
+		!p_value[save_project::node_graph_settings::INPUT_FLOAT].isArray())) {
+		return false;
+	}
+	for (int i = 0; i < p_node->m_inputFloatLabels.size(); i++) {
+		if (!p_value[save_project::node_graph_settings::INPUT_FLOAT][i].isDouble()) {
+			return false;
+		}
+		p_node->m_inputFloats[i] = p_value[save_project::node_graph_settings::INPUT_FLOAT][i].asDouble();
+	}
+
+	// populate float3 inputs params
+	if (p_node->m_inputFloat3Labels.size() > 0 && (!p_value.isMember(save_project::node_graph_settings::INPUT_FLOAT3) 
+		|| !p_value[save_project::node_graph_settings::INPUT_FLOAT3].isArray())) {
+		return false;
+	}
+
+	for (int i = 0; i < p_node->m_inputFloat3Labels.size(); i++) {
+		if (!p_value[save_project::node_graph_settings::INPUT_FLOAT3][i].isArray() || 
+			!(p_value[save_project::node_graph_settings::INPUT_FLOAT3][i].size() == 3)) {
+			return false;
+		}
+
+		for (int j = 0; j < 3; j++) {
+			if (!p_value[save_project::node_graph_settings::INPUT_FLOAT3][i][j].isDouble()) {
+				return false;
+			}
+			p_node->m_inputFloat3[i][j] = p_value[save_project::node_graph_settings::INPUT_FLOAT3][i][j].asDouble();
+		}
+
+	}
+
+	if (p_node->m_isObjectNode) {
+		ObjectNode* l_objectNode = (ObjectNode*)p_node;
+		__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::MATERIAL_ID)
+
+		l_objectNode->setMaterialID(p_value[save_project::node_graph_settings::MATERIAL_ID].asInt());
+	}
+
+	return true;
 
 }
 
