@@ -4,7 +4,7 @@
 #include "Common/custom.h"
 class CustomNode : public Node {
 	bool m_isMalformed = false;
-	void parseCutomNodeFile(std::string p_nodeName);
+	void parseCustomNodeFile(std::string p_nodeName);
 public:
 	CustomNode(std::string p_nodeName);
 	CustomNode(std::string p_nodeName, int p_ID);
