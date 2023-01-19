@@ -1,0 +1,66 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.82393085956573486, 0.5166282057762146, 0.84313726425170898 ],
+         "inputFloat" : [ 0.74000000953674316, 0.019999999552965164 ],
+         "materialType" : "Dielectric"
+      },
+      "materialID" : [ 0, 1 ]
+   },
+   "nodeGraphSettings" : {
+      "0" : {
+         "fileName" : "octahedron.glsl",
+         "inputFloat" : [ 3.0 ],
+         "nodeName" : "Octahedron",
+         "outputIDS" : [ 1 ]
+      },
+      "10" : {
+         "inputFloat" : [ -27.0 ],
+         "inputIDs" : [ 11 ],
+         "nodeName" : "Rotation_Y",
+         "outputIDS" : [ 12 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "4" : {
+         "inputIDs" : [ 5 ],
+         "materialID" : "1",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 6 ]
+      },
+      "7" : {
+         "inputFloat" : [ 15.0 ],
+         "inputIDs" : [ 8 ],
+         "nodeName" : "Rotation_X",
+         "outputIDS" : [ 9 ]
+      },
+      "nodeID" : [ 2, 4, 0, 7, 10 ],
+      "nodeLink" : [
+         [ 6, 3 ],
+         [ 12, 5 ],
+         [ 9, 11 ],
+         [ 1, 8 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 16, 10, 16, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 0.0, 0.0, 4.0 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.5, 0.69999998807907104, 1.0 ],
+      "horizonTopColor" : [ 1.0, 1.0, 1.0 ]
+   }
+}

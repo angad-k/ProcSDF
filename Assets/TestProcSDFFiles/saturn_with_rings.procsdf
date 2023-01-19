@@ -1,0 +1,83 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.86707741022109985, 0.52475011348724365, 0.87745100259780884 ],
+         "inputFloat" : [ 0.81000000238418579, 0.029999999329447746 ],
+         "materialType" : "Dielectric"
+      },
+      "3" : {
+         "color" : [ 0.74509799480438232, 0.084006153047084808, 0.37566462159156799 ],
+         "inputFloat" : [ 0.27000001072883606 ],
+         "materialType" : "Metal"
+      },
+      "materialID" : [ 0, 1, 3 ]
+   },
+   "nodeGraphSettings" : {
+      "0" : {
+         "inputFloat" : [ 2.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 1 ]
+      },
+      "12" : {
+         "inputFloat" : [ 11.0 ],
+         "inputIDs" : [ 13 ],
+         "nodeName" : "Rotation_X",
+         "outputIDS" : [ 14 ]
+      },
+      "15" : {
+         "inputFloat" : [ -29.0 ],
+         "inputIDs" : [ 16 ],
+         "nodeName" : "Rotation_Z",
+         "outputIDS" : [ 17 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "4" : {
+         "inputIDs" : [ 5 ],
+         "materialID" : "1",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 6 ]
+      },
+      "7" : {
+         "inputFloat" : [ 3.0, 0.20000000298023224 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 8 ]
+      },
+      "9" : {
+         "inputIDs" : [ 10 ],
+         "materialID" : "3",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 11 ]
+      },
+      "nodeID" : [ 0, 2, 4, 7, 9, 12, 15 ],
+      "nodeLink" : [
+         [ 1, 5 ],
+         [ 6, 3 ],
+         [ 11, 3 ],
+         [ 8, 13 ],
+         [ 14, 16 ],
+         [ 17, 10 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 16, 10, 16, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 0.0, 0.0, 5.0 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.5, 0.69999998807907104, 1.0 ],
+      "horizonTopColor" : [ 1.0, 1.0, 1.0 ]
+   }
+}

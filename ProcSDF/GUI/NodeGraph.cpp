@@ -70,6 +70,11 @@ void NodeGraph::setID(Node* p_node, int p_ID)
 	m_allocatedIDs[p_ID] = p_node;
 }
 
+void NodeGraph::setMaterialID(Material* p_material, int p_ID)
+{
+	m_allocatedMaterialIDs[p_ID] = p_material;
+}
+
 void NodeGraph::deallocateID(int p_ID)
 {
 	if (m_allocatedIDs.find(p_ID) != m_allocatedIDs.end())

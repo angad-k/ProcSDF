@@ -8,6 +8,17 @@
 
 CustomNode::CustomNode(std::string p_nodeName)
 {
+	CustomNode::parseCustomNodeFile(p_nodeName);
+	init();
+}
+
+CustomNode::CustomNode(std::string p_nodeName, int m_ID)
+{
+	CustomNode::parseCustomNodeFile(p_nodeName);
+	init(m_ID);
+}
+
+void CustomNode::parseCustomNodeFile(std::string p_nodeName) {
 	std::string l_fileContent = NodeGraph::getSingleton()->getCustomNodeFileContentsfromNodeName(p_nodeName);
 	std::vector<std::string> l_lines = custom::tokenizeWithDelimiters(l_fileContent, "\n");
 	m_titleColor = imgui_colors::CUSTOM_NODE;
@@ -63,8 +74,6 @@ CustomNode::CustomNode(std::string p_nodeName)
 		}
 	}
 	m_outputPins.push_back("Output");
-
-	init();
 }
 
 void CustomNode::AddCustomNodeAtFilePath(std::string p_filePath)
@@ -103,5 +112,6 @@ void CustomNode::AddCustomNodeAtFilePath(std::string p_filePath)
 	if (!l_isMalformed)
 	{
 		NodeGraph::getSingleton()->setCustomNodeFileContents(l_nodeName, l_fileContent);
+		NodeGraph::getSingleton()->setCustomNodeFilePath(l_nodeName, p_filePath);
 	}
 }

@@ -86,17 +86,46 @@ namespace shader_generation {
 }
 
 namespace save_project {
-	const std::string NODE_LINK = "nodeLink";
-	const std::string NODE_NAME = "nodeName";
-	const std::string INPUT_IDS = "inputIDs";
-	const std::string OUTPUT_IDS = "outputIDS";
-	const std::string INPUT_FLOAT3 = "inputFloat3";
-	const std::string INPUT_FLOAT = "inputFloat";
+	namespace world_settings {
+		const std::string WORLD_SETTINGS = "worldSettings";
+		const std::string CAMERA_ORIGIN = "cameraOrigin";
+		const std::string CAMERA_FOCAL_LENGTH = "focalLength";
+		const std::string TOP_COLOR = "horizonTopColor";
+		const std::string BOTTOM_COLOR = "horizonBottomColor";
+	}
+	namespace render_settings {
+		const std::string RENDER_SETTINGS = "renderSettings";
+		const std::string RENDER_VALUES = "renderValues";
+		const std::string RENDER_DEBUG_VALUES = "renderDebugValues";
+		const std::string RENDER_DEBUG_COLORS = "renderDebugColor";
+	}
+	namespace node_graph_settings {
+		const std::string NODE_GRAPH_SETTINGS = "nodeGraphSettings";
+		const std::string NODE_ID = "nodeID";
+		const std::string NODE_LINK = "nodeLink";
+		const std::string NODE_NAME = "nodeName";
+		const std::string INPUT_IDS = "inputIDs";
+		const std::string OUTPUT_IDS = "outputIDS";
+		const std::string INPUT_FLOAT3 = "inputFloat3";
+		const std::string INPUT_FLOAT = "inputFloat";
+		const std::string FILE_NAME = "fileName";
+		const std::string MATERIAL_ID = "materialID";
+	}
+
+	namespace material_settings {
+		const std::string MATERIAL_SETTINGS = "materialSettings";
+		const std::string COLOR = "color";
+		const std::string MATERIAL_TYPE = "materialType";
+		const std::string INPUT_FLOAT3 = "inputFloat3";
+		const std::string INPUT_FLOAT = "inputFloat";
+		const std::string MATERIAL_ID = "materialID";
+		const std::string FILE_NAME = "fileName";
+		const std::string CUSTOM_NAME = "customName";
+	}
+	
 	const std::string PROCSDF_EXTENSION = ".procsdf";
-	const std::string CAMERA_SETTING = "cameraSetting";
-	const std::string CAMERA_ORIGIN = "cameraOrigin";
-	const std::string CAMERA_FOCAL_LENGTH = "focalLength";
-	const std::string NODE_ID = "nodeID";
+	const std::string CUSTOM_SDF_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomSDFs\\";
+	const std::string CUSTOM_MATERIAL_FILE_PATH = (std::string)ROOT_DIR"Assets\\CustomMaterials\\";
 }
 
 namespace node_name {
