@@ -216,7 +216,22 @@ void ProjectSaver::saveMaterialList(Json::Value& p_value) {
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	for (Material* material : l_nodeGraph->getMaterials()) {
 		ProjectSaver::saveMaterial(p_value[std::to_string(material->getID())], material);
+		if (material->m_materialType == material_type::CUSTOM) {
+			ProjectSaver::saveCustomMaterialFileContent(p_value[save_project::material_settings::CUSTOM_FILE_CONTENT], material);
+		}
 	}
+}
+
+void ProjectSaver::saveCustomMaterialFileContent(Json::Value& p_value, Material* p_material) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	CustomMaterial* l_customMaterial = (CustomMaterial*)p_material;
+	std::string l_fileName = ProjectSaver::getFileNameFromFilePath(
+		l_nodeGraph->getCustomMaterialFilePathFromMaterialName(l_customMaterial->getCustomName()));
+	std::string l_fileContent = l_nodeGraph->getCustomMaterialFileContentsfromMaterialName(l_customMaterial->getCustomName());
+
+	p_value[l_fileName] = l_fileContent;
 }
 
 void ProjectSaver::saveMaterial(Json::Value& p_value, Material* p_material) {
