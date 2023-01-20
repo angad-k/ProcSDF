@@ -35,7 +35,7 @@ private:
 	static bool parseNodeLink(const Json::Value& p_value);
 	static bool parseMaterialSettings(const Json::Value& p_value);
 	static bool parseMaterials(const Json::Value& p_value);
-	static bool parseMaterial(const Json::Value& p_value, int p_ID);
+	static bool parseMaterial(const Json::Value& p_value, int p_ID, std::string p_fileContent);
 public:
 	static bool saveProject();
 	static bool loadProject();

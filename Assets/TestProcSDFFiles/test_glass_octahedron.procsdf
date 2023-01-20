@@ -40,6 +40,9 @@
          "nodeName" : "Rotation_X",
          "outputIDS" : [ 9 ]
       },
+      "customFileContent" : {
+         "octahedron.glsl" : "\n// type primitive\n// name Octahedron\n// float_params s\nfloat Octahedron( in vec3 p, in float s)\n{\n  p = abs(p);\n  return (p.x+p.y+p.z-s)*0.57735027;\n}\n"
+      },
       "nodeID" : [ 2, 4, 0, 7, 10 ],
       "nodeLink" : [
          [ 6, 3 ],

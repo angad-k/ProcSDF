@@ -441,6 +441,7 @@ bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
 	}
 
 	bool l_status = true;
+	std::string l_fileContent;
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	for (int i = 0; i < l_materialIDs.size(); i++) {
 		if (!l_materialIDs[i].isInt()) {
@@ -451,7 +452,19 @@ bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
 
 		__IS_MEMBER_CHECK__(l_materialSettings, std::to_string(l_ID));
 
-		l_status = ProjectSaver::parseMaterial(l_materialSettings[std::to_string(l_ID)], l_ID);
+		if (l_materialSettings[std::to_string(l_ID)].isMember(save_project::material_settings::FILE_NAME)) {
+			__IS_MEMBER_CHECK__(l_materialSettings, save_project::material_settings::CUSTOM_FILE_CONTENT)
+
+			Json::Value l_customFileContent = l_materialSettings[save_project::material_settings::CUSTOM_FILE_CONTENT];
+			std::string l_fileName = l_materialSettings[std::to_string(l_ID)][save_project::material_settings::FILE_NAME].asString();
+
+			if (!l_customFileContent[l_fileName].isString()) {
+				return false;
+			}
+			l_fileContent = l_customFileContent[l_fileName].asString();
+		}
+
+		l_status = ProjectSaver::parseMaterial(l_materialSettings[std::to_string(l_ID)], l_ID, l_fileContent);
 
 		__PARSE_SUCESS__(l_status)
 	}
@@ -459,7 +472,7 @@ bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
 	return true;
 }
 
-bool ProjectSaver::parseMaterial(const Json::Value& p_value, int p_ID) {
+bool ProjectSaver::parseMaterial(const Json::Value& p_value, int p_ID, std::string p_fileContent) {
 
 	__IS_MEMBER_CHECK__(p_value, save_project::material_settings::MATERIAL_TYPE)
 	__IS_MEMBER_CHECK__(p_value, save_project::material_settings::COLOR)
@@ -489,7 +502,7 @@ bool ProjectSaver::parseMaterial(const Json::Value& p_value, int p_ID) {
 
 		std::string l_customName = p_value[save_project::material_settings::CUSTOM_NAME].asString();
 
-		CustomMaterial::AddCustomMaterialAtFilePath(l_filePath);
+		CustomMaterial::AddCustomMaterialWithFileContent(p_fileContent);
 		CustomMaterial* l_customMaterial = new CustomMaterial(l_customName, p_ID);
 
 		if (l_customMaterial->isMalformed()) {
