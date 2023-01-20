@@ -110,6 +110,7 @@ namespace save_project {
 		const std::string INPUT_FLOAT = "inputFloat";
 		const std::string FILE_NAME = "fileName";
 		const std::string MATERIAL_ID = "materialID";
+		const std::string CUSTOM_FILE_CONTENT = "customFileContent";
 	}
 
 	namespace material_settings {

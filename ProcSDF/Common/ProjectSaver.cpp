@@ -149,9 +149,22 @@ void ProjectSaver::saveNodeList(Json::Value& p_value) {
 			l_isCustom = true;
 		}
 
+		if (l_isCustom) {
+			ProjectSaver::saveCustomNodeFileContent(p_value[save_project::node_graph_settings::CUSTOM_FILE_CONTENT], node);
+		}
 		ProjectSaver::saveNode(p_value[std::to_string(node->m_ID)], node, l_isCustom, l_filePath, l_nodeIDToMaterialID[node->m_ID]);
 	}
 
+}
+
+void ProjectSaver::saveCustomNodeFileContent(Json::Value& p_value, Node* p_node) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	std::string l_fileName = l_nodeGraph->getCustomNodeFilePath(p_node->m_nodeName);
+	std::string l_fileContent = l_nodeGraph->getCustomNodeFileContentsfromNodeName(p_node->m_nodeName);
+
+	p_value[ProjectSaver::getFileNameFromFilePath(l_fileName)] = l_fileContent;
 }
 
 void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom, std::string p_filePath, int p_materialID) {

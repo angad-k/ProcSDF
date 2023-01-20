@@ -18,6 +18,7 @@ private:
 	static void saveMaterial(Json::Value& p_value, Material* p_material);
 	static void saveMaterialIDs(Json::Value& p_value);
 	static void saveCustomMaterialFileContent(Json::Value& p_value, Material* p_material);
+	static void saveCustomNodeFileContent(Json::Value& p_value, Node* p_node);
 	static std::string getFileNameFromFilePath(std::string p_filePath);
 	static bool saveProjectToFile(Json::Value& p_value);
 
