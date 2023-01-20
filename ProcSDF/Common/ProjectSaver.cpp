@@ -605,6 +605,7 @@ bool ProjectSaver::parseNodes(const Json::Value& p_value) {
 	}
 
 	bool l_status = true;
+	std::string l_fileContent;
 	for (int i = 0; i < l_nodeIDList.size(); i++) {
 		if (!l_nodeIDList[i].isInt()) {
 			return false;
@@ -612,16 +613,28 @@ bool ProjectSaver::parseNodes(const Json::Value& p_value) {
 
 		int l_ID = l_nodeIDList[i].asInt();
 
-		__IS_MEMBER_CHECK__(p_value, std::to_string(l_ID));
+		__IS_MEMBER_CHECK__(p_value, std::to_string(l_ID))
 
-		l_status = ProjectSaver::parseNode(p_value[std::to_string(l_ID)], l_ID);
+		if (p_value[std::to_string(l_ID)].isMember(save_project::node_graph_settings::FILE_NAME)) {
+			__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::CUSTOM_FILE_CONTENT)
+
+			Json::Value l_customFileContent = p_value[save_project::node_graph_settings::CUSTOM_FILE_CONTENT];
+			std::string l_fileName = p_value[std::to_string(l_ID)][save_project::node_graph_settings::FILE_NAME].asString();
+			
+			if (!l_customFileContent[l_fileName].isString()) {
+				return false;
+			}
+			l_fileContent = l_customFileContent[l_fileName].asString();
+		}
+
+		l_status = ProjectSaver::parseNode(p_value[std::to_string(l_ID)], l_ID, l_fileContent);
 		__PARSE_SUCESS__(l_status);
 	}
 
 	return true;
 }
 
-bool ProjectSaver::parseNode(const Json::Value& p_value, int p_ID) {
+bool ProjectSaver::parseNode(const Json::Value& p_value, int p_ID, std::string p_fileContent) {
 
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	bool l_isCustomNode = false;
@@ -644,7 +657,7 @@ bool ProjectSaver::parseNode(const Json::Value& p_value, int p_ID) {
 	}
 	else {
 		std::string l_fileName = save_project::CUSTOM_SDF_FILE_PATH + p_value[save_project::node_graph_settings::FILE_NAME].asString();
-		CustomNode::AddCustomNodeAtFilePath(l_fileName);
+		CustomNode::AddCustomNodeAtFilePath(l_fileName, p_fileContent);
 		CustomNode* l_customNode = new CustomNode(l_nodeName, p_ID);
 		if (l_customNode->isMalformed()) {
 			delete(l_customNode);

@@ -31,7 +31,7 @@ private:
 	static bool parseRenderingSettings(const Json::Value& p_value);
 	static bool parseNodeGraphSettings(const Json::Value& p_value);
 	static bool parseNodes(const Json::Value& p_value);
-	static bool parseNode(const Json::Value& p_value, int p_ID);
+	static bool parseNode(const Json::Value& p_value, int p_ID, std::string p_fileContent);
 	static bool parseNodeLink(const Json::Value& p_value);
 	static bool parseMaterialSettings(const Json::Value& p_value);
 	static bool parseMaterials(const Json::Value& p_value);
