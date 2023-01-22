@@ -76,9 +76,15 @@ void CustomNode::parseCustomNodeFile(std::string p_nodeName) {
 	m_outputPins.push_back("Output");
 }
 
-void CustomNode::AddCustomNodeAtFilePath(std::string p_filePath)
+void CustomNode::AddCustomNodeAtFilePath(std::string p_filePath, std::string p_fileContent)
 {
-	std::string l_fileContent = OS::fetchFileContent(p_filePath);
+	std::string l_fileContent;
+	if (p_fileContent == "") {
+		l_fileContent = OS::fetchFileContent(p_filePath);
+	}
+	else {
+		l_fileContent = p_fileContent;
+	}
 	std::vector<std::string> l_lines = custom::tokenizeWithDelimiters(l_fileContent, "\n");
 	bool l_isMalformed = false;
 	std::string l_nodeName = "";

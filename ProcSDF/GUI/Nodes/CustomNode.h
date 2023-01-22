@@ -12,5 +12,5 @@ public:
 	{
 		return m_isMalformed;
 	}
-	static void AddCustomNodeAtFilePath(std::string p_filePath);
+	static void AddCustomNodeAtFilePath(std::string p_filePath, std::string p_fileContent = "");
 };

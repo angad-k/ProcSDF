@@ -47,9 +47,41 @@ void CustomMaterial::parseCustomMaterialFile(std::string p_materialName) {
 	}
 }
 
+void CustomMaterial::AddCustomMaterialWithFileContent(std::string p_fileContent) {
+
+	std::vector<std::string> l_lines = custom::tokenizeWithDelimiters(p_fileContent, "\n");
+	bool l_isMalformed = false;
+	std::string l_materialName = "";
+	for (std::string line : l_lines)
+	{
+		std::vector<std::string> l_tokens = custom::tokenizeWithDelimiters(line, "\\s+");
+
+		if (l_tokens[0] == "//")
+		{
+			if (l_tokens[1] == "name")
+			{
+				if (l_tokens.size() <= 2)
+				{
+					ERR("type should be followed by an argument.");
+					l_isMalformed = true;
+					break;
+				}
+				l_materialName = l_tokens[2];
+			}
+		}
+	}
+	if (!l_isMalformed)
+	{
+		NodeGraph::getSingleton()->setCustomMaterialFileContents(l_materialName, p_fileContent);
+		NodeGraph::getSingleton()->setCustomMaterialFilePath(l_materialName, "");
+	}
+}
+
 void CustomMaterial::AddCustomMaterialAtFilePath(std::string p_filePath)
 {
+
 	std::string l_fileContent = OS::fetchFileContent(p_filePath);
+	
 	std::vector<std::string> l_lines = custom::tokenizeWithDelimiters(l_fileContent, "\n");
 	bool l_isMalformed = false;
 	std::string l_materialName = "";
@@ -76,4 +108,5 @@ void CustomMaterial::AddCustomMaterialAtFilePath(std::string p_filePath)
 		NodeGraph::getSingleton()->setCustomMaterialFileContents(l_materialName, l_fileContent);
 		NodeGraph::getSingleton()->setCustomMaterialFilePath(l_materialName, p_filePath);
 	}
+	
 }

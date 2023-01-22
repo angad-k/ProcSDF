@@ -19,4 +19,5 @@ public:
 	CustomMaterial(std::string p_materialName);
 	CustomMaterial(std::string p_materialName, int p_ID);
 	static void AddCustomMaterialAtFilePath(std::string p_filePath);
+	static void AddCustomMaterialWithFileContent(std::string p_fileContent);
 };

@@ -149,9 +149,22 @@ void ProjectSaver::saveNodeList(Json::Value& p_value) {
 			l_isCustom = true;
 		}
 
+		if (l_isCustom) {
+			ProjectSaver::saveCustomNodeFileContent(p_value[save_project::node_graph_settings::CUSTOM_FILE_CONTENT], node);
+		}
 		ProjectSaver::saveNode(p_value[std::to_string(node->m_ID)], node, l_isCustom, l_filePath, l_nodeIDToMaterialID[node->m_ID]);
 	}
 
+}
+
+void ProjectSaver::saveCustomNodeFileContent(Json::Value& p_value, Node* p_node) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	std::string l_fileName = l_nodeGraph->getCustomNodeFilePath(p_node->m_nodeName);
+	std::string l_fileContent = l_nodeGraph->getCustomNodeFileContentsfromNodeName(p_node->m_nodeName);
+
+	p_value[ProjectSaver::getFileNameFromFilePath(l_fileName)] = l_fileContent;
 }
 
 void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom, std::string p_filePath, int p_materialID) {
@@ -216,7 +229,22 @@ void ProjectSaver::saveMaterialList(Json::Value& p_value) {
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	for (Material* material : l_nodeGraph->getMaterials()) {
 		ProjectSaver::saveMaterial(p_value[std::to_string(material->getID())], material);
+		if (material->m_materialType == material_type::CUSTOM) {
+			ProjectSaver::saveCustomMaterialFileContent(p_value[save_project::material_settings::CUSTOM_FILE_CONTENT], material);
+		}
 	}
+}
+
+void ProjectSaver::saveCustomMaterialFileContent(Json::Value& p_value, Material* p_material) {
+
+	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
+
+	CustomMaterial* l_customMaterial = (CustomMaterial*)p_material;
+	std::string l_fileName = ProjectSaver::getFileNameFromFilePath(
+		l_nodeGraph->getCustomMaterialFilePathFromMaterialName(l_customMaterial->getCustomName()));
+	std::string l_fileContent = l_nodeGraph->getCustomMaterialFileContentsfromMaterialName(l_customMaterial->getCustomName());
+
+	p_value[l_fileName] = l_fileContent;
 }
 
 void ProjectSaver::saveMaterial(Json::Value& p_value, Material* p_material) {
@@ -413,6 +441,7 @@ bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
 	}
 
 	bool l_status = true;
+	std::string l_fileContent;
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	for (int i = 0; i < l_materialIDs.size(); i++) {
 		if (!l_materialIDs[i].isInt()) {
@@ -423,7 +452,19 @@ bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
 
 		__IS_MEMBER_CHECK__(l_materialSettings, std::to_string(l_ID));
 
-		l_status = ProjectSaver::parseMaterial(l_materialSettings[std::to_string(l_ID)], l_ID);
+		if (l_materialSettings[std::to_string(l_ID)].isMember(save_project::material_settings::FILE_NAME)) {
+			__IS_MEMBER_CHECK__(l_materialSettings, save_project::material_settings::CUSTOM_FILE_CONTENT)
+
+			Json::Value l_customFileContent = l_materialSettings[save_project::material_settings::CUSTOM_FILE_CONTENT];
+			std::string l_fileName = l_materialSettings[std::to_string(l_ID)][save_project::material_settings::FILE_NAME].asString();
+
+			if (!l_customFileContent[l_fileName].isString()) {
+				return false;
+			}
+			l_fileContent = l_customFileContent[l_fileName].asString();
+		}
+
+		l_status = ProjectSaver::parseMaterial(l_materialSettings[std::to_string(l_ID)], l_ID, l_fileContent);
 
 		__PARSE_SUCESS__(l_status)
 	}
@@ -431,7 +472,7 @@ bool ProjectSaver::parseMaterials(const Json::Value& p_value) {
 	return true;
 }
 
-bool ProjectSaver::parseMaterial(const Json::Value& p_value, int p_ID) {
+bool ProjectSaver::parseMaterial(const Json::Value& p_value, int p_ID, std::string p_fileContent) {
 
 	__IS_MEMBER_CHECK__(p_value, save_project::material_settings::MATERIAL_TYPE)
 	__IS_MEMBER_CHECK__(p_value, save_project::material_settings::COLOR)
@@ -461,7 +502,7 @@ bool ProjectSaver::parseMaterial(const Json::Value& p_value, int p_ID) {
 
 		std::string l_customName = p_value[save_project::material_settings::CUSTOM_NAME].asString();
 
-		CustomMaterial::AddCustomMaterialAtFilePath(l_filePath);
+		CustomMaterial::AddCustomMaterialWithFileContent(p_fileContent);
 		CustomMaterial* l_customMaterial = new CustomMaterial(l_customName, p_ID);
 
 		if (l_customMaterial->isMalformed()) {
@@ -577,6 +618,7 @@ bool ProjectSaver::parseNodes(const Json::Value& p_value) {
 	}
 
 	bool l_status = true;
+	std::string l_fileContent;
 	for (int i = 0; i < l_nodeIDList.size(); i++) {
 		if (!l_nodeIDList[i].isInt()) {
 			return false;
@@ -584,16 +626,28 @@ bool ProjectSaver::parseNodes(const Json::Value& p_value) {
 
 		int l_ID = l_nodeIDList[i].asInt();
 
-		__IS_MEMBER_CHECK__(p_value, std::to_string(l_ID));
+		__IS_MEMBER_CHECK__(p_value, std::to_string(l_ID))
 
-		l_status = ProjectSaver::parseNode(p_value[std::to_string(l_ID)], l_ID);
+		if (p_value[std::to_string(l_ID)].isMember(save_project::node_graph_settings::FILE_NAME)) {
+			__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::CUSTOM_FILE_CONTENT)
+
+			Json::Value l_customFileContent = p_value[save_project::node_graph_settings::CUSTOM_FILE_CONTENT];
+			std::string l_fileName = p_value[std::to_string(l_ID)][save_project::node_graph_settings::FILE_NAME].asString();
+			
+			if (!l_customFileContent[l_fileName].isString()) {
+				return false;
+			}
+			l_fileContent = l_customFileContent[l_fileName].asString();
+		}
+
+		l_status = ProjectSaver::parseNode(p_value[std::to_string(l_ID)], l_ID, l_fileContent);
 		__PARSE_SUCESS__(l_status);
 	}
 
 	return true;
 }
 
-bool ProjectSaver::parseNode(const Json::Value& p_value, int p_ID) {
+bool ProjectSaver::parseNode(const Json::Value& p_value, int p_ID, std::string p_fileContent) {
 
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 	bool l_isCustomNode = false;
@@ -616,7 +670,7 @@ bool ProjectSaver::parseNode(const Json::Value& p_value, int p_ID) {
 	}
 	else {
 		std::string l_fileName = save_project::CUSTOM_SDF_FILE_PATH + p_value[save_project::node_graph_settings::FILE_NAME].asString();
-		CustomNode::AddCustomNodeAtFilePath(l_fileName);
+		CustomNode::AddCustomNodeAtFilePath(l_fileName, p_fileContent);
 		CustomNode* l_customNode = new CustomNode(l_nodeName, p_ID);
 		if (l_customNode->isMalformed()) {
 			delete(l_customNode);

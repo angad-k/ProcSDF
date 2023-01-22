@@ -17,6 +17,8 @@ private:
 	static void saveMaterialList(Json::Value& p_value);
 	static void saveMaterial(Json::Value& p_value, Material* p_material);
 	static void saveMaterialIDs(Json::Value& p_value);
+	static void saveCustomMaterialFileContent(Json::Value& p_value, Material* p_material);
+	static void saveCustomNodeFileContent(Json::Value& p_value, Node* p_node);
 	static std::string getFileNameFromFilePath(std::string p_filePath);
 	static bool saveProjectToFile(Json::Value& p_value);
 
@@ -29,11 +31,11 @@ private:
 	static bool parseRenderingSettings(const Json::Value& p_value);
 	static bool parseNodeGraphSettings(const Json::Value& p_value);
 	static bool parseNodes(const Json::Value& p_value);
-	static bool parseNode(const Json::Value& p_value, int p_ID);
+	static bool parseNode(const Json::Value& p_value, int p_ID, std::string p_fileContent);
 	static bool parseNodeLink(const Json::Value& p_value);
 	static bool parseMaterialSettings(const Json::Value& p_value);
 	static bool parseMaterials(const Json::Value& p_value);
-	static bool parseMaterial(const Json::Value& p_value, int p_ID);
+	static bool parseMaterial(const Json::Value& p_value, int p_ID, std::string p_fileContent);
 public:
 	static bool saveProject();
 	static bool loadProject();
