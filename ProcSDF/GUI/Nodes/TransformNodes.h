@@ -15,7 +15,6 @@ public:
 	TransformationType m_TransformationType;
 	TransformNode()
 	{
-		m_isTransformNode = true;
 		m_inputPins = { "Input" };
 		m_outputPins = { "Output" };
 		m_titleColor = imgui_colors::ORANGE;

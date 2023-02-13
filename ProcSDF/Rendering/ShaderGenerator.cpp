@@ -5,6 +5,7 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
 #include "GUI/Nodes/ObjectNode.h"
+#include "GUI/Nodes/OperationNodes.h"
 #include "Common/constant.h"
 #include "GUI/NodeGraph.h"
 #include "Common/os.h"
@@ -13,7 +14,7 @@ void ShaderGenerator::computeAndSetObjectCount() {
 	
 	int l_objectCount = 0;
 	for (Node* node : NodeGraph::getSingleton()->m_nodes) {
-		if (node->m_isObjectNode) {
+		if (node->checkIfObject()) {
 			l_objectCount++;
 			ShaderGenerator::m_nodeIDToObjectIDMap[node->m_ID] = l_objectCount;
 			ShaderGenerator::m_objectIDToNodeIDMap[l_objectCount] = node->m_ID;
@@ -86,7 +87,7 @@ std::string ShaderGenerator::generateGetColorFunction()
 	std::string l_getColorCases = "";
 
 	for (Node* node : NodeGraph::getSingleton()->m_nodes) {
-		if (node->m_isObjectNode) {
+		if (node->checkIfObject()) {
 			ObjectNode* l_node = (ObjectNode*)node;
 			std::string l_caseStatement = shader_generation::get_color::CASE_STATEMENT;
 			l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(ShaderGenerator::m_nodeIDToObjectIDMap[node->m_ID]));
@@ -344,7 +345,7 @@ std::string ShaderGenerator::generateObjectFunctions() {
 	for (int l_nodeID : l_topologicalSorting) {
 		
 		Node* l_nd = l_nodeGraph->getNode(l_nodeID);
-		if (l_nd->m_isTransformNode || l_nd->m_isFinalNode) {
+		if (l_nd->checkIfTransform() || l_nd->checkIfFinal()) {
 			continue;
 		}
 		std::string l_functionName = "f_" + l_nd->getVariableName();
@@ -355,7 +356,7 @@ std::string ShaderGenerator::generateObjectFunctions() {
 		
 		int l_index = 0;
 
-		if (l_nd->m_isObjectNode) {
+		if (l_nd->checkIfObject()) {
 			l_functionName = "object";
 			l_functionName.append("_");
 			l_functionName.append(std::to_string(ShaderGenerator::m_nodeIDToObjectIDMap[l_nd->m_ID]));
@@ -388,12 +389,12 @@ std::string ShaderGenerator::generateObjectFunctions() {
 			l_index++;
 		}
 
-		if (!l_nd->m_isObjectNode) {
+		if (!l_nd->checkIfObject()) {
 			l_returnVariable = l_nd->getVariableName();
 		}
 		l_returnStatement.replace(l_returnStatement.find('$'), 1, l_returnVariable);
 
-		if (l_nd->m_isOperationNode) {
+		if (l_nd->checkIfOperation()) {
 			std::string l_finalStatement = "\n";
 			l_finalStatement.append(l_nd->m_getString());
 			l_finalStatement.append("\n");

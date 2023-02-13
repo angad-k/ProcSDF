@@ -136,6 +136,12 @@ float Union(float dist1, float dist2)
     return min(dist1, dist2);
 }
 
+
+float Round( in float primitive, float radius )
+{
+    return primitive - radius;
+}
+
 // END OF OPERATIONS
 
 // STRUCTS

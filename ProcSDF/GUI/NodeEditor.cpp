@@ -94,7 +94,7 @@ void NodeEditor::draw()
 	int l_linkID;
 	if (ImNodes::IsLinkDestroyed(&l_linkID))
 	{
-		if (!l_nodeGraph->getNode(l_nodeGraph->m_links[l_linkID].second)->m_isFinalNode)
+		if (!l_nodeGraph->getNode(l_nodeGraph->m_links[l_linkID].second)->checkIfFinal())
 		{
 			l_nodeGraph->m_links.erase(l_nodeGraph->m_links.begin() + l_linkID);
 			l_nodeGraph->informModification();

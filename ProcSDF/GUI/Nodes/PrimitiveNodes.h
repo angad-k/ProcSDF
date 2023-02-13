@@ -8,7 +8,6 @@ public:
 		m_titleColor = imgui_colors::RED;
 		m_inputPins = {};
 		m_outputPins = { "Output" };
-		m_isFinalNode = false;
 	}
 };
 class SphereNode : public PrimitiveNode {
