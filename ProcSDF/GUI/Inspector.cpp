@@ -322,6 +322,11 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<UnionNode>();
 			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Round"))
+			{
+				addNode<RoundNode>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
