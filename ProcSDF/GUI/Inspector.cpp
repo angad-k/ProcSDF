@@ -283,6 +283,11 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<BoxFrameNode>();
 			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Round Box"))
+			{
+				addNode<RoundBoxNode>();
+			}
 
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

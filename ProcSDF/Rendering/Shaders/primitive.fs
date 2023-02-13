@@ -1,3 +1,4 @@
+R"(
 // PRIMITIVES
 
 float Sphere(in vec3 position, in float radius)
@@ -11,13 +12,6 @@ float Box(in vec3 position, in float dimension_x, in float dimension_y, in float
     vec3 half_dimension = dimension/2;
     vec3 dist = abs(position) - half_dimension;
     return length(max(dist,0.0)) + min(max(dist.x, max(dist.y, dist.z)), 0.0);
-}
-
-float RoundBox(in vec3 position, in float dimension_x, in float dimension_y, in float dimension_z, float r)
-{
-    vec3 dimension = vec3(dimension_x, dimension_y, dimension_z);
-    vec3 q = abs(position) - dimension;
-    return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
 }
 
 // torus with parameter representing the radius of the path of rotating circle and the radius of the rotating circle
@@ -41,3 +35,4 @@ float BoxFrame(in vec3 position, in float dimension_x, in float dimension_y, in 
 
 
 // END OF PRIMITIVES
+)"

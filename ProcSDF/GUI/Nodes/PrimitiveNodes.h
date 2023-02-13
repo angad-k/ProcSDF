@@ -83,3 +83,22 @@ public:
 	}
 };
 
+class RoundBoxNode : public PrimitiveNode {
+public:
+	RoundBoxNode()
+	{
+		m_nodeName = "RoundBox";
+		m_inputFloat3Labels = { "Box Dimension" };
+		m_inputFloatLabels = { "Radius" };
+		init();
+	}
+	RoundBoxNode(int p_ID)
+	{
+		m_nodeName = "BoxFrame";
+		m_inputFloat3Labels = { "Box Dimension" };
+		m_inputFloatLabels = { "Radius" };
+		init(p_ID);
+	}
+};
+
+
