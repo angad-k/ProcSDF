@@ -196,7 +196,9 @@ std::string Node::m_getString()
 		l_commaNeeded = true;
 	}
 
-	if (m_inputIDs.size() == 0) {
+	Node* l_self = this;
+	if (dynamic_cast<PrimitiveNode*>(this) != nullptr)
+	{
 		l_nodestr.append(shader_generation::POSITION);
 		l_commaNeeded = true;
 	}
