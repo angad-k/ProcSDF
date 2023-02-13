@@ -288,6 +288,16 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<RoundBoxNode>();
 			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Cone"))
+			{
+				addNode<ConeNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Capsule"))
+			{
+				addNode<CapsuleNode>();
+			}
 
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

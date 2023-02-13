@@ -101,4 +101,38 @@ public:
 	}
 };
 
+class ConeNode : public PrimitiveNode {
+public:
+	ConeNode()
+	{
+		m_nodeName = "Cone";
+		m_inputFloatLabels = { "sin", "cos", "height"};
+		init();
+	}
+	ConeNode(int p_ID)
+	{
+		m_nodeName = "Cone";
+		m_inputFloatLabels = { "sin", "cos", "height" };
+		init(p_ID);
+	}
+};
+
+class CapsuleNode : public PrimitiveNode {
+public:
+	CapsuleNode()
+	{
+		m_nodeName = "Capsule";
+		m_inputFloat3Labels = { "Point1", "Point2"};
+		m_inputFloatLabels = { "radius" };
+		init();
+	}
+	CapsuleNode(int p_ID)
+	{
+		m_nodeName = "Capsule";
+		m_inputFloat3Labels = { "Point1", "Point2" };
+		m_inputFloatLabels = { "radius" };
+		init(p_ID);
+	}
+};
+
 
