@@ -365,8 +365,8 @@ std::string ShaderGenerator::generateObjectFunctions() {
 
 		for (auto it : l_nd->m_operationOrdering) {
 			l_functionBody.append(shader_generation::object_function::POSITION_RESTORATION);
-			for (auto itr : it.second) {
-				l_functionBody.append(ShaderGenerator::getTransform(itr));
+			for (auto itr = it.second.rbegin(); itr < it.second.rend(); itr++) {
+				l_functionBody.append(ShaderGenerator::getTransform(*itr));
 			}
 			std::string l_valueAssignment = shader_generation::object_function::DISTANCE_STORAGE;
 			if (l_nd->m_previousNonTransformNode[l_index] == NULL) {
