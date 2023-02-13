@@ -61,4 +61,20 @@ float Capsule( vec3 position, float point1_x, float point1_y, float point1_z, fl
     return length( pa - ba*h ) - radius;
 }
 
+float Cylinder(vec3 position, float point1_x, float point1_y, float point1_z, float point2_x, float point2_y, float point2_z, float radius)
+{
+    vec3 a = vec3(point1_x, point1_y, point1_z); 
+    vec3 b = vec3(point2_x, point2_y, point2_z);
+    vec3  ba = b - a;
+    vec3  pa = position - a;
+    float baba = dot(ba,ba);
+    float paba = dot(pa,ba);
+    float x = length(pa*baba-ba*paba) - radius*baba;
+    float y = abs(paba-baba*0.5)-baba*0.5;
+    float x2 = x*x;
+    float y2 = y*y*baba;
+    float d = (max(x,y)<0.0)?-min(x2,y2):(((x>0.0)?x2:0.0)+((y>0.0)?y2:0.0));
+    return sign(d)*sqrt(abs(d))/baba;
+}
+
 // END OF PRIMITIVES

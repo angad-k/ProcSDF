@@ -298,6 +298,11 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<CapsuleNode>();
 			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Cylinder"))
+			{
+				addNode<CylinderNode>();
+			}
 
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

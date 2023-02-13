@@ -135,4 +135,22 @@ public:
 	}
 };
 
+class CylinderNode : public PrimitiveNode {
+public:
+	CylinderNode()
+	{
+		m_nodeName = "Cylinder";
+		m_inputFloat3Labels = { "Point1", "Point2" };
+		m_inputFloatLabels = { "radius" };
+		init();
+	}
+	CylinderNode(int p_ID)
+	{
+		m_nodeName = "Cylinder";
+		m_inputFloat3Labels = { "Point1", "Point2" };
+		m_inputFloatLabels = { "radius" };
+		init(p_ID);
+	}
+};
+
 
