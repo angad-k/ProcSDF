@@ -200,7 +200,7 @@ std::string Node::m_getString()
 	}
 
 	Node* l_self = this;
-	if (dynamic_cast<PrimitiveNode*>(this) != nullptr)
+	if (this->checkIfPrimitive())
 	{
 		l_nodestr.append(shader_generation::POSITION);
 		l_commaNeeded = true;

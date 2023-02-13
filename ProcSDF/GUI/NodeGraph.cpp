@@ -115,7 +115,7 @@ void NodeGraph::addLink(int p_src, int p_dest)
 	{
 		if (link.second == p_dest)
 		{
-			if (dynamic_cast<FinalNode*>(m_allocatedIDs[link.second])==nullptr)
+			if (!m_allocatedIDs[link.second]->checkIfFinal())
 			{
 				ERR("All input pins(except for final) can have only one input.");
 				l_possible = false;
