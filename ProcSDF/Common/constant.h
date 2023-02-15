@@ -32,7 +32,8 @@ namespace shader_generation {
 		const std::string ROTATION_TRANSFORM_INIT_Z = "\nrotation_transform_z = mat3(1.0);\nrotation_transform_z[0][0] = rotation_transform_z[1][1] = cos(radians(float($)));\nrotation_transform_z[0][1] = -sin(radians(float($)));\nrotation_transform_z[1][0] = -rotation_transform_z[0][1];\n";
 		const std::string ROTATION_TRANSFORM_APPLICATION = "\nposition = rotation_transform_$ * position;\n";
 		const std::string POSITION_RESTORATION = "\nposition = position_dup;\n";
-		const std::string DISTANCE_STORAGE = "\nfloat $ = $(position);\n";
+		const std::string POSITION_SCALING = "\nposition = position/($);\n";
+		const std::string DISTANCE_STORAGE = "\nfloat $ = $(position) * $;\n";
 		const std::string ROTATION = "rotation_transform";
 	}
 	namespace closest_object_info {
@@ -143,6 +144,7 @@ namespace node_name {
 	const std::string ROTATIONX_NODE = "Rotation_X";
 	const std::string ROTATIONY_NODE = "Rotation_Y";
 	const std::string ROTATIONZ_NODE = "Rotation_Z";
+	const std::string SCALING_NODE = "Scale";
 }
 
 namespace material_type {
