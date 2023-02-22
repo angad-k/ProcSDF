@@ -372,6 +372,11 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<RotationNodeZ>();
 			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Scale"))
+			{
+				addNode<Scale>();
+			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();

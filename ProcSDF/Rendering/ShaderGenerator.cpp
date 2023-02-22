@@ -366,14 +366,28 @@ std::string ShaderGenerator::generateObjectFunctions() {
 
 		for (auto it : l_nd->m_operationOrdering) {
 			l_functionBody.append(shader_generation::object_function::POSITION_RESTORATION);
+			std::string l_scalingString = "1.0";
 			for (auto itr = it.second.rbegin(); itr < it.second.rend(); itr++) {
+				TransformNode* l_transformNode = (*itr);
+				if (l_transformNode->m_TransformationType == TransformationType::SCALE) {
+					l_scalingString.append(" * ");
+					l_scalingString.append(ShaderGenerator::getUniformStringFromLabel(l_transformNode->getVariableName(), l_transformNode->m_inputFloatLabels[0]));
+					continue;
+				}
 				l_functionBody.append(ShaderGenerator::getTransform(*itr));
 			}
+
+			std::string l_positionScaling = shader_generation::object_function::POSITION_SCALING;
+			l_positionScaling.replace(l_positionScaling.find('$'), 1, l_scalingString);
+			l_functionBody.append(l_positionScaling);
+
 			std::string l_valueAssignment = shader_generation::object_function::DISTANCE_STORAGE;
 			if (l_nd->m_previousNonTransformNode[l_index] == NULL) {
 				l_valueAssignment = "\n";
 				l_valueAssignment.append(l_nd->m_getString());
-				l_valueAssignment.append("\n");
+				l_valueAssignment.pop_back();
+				l_valueAssignment.append(" * " + l_scalingString);
+				l_valueAssignment.append(";\n");
 				l_returnVariable = l_nd->getVariableName();
 			}
 			else {
@@ -382,6 +396,7 @@ std::string ShaderGenerator::generateObjectFunctions() {
 				l_variableName.append(std::to_string(l_index));
 				l_valueAssignment.replace(l_valueAssignment.find('$'), 1, l_variableName);
 				l_valueAssignment.replace(l_valueAssignment.find('$'), 1, l_functionName);
+				l_valueAssignment.replace(l_valueAssignment.find('$'), 1, l_scalingString);
 				l_returnVariable = l_variableName;
 			}
 
