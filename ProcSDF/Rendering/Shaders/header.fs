@@ -1,3 +1,4 @@
+const std::string heR"(
 // PREAMBLE
 
 #version 330 core
@@ -136,12 +137,6 @@ float Union(float dist1, float dist2)
     return min(dist1, dist2);
 }
 
-
-float Round( in float primitive, float radius )
-{
-    return primitive - radius;
-}
-
 // END OF OPERATIONS
 
 // STRUCTS
@@ -204,3 +199,4 @@ scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in int obj
 }
 
 // END OF SCATTER FNS
+)"};

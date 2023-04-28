@@ -1,0 +1,61 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.81862747669219971, 0.65409940481185913, 0.65409940481185913 ],
+         "inputFloat" : [ 0.0 ],
+         "materialType" : "Metal"
+      },
+      "materialID" : [ 0, 1 ]
+   },
+   "nodeGraphSettings" : {
+      "15" : {
+         "inputIDs" : [ 16 ],
+         "materialID" : "1",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 17 ]
+      },
+      "18" : {
+         "inputFloat3" : [
+            [ 5.0, 0.0, 0.0 ]
+         ],
+         "inputIDs" : [ 19 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 20 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "21" : {
+         "fileName" : "mandelbulb.glsl",
+         "inputFloat" : [ 43.0, 21.0, 13.0 ],
+         "nodeName" : "Mandelbulb",
+         "outputIDS" : [ 22 ]
+      },
+      "nodeID" : [ 2, 15, 18, 21 ],
+      "nodeLink" : [
+         [ 17, 3 ],
+         [ 20, 16 ],
+         [ 22, 19 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 16, 10, 16, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 5.0, 0.0, 2.0 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.5, 0.69999998807907104, 1.0 ],
+      "horizonTopColor" : [ 1.0, 1.0, 1.0 ]
+   }
+}

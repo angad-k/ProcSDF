@@ -8,10 +8,6 @@ class TransformNode;
 class Node {
 public:
 	int m_ID;
-	bool m_isFinalNode = false;
-	bool m_isObjectNode = false;
-	bool m_isTransformNode = false;
-	bool m_isOperationNode = false;
 	virtual void draw();
 	void drawStartNode();
 	void drawEndNode();
@@ -42,6 +38,12 @@ public:
 	}
 	void init();
 	void init(int p_ID);
+
+	bool checkIfTransform();
+	bool checkIfOperation();
+	bool checkIfPrimitive();
+	bool checkIfObject();
+	bool checkIfFinal();
 
 	~Node();
 };

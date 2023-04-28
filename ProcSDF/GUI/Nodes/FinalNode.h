@@ -9,7 +9,6 @@ public:
 		m_nodeName = "Final node";
 		m_inputPins = { "Final Output" };
 		m_outputPins = {};
-		m_isFinalNode = true;
 		m_titleColor = imgui_colors::GREEN;
 		init();
 	}
@@ -19,7 +18,6 @@ public:
 		m_nodeName = "Final node";
 		m_inputPins = { "Final Output" };
 		m_outputPins = {};
-		m_isFinalNode = true;
 		m_titleColor = imgui_colors::GREEN;
 		init(p_ID);
 	}

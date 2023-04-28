@@ -283,6 +283,26 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<BoxFrameNode>();
 			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Round Box"))
+			{
+				addNode<RoundBoxNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Cone"))
+			{
+				addNode<ConeNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Capsule"))
+			{
+				addNode<CapsuleNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Cylinder"))
+			{
+				addNode<CylinderNode>();
+			}
 
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
@@ -346,6 +366,11 @@ void Inspector::drawNodeGraphSettings()
 			if (ImGui::Button("Rotation Around Z-Axis"))
 			{
 				addNode<RotationNodeZ>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Scale"))
+			{
+				addNode<Scale>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

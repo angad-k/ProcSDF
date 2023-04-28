@@ -134,7 +134,7 @@ void ProjectSaver::saveNodeList(Json::Value& p_value) {
 	NodeGraph* l_nodeGraph = NodeGraph::getSingleton();
 
 	for (Node* node : l_nodeGraph->m_nodes) {
-		if (node->m_isObjectNode) {
+		if (node->checkIfObject()) {
 			ObjectNode* l_objectNode = (ObjectNode*)node;
 			l_nodeIDToMaterialID[l_objectNode->m_ID] = l_objectNode->getMaterialID();
 		}
@@ -193,7 +193,7 @@ void ProjectSaver::saveNode(Json::Value& p_value, Node* p_node, bool p_isCustom,
 		p_value[save_project::node_graph_settings::FILE_NAME] = ProjectSaver::getFileNameFromFilePath(p_filePath);
 	}
 
-	if (p_node->m_isObjectNode) {
+	if (p_node->checkIfObject()) {
 		p_value[save_project::node_graph_settings::MATERIAL_ID] = std::to_string(p_materialID);
 	}
 }
@@ -748,7 +748,7 @@ bool ProjectSaver::parseNode(const Json::Value& p_value, int p_ID, std::string p
 
 	}
 
-	if (l_node->m_isObjectNode) {
+	if (l_node->checkIfObject()) {
 		ObjectNode* l_objectNode = (ObjectNode*)l_node;
 		__IS_MEMBER_CHECK__(p_value, save_project::node_graph_settings::MATERIAL_ID)
 

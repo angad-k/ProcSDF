@@ -38,7 +38,7 @@ void CustomNode::parseCustomNodeFile(std::string p_nodeName) {
 				}
 				if (l_tokens[2] == "primitive")
 				{
-					// do nothing for now.
+					m_isPrimitiveNode = true;
 				}
 				if (l_tokens[2] == "operation")
 				{

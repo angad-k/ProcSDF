@@ -8,7 +8,6 @@ public:
 		m_titleColor = imgui_colors::RED;
 		m_inputPins = {};
 		m_outputPins = { "Output" };
-		m_isFinalNode = false;
 	}
 };
 class SphereNode : public PrimitiveNode {
@@ -82,4 +81,75 @@ public:
 		init(p_ID);
 	}
 };
+
+class RoundBoxNode : public PrimitiveNode {
+public:
+	RoundBoxNode()
+	{
+		m_nodeName = "RoundBox";
+		m_inputFloat3Labels = { "Box Dimension" };
+		m_inputFloatLabels = { "Radius" };
+		init();
+	}
+	RoundBoxNode(int p_ID)
+	{
+		m_nodeName = "BoxFrame";
+		m_inputFloat3Labels = { "Box Dimension" };
+		m_inputFloatLabels = { "Radius" };
+		init(p_ID);
+	}
+};
+
+class ConeNode : public PrimitiveNode {
+public:
+	ConeNode()
+	{
+		m_nodeName = "Cone";
+		m_inputFloatLabels = { "sin", "cos", "height"};
+		init();
+	}
+	ConeNode(int p_ID)
+	{
+		m_nodeName = "Cone";
+		m_inputFloatLabels = { "sin", "cos", "height" };
+		init(p_ID);
+	}
+};
+
+class CapsuleNode : public PrimitiveNode {
+public:
+	CapsuleNode()
+	{
+		m_nodeName = "Capsule";
+		m_inputFloat3Labels = { "Point1", "Point2"};
+		m_inputFloatLabels = { "radius" };
+		init();
+	}
+	CapsuleNode(int p_ID)
+	{
+		m_nodeName = "Capsule";
+		m_inputFloat3Labels = { "Point1", "Point2" };
+		m_inputFloatLabels = { "radius" };
+		init(p_ID);
+	}
+};
+
+class CylinderNode : public PrimitiveNode {
+public:
+	CylinderNode()
+	{
+		m_nodeName = "Cylinder";
+		m_inputFloat3Labels = { "Point1", "Point2" };
+		m_inputFloatLabels = { "radius" };
+		init();
+	}
+	CylinderNode(int p_ID)
+	{
+		m_nodeName = "Cylinder";
+		m_inputFloat3Labels = { "Point1", "Point2" };
+		m_inputFloatLabels = { "radius" };
+		init(p_ID);
+	}
+};
+
 

@@ -115,7 +115,7 @@ void NodeGraph::addLink(int p_src, int p_dest)
 	{
 		if (link.second == p_dest)
 		{
-			if (!m_allocatedIDs[link.second]->m_isFinalNode)
+			if (!m_allocatedIDs[link.second]->checkIfFinal())
 			{
 				ERR("All input pins(except for final) can have only one input.");
 				l_possible = false;
@@ -123,8 +123,19 @@ void NodeGraph::addLink(int p_src, int p_dest)
 			}
 		}
 	}
-	if ((m_allocatedIDs[p_src]->m_isObjectNode && !m_allocatedIDs[p_dest]->m_isFinalNode)
-		|| ((!m_allocatedIDs[p_src]->m_isObjectNode) && m_allocatedIDs[p_dest]->m_isFinalNode))
+	if(
+		( 
+			(m_allocatedIDs[p_src]->checkIfObject())
+			&& 
+			(!m_allocatedIDs[p_dest]->checkIfFinal())
+		)
+		|| 
+		(
+			(!m_allocatedIDs[p_src]->checkIfObject())
+			&& 
+			(m_allocatedIDs[p_dest]->checkIfFinal())
+		)
+	)
 	{
 		ERR("|| Object Node --> Final Node || is the only acceptable link here.");
 		l_possible = false;
@@ -175,7 +186,7 @@ void NodeGraph::addNode(Node* p_new_node)
 void NodeGraph::deleteNode(int p_id)
 {
 	Node* node = m_allocatedIDs[p_id];
-	if (node->m_isFinalNode)
+	if (node->checkIfFinal())
 	{
 		ERR("Cannot delete final node.")
 			return;
@@ -212,7 +223,7 @@ void NodeGraph::depthFirstSearchForTopologicalSorting(int p_src,
 
 	l_srcNode->m_previousNonTransformNode.push_back(p_previousNonTransformNode);
 
-	if (!l_srcNode->m_isTransformNode) {
+	if (!l_srcNode->checkIfTransform()) {
 		p_previousNonTransformNode = l_srcNode;
 		l_srcNode->m_operationOrdering[l_srcNode->m_visitCount] = p_operationOrdering;
 		p_operationOrdering.clear();
@@ -238,7 +249,7 @@ void NodeGraph::depthFirstSearchForTopologicalSorting(int p_src,
 		l_index++;
 	}
 
-	if (l_srcNode->m_isObjectNode) {
+	if (l_srcNode->checkIfObject()) {
 		l_childObjectNodes.insert(p_src);
 	}
 	
@@ -392,7 +403,7 @@ void NodeGraph::fixMaterials()
 {
 	for (Node* node : m_nodes)
 	{
-		if (node->m_isObjectNode)
+		if (node->checkIfObject())
 		{
 			ObjectNode* l_obj = (ObjectNode*)node;
 			int l_matID = l_obj->getMaterialID();
