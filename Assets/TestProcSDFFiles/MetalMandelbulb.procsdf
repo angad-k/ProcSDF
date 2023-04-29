@@ -1,0 +1,76 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.15378700196743011, 0.67304420471191406, 0.78431373834609985 ],
+         "inputFloat" : [ 0.0 ],
+         "materialType" : "Metal"
+      },
+      "materialID" : [ 0, 1 ]
+   },
+   "nodeGraphSettings" : {
+      "0" : {
+         "fileName" : "mandelbulb.glsl",
+         "inputFloat" : [ 11.0, 3.0, 9.0 ],
+         "nodeName" : "Mandelbulb",
+         "outputIDS" : [ 1 ]
+      },
+      "10" : {
+         "inputFloat" : [ 27.0 ],
+         "inputIDs" : [ 11 ],
+         "nodeName" : "Rotation_Y",
+         "outputIDS" : [ 12 ]
+      },
+      "13" : {
+         "inputFloat" : [ 7.0 ],
+         "inputIDs" : [ 14 ],
+         "nodeName" : "Rotation_Z",
+         "outputIDS" : [ 15 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "4" : {
+         "inputIDs" : [ 5 ],
+         "materialID" : "1",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 6 ]
+      },
+      "7" : {
+         "inputFloat" : [ 49.0 ],
+         "inputIDs" : [ 8 ],
+         "nodeName" : "Rotation_X",
+         "outputIDS" : [ 9 ]
+      },
+      "customFileContent" : {
+         "mandelbulb.glsl" : "\n// type primitive\n// name Mandelbulb\n// float_params Iterations Bailout Power\nfloat Mandelbulb(in vec3 pos, in float Iterations, in float Bailout, in float Power) {\n\tvec3 z = pos;\n\tfloat dr = 1.0;\n\tfloat r = 0.0;\n\tfor (int i = 0; i < Iterations ; i++) {\n\t\tr = length(z);\n\t\tif (r>Bailout) break;\n\t\t\n\t\t// convert to polar coordinates\n\t\tfloat theta = acos(z.z/r);\n\t\tfloat phi = atan(z.y,z.x);\n\t\tdr =  pow( r, Power-1.0)*Power*dr + 1.0;\n\t\t\n\t\t// scale and rotate the point\n\t\tfloat zr = pow( r,Power);\n\t\ttheta = theta*Power;\n\t\tphi = phi*Power;\n\t\t\n\t\t// convert back to cartesian coordinates\n\t\tz = zr*vec3(sin(theta)*cos(phi), sin(phi)*sin(theta), cos(theta));\n\t\tz+=pos;\n\t}\n\treturn 0.5*log(r)*r/dr;\n}\n"
+      },
+      "nodeID" : [ 2, 4, 0, 7, 10, 13 ],
+      "nodeLink" : [
+         [ 6, 3 ],
+         [ 1, 8 ],
+         [ 9, 11 ],
+         [ 12, 14 ],
+         [ 15, 5 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 500, 50, 16, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 0.0, 0.0, 1.8999999761581421 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.1063292920589447, 0.21085648238658905, 0.36764705181121826 ],
+      "horizonTopColor" : [ 1.0, 1.0, 1.0 ]
+   }
+}

@@ -46,7 +46,7 @@ Renderer::Renderer()
 	glEnableVertexAttribArray(0);
 }
 
-void Renderer::draw(float p_width, float p_height)
+void Renderer::draw(float p_width, float p_height, bool from_export)
 {
 	if (m_cachedWidth != p_width || m_cachedHeight != p_height)
 	{
@@ -74,6 +74,7 @@ void Renderer::draw(float p_width, float p_height)
 	glUniform1f(m_focalLength, m_focalLengthValue);
 	glUseProgram(m_shaderProgram);
 	glBindVertexArray(m_VAO);
+	if(m_render_continously || from_export)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -227,7 +228,7 @@ std::vector<unsigned char> Renderer::getRenderedImage(int p_width, int p_height)
 	
 	auto start = std::chrono::high_resolution_clock::now();
 	// We first render the image with required size.
-	draw(p_width, p_height);
+	draw(p_width, p_height, true);
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 	PRINT("Time taken for render : " + std::to_string(duration.count()) + " microseconds")

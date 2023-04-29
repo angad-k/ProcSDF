@@ -126,6 +126,7 @@ void Inspector::drawRenderingSettings()
 		{
 			ImGui::DragInt(l_render_uniforms[i].c_str(), &Renderer::getSingleton()->m_render_uniforms_values[i]);
 		}
+		ImGui::Checkbox("Render continously", &Renderer::getSingleton()->m_render_continously);
 		ImGui::Unindent();
 		ImGui::TreePop();
 	}
@@ -323,9 +324,19 @@ void Inspector::drawNodeGraphSettings()
 				addNode<UnionNode>();
 			}
 			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Subtraction"))
+			{
+				addNode<SubtractionNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 			if (ImGui::Button("Round"))
 			{
 				addNode<RoundNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Onion"))
+			{
+				addNode<OnionNode>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

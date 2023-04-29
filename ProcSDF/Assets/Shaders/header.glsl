@@ -137,9 +137,19 @@ float Union(float dist1, float dist2)
 }
 
 
-float Round( in float primitive, float radius )
+float Round( in float primitive, in float radius )
 {
     return primitive - radius;
+}
+
+float Onion( in float primitive, in float thickness )
+{
+    return abs(primitive) - thickness;
+}
+
+float Subtraction( in float dist1, in float dist2 )
+{
+    return max(dist1, -dist2);
 }
 
 // END OF OPERATIONS

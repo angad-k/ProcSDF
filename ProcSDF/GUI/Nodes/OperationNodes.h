@@ -44,6 +44,24 @@ public:
 	}
 };
 
+class SubtractionNode : public OperationNode {
+public:
+	SubtractionNode()
+	{
+		m_nodeName = "Subtraction";
+		m_inputPins = { "Input 1", "Input 2"};
+		m_outputPins = { "Output" };
+		init();
+	}
+	SubtractionNode(int p_ID)
+	{
+		m_nodeName = "Subtraction";
+		m_inputPins = { "Input 1", "Input 2" };
+		m_outputPins = { "Output" };
+		init(p_ID);
+	}
+};
+
 class RoundNode : public OperationNode {
 public:
 	RoundNode()
@@ -59,6 +77,26 @@ public:
 		m_nodeName = "Round";
 		m_inputPins = { "Input" };
 		m_inputFloatLabels = { "radius" };
+		m_outputPins = { "Output" };
+		init(p_ID);
+	}
+};
+
+class OnionNode : public OperationNode {
+public:
+	OnionNode()
+	{
+		m_nodeName = "Onion";
+		m_inputPins = { "Input" };
+		m_inputFloatLabels = { "thickness" };
+		m_outputPins = { "Output" };
+		init();
+	}
+	OnionNode(int p_ID)
+	{
+		m_nodeName = "Onion";
+		m_inputPins = { "Input" };
+		m_inputFloatLabels = { "thickness" };
 		m_outputPins = { "Output" };
 		init(p_ID);
 	}

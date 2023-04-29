@@ -1,0 +1,98 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.78431373834609985, 0.11918488889932632, 0.62781298160552979 ],
+         "inputFloat" : [ 0.34999999403953552 ],
+         "materialType" : "Metal"
+      },
+      "2" : {
+         "color" : [ 0.38744714856147766, 0.60356885194778442, 0.68137252330780029 ],
+         "inputFloat" : [ 0.029999999329447746 ],
+         "materialType" : "Metal"
+      },
+      "3" : {
+         "color" : [ 0.72778838872909546, 0.29844292998313904, 0.88235294818878174 ],
+         "inputFloat" : [ 1.5, 0.2800000011920929 ],
+         "materialType" : "Dielectric"
+      },
+      "materialID" : [ 0, 1, 2, 3 ]
+   },
+   "nodeGraphSettings" : {
+      "0" : {
+         "inputFloat" : [ 2.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 1 ]
+      },
+      "12" : {
+         "inputFloat" : [ 0.0 ],
+         "inputIDs" : [ 13 ],
+         "nodeName" : "Rotation_X",
+         "outputIDS" : [ 14 ]
+      },
+      "15" : {
+         "inputFloat" : [ 0.0 ],
+         "inputIDs" : [ 16 ],
+         "nodeName" : "Rotation_Y",
+         "outputIDS" : [ 17 ]
+      },
+      "18" : {
+         "inputFloat" : [ 0.0 ],
+         "inputIDs" : [ 19 ],
+         "nodeName" : "Rotation_Z",
+         "outputIDS" : [ 20 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "4" : {
+         "inputIDs" : [ 5 ],
+         "materialID" : "3",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 6 ]
+      },
+      "7" : {
+         "inputFloat" : [ 1.0 ],
+         "inputFloat3" : [
+            [ 4.0, 4.0, 4.0 ]
+         ],
+         "nodeName" : "BoxFrame",
+         "outputIDS" : [ 8 ]
+      },
+      "9" : {
+         "inputIDs" : [ 10 ],
+         "materialID" : "2",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 11 ]
+      },
+      "nodeID" : [ 0, 2, 4, 7, 9, 12, 15, 18 ],
+      "nodeLink" : [
+         [ 1, 5 ],
+         [ 6, 3 ],
+         [ 11, 3 ],
+         [ 8, 13 ],
+         [ 14, 16 ],
+         [ 17, 19 ],
+         [ 20, 10 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 8, 32, 32, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 0.0, 0.0, 5.0 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.46078431606292725, 0.097126103937625885, 0.097126103937625885 ],
+      "horizonTopColor" : [ 1.0, 1.0, 1.0 ]
+   }
+}
