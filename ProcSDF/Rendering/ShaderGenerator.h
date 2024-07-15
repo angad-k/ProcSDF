@@ -21,7 +21,6 @@ private:
 	
 	bool m_shaderModified = true;
 
-	std::string generateShaderFilePath(std::string p_fileName);
 	std::string generateUniformDeclarations();
 	std::string generateObjectFunctions();
 	std::string generateGetColorFunction();
@@ -46,6 +45,7 @@ public:
 	}
 
 	static std::string getUniformStringFromLabel(std::string p_variable_name, std::string p_label);
+	bool m_print_shader = false;
 
 	std::string getShader() {
 		return m_shader;

@@ -150,18 +150,13 @@ void ShaderGenerator::generateAndSetShader() {
 	// Appends the raymarch and main function.
 	l_shaderString.append(l_shaderFooter);
 
+	if(m_print_shader)
 	std::cout << l_shaderString;
 
 	//std::cout << l_shaderString;
 	ShaderGenerator::setShader(l_shaderString);
 
 	m_shaderModified = true;
-}
-
-std::string ShaderGenerator::generateShaderFilePath(std::string p_fileName)
-{
-	std::string l_filePath = sdf::SHADER_FOLDER_PATH + p_fileName + sdf::SHADER_FILE_EXTENSION;
-	return l_filePath;
 }
 
 std::string ShaderGenerator::generateUniformDeclarations()
