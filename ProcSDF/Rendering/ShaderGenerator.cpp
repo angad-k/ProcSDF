@@ -10,6 +10,7 @@
 #include "GUI/NodeGraph.h"
 #include "Common/os.h"
 #include "Rendering/Materials/CustomMaterial.h"
+
 void ShaderGenerator::computeAndSetObjectCount() {
 	
 	int l_objectCount = 0;
@@ -110,14 +111,26 @@ void ShaderGenerator::generateAndSetShader() {
 	computeAndSetObjectCount();
 	computeUniforms();
 
+	const std::string l_shaderHeader =
+	#include "Rendering/Shaders/header.fs"
+	"";
+
+	const std::string l_shaderFooter =
+	#include "Rendering/Shaders/footer.fs"
+	"";
+
+	const std::string l_shaderPrimitive =
+	#include "Rendering/Shaders/primitive.fs"
+	"";
+
 	std::string l_shaderString;
 	int l_index = 0;
 	// Appends the shader header which includes a number of utility functions.
-	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
+	l_shaderString.append(l_shaderHeader);
 	// Appends all the uniform declarations.
 	l_shaderString.append(ShaderGenerator::generateUniformDeclarations());
 	// Appends all the primitive functions.
-	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
+	l_shaderString.append(l_shaderPrimitive);
 	// Appends all the user defined functions.
 	appendCustomFunctions(l_shaderString);
 	// Generates the getColor function.
@@ -135,7 +148,9 @@ void ShaderGenerator::generateAndSetShader() {
 	// Generates and appends the get target ray function.
 	l_shaderString.append(ShaderGenerator::generateGetTargetRayFunction());
 	// Appends the raymarch and main function.
-	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
+	l_shaderString.append(l_shaderFooter);
+
+	std::cout << l_shaderString;
 
 	//std::cout << l_shaderString;
 	ShaderGenerator::setShader(l_shaderString);

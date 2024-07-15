@@ -84,8 +84,11 @@ void Renderer::assembleShader()
 {
 	std::string l_fragmentSrc = ShaderGenerator::getSingleton()->getShader();
 
-	std::string l_vertexPath = sdf::VERTEX_SHADER_PATH;
-	unsigned int l_vertexShader = compileShader(l_vertexPath, GL_VERTEX_SHADER);
+	std::string l_vertexSrc =
+	#include "Rendering/Shaders/vertex.vs"
+	"";
+
+	unsigned int l_vertexShader = compileShader(l_vertexSrc.c_str(), GL_VERTEX_SHADER);
 	unsigned int l_fragmentShader = compileShader(l_fragmentSrc.c_str(), GL_FRAGMENT_SHADER);
 
 	linkShader(l_vertexShader, l_fragmentShader);

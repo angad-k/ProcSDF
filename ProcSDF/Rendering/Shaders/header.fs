@@ -1,4 +1,4 @@
-const std::string heR"(
+R""(
 // PREAMBLE
 
 #version 330 core
@@ -137,6 +137,22 @@ float Union(float dist1, float dist2)
     return min(dist1, dist2);
 }
 
+
+float Round( in float primitive, in float radius )
+{
+    return primitive - radius;
+}
+
+float Onion( in float primitive, in float thickness )
+{
+    return abs(primitive) - thickness;
+}
+
+float Subtraction( in float dist1, in float dist2 )
+{
+    return max(dist1, -dist2);
+}
+
 // END OF OPERATIONS
 
 // STRUCTS
@@ -199,4 +215,4 @@ scatter_info dielectric_scatter(in vec3 intersection, in vec3 normal, in int obj
 }
 
 // END OF SCATTER FNS
-)"};
+)""

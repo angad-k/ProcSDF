@@ -209,12 +209,6 @@
     <ClInclude Include="Utilities\ProcVec.h" />
     <ClInclude Include="Rendering\Renderer.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Shaders\footer.glsl" />
-    <None Include="Assets\Shaders\header.glsl" />
-    <None Include="Assets\Shaders\primitive.glsl" />
-    <None Include="Assets\Shaders\shader_reference.glsl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
