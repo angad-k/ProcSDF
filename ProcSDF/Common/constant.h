@@ -5,8 +5,6 @@
 #include "ImGui/imgui.h"
 
 namespace sdf {
-	const std::string SHADER_FOLDER_PATH = "Assets/Shaders/";
-	const std::string SHADER_FILE_EXTENSION = ".glsl";
 	const std::string TRANSLATION_NODE = "Translation";
 	const std::string ROTATION_X_NODE = "Rotation_X";
 	const std::string ROTATION_Y_NODE = "Rotation_Y";

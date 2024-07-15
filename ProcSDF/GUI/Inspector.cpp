@@ -153,6 +153,15 @@ void Inspector::drawRenderingSettings()
 			}
 			Renderer::getSingleton()->m_render_uniforms_debug_values[i] = value;
 		}
+		if (!Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+		{
+			ImGui::BeginDisabled();
+		}
+		ImGui::Checkbox("Print Shader Code", &ShaderGenerator::getSingleton()->m_print_shader);
+		if (!Renderer::getSingleton()->m_render_uniforms_debug_values[0])
+		{
+			ImGui::EndDisabled();
+		}
 		ImGui::Unindent();
 		ImGui::TreePop();
 	}
