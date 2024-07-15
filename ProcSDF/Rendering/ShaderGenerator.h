@@ -3,9 +3,11 @@
 #include<vector>
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/TransformNodes.h"
+
 class ShaderGenerator
 {
 private:
+
 	std::string m_shader;
 	int m_objectCount;
 	static ShaderGenerator* s_shaderGenerator;
@@ -33,6 +35,7 @@ private:
 	void computeAndSetObjectCount();
 	void computeUniforms();
 	void appendCustomFunctions(std::string& p_shaderString);
+
 public:
 	static ShaderGenerator* getSingleton() {
 		if (!s_shaderGenerator)

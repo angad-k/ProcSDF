@@ -1,0 +1,646 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.0, 0.97058820724487305, 0.11418672651052475 ],
+         "materialType" : "Diffuse"
+      },
+      "2" : {
+         "color" : [ 0.92156863212585449, 0.31170704960823059, 0.31170704960823059 ],
+         "inputFloat" : [ 0.51999998092651367, 0.76999998092651367 ],
+         "materialType" : "Dielectric"
+      },
+      "3" : {
+         "color" : [ 1.0, 1.0, 1.0 ],
+         "inputFloat" : [ 0.0, 0.0 ],
+         "materialType" : "Dielectric"
+      },
+      "materialID" : [ 0, 1, 2, 3 ]
+   },
+   "nodeGraphSettings" : {
+      "0" : {
+         "inputFloat3" : [
+            [ 379.0, 11.0, 376.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 1 ]
+      },
+      "100" : {
+         "inputIDs" : [ 101 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 102 ]
+      },
+      "103" : {
+         "inputFloat3" : [
+            [ 144.0, 117.0, 132.0 ]
+         ],
+         "inputIDs" : [ 104 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 105 ]
+      },
+      "106" : {
+         "inputIDs" : [ 107 ],
+         "materialID" : "2",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 108 ]
+      },
+      "109" : {
+         "inputFloat3" : [
+            [ 228.0, 125.0, 145.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 110 ]
+      },
+      "111" : {
+         "inputIDs" : [ 112 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 113 ]
+      },
+      "114" : {
+         "inputFloat3" : [
+            [ 0.0, 59.0, 0.0 ]
+         ],
+         "inputIDs" : [ 115 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 116 ]
+      },
+      "117" : {
+         "inputFloat3" : [
+            [ 126.0, 80.0, 62.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 118 ]
+      },
+      "119" : {
+         "inputFloat3" : [
+            [ 0.0, 139.0, 0.0 ]
+         ],
+         "inputIDs" : [ 120 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 121 ]
+      },
+      "12" : {
+         "inputFloat3" : [
+            [ -144.0, 117.0, 142.0 ]
+         ],
+         "inputIDs" : [ 13 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 14 ]
+      },
+      "122" : {
+         "inputIDs" : [ 123 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 124 ]
+      },
+      "125" : {
+         "inputFloat" : [ 123.0, 9.0 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 126 ]
+      },
+      "127" : {
+         "inputIDs" : [ 128 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 129 ]
+      },
+      "130" : {
+         "inputFloat3" : [
+            [ 0.0, 119.0, 0.0 ]
+         ],
+         "inputIDs" : [ 131 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 132 ]
+      },
+      "133" : {
+         "inputFloat" : [ 47.0, 20.0 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 134 ]
+      },
+      "135" : {
+         "inputFloat3" : [
+            [ 0.0, 178.0, 0.0 ]
+         ],
+         "inputIDs" : [ 136 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 137 ]
+      },
+      "138" : {
+         "inputIDs" : [ 139 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 140 ]
+      },
+      "141" : {
+         "inputFloat3" : [
+            [ 0.0, 184.0, 0.0 ]
+         ],
+         "inputIDs" : [ 142 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 143 ]
+      },
+      "144" : {
+         "inputIDs" : [ 145 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 146 ]
+      },
+      "147" : {
+         "inputFloat" : [ -240.0, 242.0 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 148 ]
+      },
+      "149" : {
+         "inputFloat3" : [
+            [ 0.0, 256.0, 0.0 ]
+         ],
+         "inputIDs" : [ 150 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 151 ]
+      },
+      "15" : {
+         "inputFloat" : [ 15.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 16 ]
+      },
+      "152" : {
+         "inputIDs" : [ 153 ],
+         "materialID" : "2",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 154 ]
+      },
+      "155" : {
+         "inputFloat3" : [
+            [ 45.0, 45.0, 1.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 156 ]
+      },
+      "157" : {
+         "inputFloat" : [ 45.0 ],
+         "inputIDs" : [ 158 ],
+         "nodeName" : "Rotation_Z",
+         "outputIDS" : [ 159 ]
+      },
+      "160" : {
+         "inputIDs" : [ 161 ],
+         "materialID" : "3",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 162 ]
+      },
+      "163" : {
+         "inputFloat3" : [
+            [ 0.0, 55.0, 98.0 ]
+         ],
+         "inputIDs" : [ 164 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 165 ]
+      },
+      "166" : {
+         "inputFloat3" : [
+            [ 63.639999389648438, 41.0, 1.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 167 ]
+      },
+      "168" : {
+         "inputIDs" : [ 169, 170 ],
+         "nodeName" : "Union",
+         "outputIDS" : [ 171 ]
+      },
+      "17" : {
+         "inputIDs" : [ 18, 19 ],
+         "nodeName" : "Union",
+         "outputIDS" : [ 20 ]
+      },
+      "172" : {
+         "inputFloat3" : [
+            [ 0.0, -21.0, 0.0 ]
+         ],
+         "inputIDs" : [ 173 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 174 ]
+      },
+      "175" : {
+         "inputFloat3" : [
+            [ 20.0, 20.0, 1.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 176 ]
+      },
+      "177" : {
+         "inputFloat" : [ 45.0 ],
+         "inputIDs" : [ 178 ],
+         "nodeName" : "Rotation_Z",
+         "outputIDS" : [ 179 ]
+      },
+      "180" : {
+         "inputFloat3" : [
+            [ 28.299999237060547, 22.0, 1.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 181 ]
+      },
+      "182" : {
+         "inputFloat3" : [
+            [ 0.0, -10.0, 0.0 ]
+         ],
+         "inputIDs" : [ 183 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 184 ]
+      },
+      "185" : {
+         "inputIDs" : [ 186, 187 ],
+         "nodeName" : "Union",
+         "outputIDS" : [ 188 ]
+      },
+      "189" : {
+         "inputFloat3" : [
+            [ 0.0, 150.0, 143.0 ]
+         ],
+         "inputIDs" : [ 190 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 191 ]
+      },
+      "192" : {
+         "inputIDs" : [ 193 ],
+         "materialID" : "3",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 194 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "21" : {
+         "inputFloat3" : [
+            [ 0.0, 119.0, 0.0 ]
+         ],
+         "inputIDs" : [ 22 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 31 ]
+      },
+      "23" : {
+         "inputFloat" : [ -240.0, 242.0 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 24 ]
+      },
+      "25" : {
+         "inputIDs" : [ 26 ],
+         "materialID" : "2",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 27 ]
+      },
+      "28" : {
+         "inputFloat3" : [
+            [ -143.0, 258.0, 148.0 ]
+         ],
+         "inputIDs" : [ 29 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 30 ]
+      },
+      "32" : {
+         "inputIDs" : [ 33 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 34 ]
+      },
+      "35" : {
+         "inputFloat3" : [
+            [ 21.0, 235.0, 12.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 36 ]
+      },
+      "37" : {
+         "inputFloat" : [ 15.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 38 ]
+      },
+      "39" : {
+         "inputIDs" : [ 40, 41 ],
+         "nodeName" : "Union",
+         "outputIDS" : [ 42 ]
+      },
+      "4" : {
+         "inputIDs" : [ 5 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 6 ]
+      },
+      "43" : {
+         "inputFloat3" : [
+            [ 0.0, 119.0, 0.0 ]
+         ],
+         "inputIDs" : [ 44 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 45 ]
+      },
+      "46" : {
+         "inputFloat3" : [
+            [ -144.0, 117.0, -132.0 ]
+         ],
+         "inputIDs" : [ 47 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 48 ]
+      },
+      "49" : {
+         "inputFloat" : [ -240.0, 242.0 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 50 ]
+      },
+      "51" : {
+         "inputFloat3" : [
+            [ -143.0, 258.0, -132.0 ]
+         ],
+         "inputIDs" : [ 52 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 53 ]
+      },
+      "54" : {
+         "inputIDs" : [ 55 ],
+         "materialID" : "2",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 56 ]
+      },
+      "57" : {
+         "inputFloat" : [ 58.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 58 ]
+      },
+      "59" : {
+         "inputFloat" : [ 15.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 60 ]
+      },
+      "61" : {
+         "inputFloat3" : [
+            [ 21.0, 235.0, 12.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 62 ]
+      },
+      "63" : {
+         "inputFloat" : [ -240.0, 242.0 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 64 ]
+      },
+      "65" : {
+         "inputFloat3" : [
+            [ 0.0, 119.0, 0.0 ]
+         ],
+         "inputIDs" : [ 66 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 67 ]
+      },
+      "68" : {
+         "inputIDs" : [ 69, 70 ],
+         "nodeName" : "Union",
+         "outputIDS" : [ 71 ]
+      },
+      "7" : {
+         "inputFloat3" : [
+            [ 21.0, 235.0, 12.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 8 ]
+      },
+      "72" : {
+         "inputFloat3" : [
+            [ 144.0, 117.0, -132.0 ]
+         ],
+         "inputIDs" : [ 73 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 74 ]
+      },
+      "75" : {
+         "inputIDs" : [ 76 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 77 ]
+      },
+      "78" : {
+         "inputIDs" : [ 79 ],
+         "materialID" : "2",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 80 ]
+      },
+      "81" : {
+         "inputFloat3" : [
+            [ 144.0, 258.0, -132.0 ]
+         ],
+         "inputIDs" : [ 82 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 83 ]
+      },
+      "84" : {
+         "inputFloat3" : [
+            [ 21.0, 253.0, 12.0 ]
+         ],
+         "nodeName" : "Box",
+         "outputIDS" : [ 85 ]
+      },
+      "86" : {
+         "inputFloat" : [ 15.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 87 ]
+      },
+      "88" : {
+         "inputFloat" : [ -240.0, 242.0 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 89 ]
+      },
+      "9" : {
+         "inputIDs" : [ 10 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 11 ]
+      },
+      "90" : {
+         "inputIDs" : [ 91, 92 ],
+         "nodeName" : "Union",
+         "outputIDS" : [ 93 ]
+      },
+      "94" : {
+         "inputFloat3" : [
+            [ 144.0, 258.0, 132.0 ]
+         ],
+         "inputIDs" : [ 95 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 96 ]
+      },
+      "97" : {
+         "inputFloat3" : [
+            [ 0.0, 119.0, 0.0 ]
+         ],
+         "inputIDs" : [ 98 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 99 ]
+      },
+      "nodeID" : [
+         2,
+         4,
+         0,
+         7,
+         9,
+         12,
+         15,
+         23,
+         17,
+         21,
+         25,
+         28,
+         32,
+         35,
+         37,
+         39,
+         43,
+         46,
+         49,
+         51,
+         54,
+         59,
+         61,
+         63,
+         65,
+         68,
+         72,
+         75,
+         78,
+         81,
+         84,
+         86,
+         88,
+         90,
+         94,
+         97,
+         100,
+         103,
+         106,
+         109,
+         111,
+         114,
+         117,
+         119,
+         122,
+         125,
+         127,
+         130,
+         133,
+         135,
+         138,
+         57,
+         141,
+         144,
+         147,
+         149,
+         152,
+         155,
+         157,
+         160,
+         163,
+         166,
+         168,
+         172,
+         175,
+         177,
+         180,
+         182,
+         185,
+         189,
+         192
+      ],
+      "nodeLink" : [
+         [ 6, 3 ],
+         [ 1, 5 ],
+         [ 11, 3 ],
+         [ 14, 10 ],
+         [ 8, 18 ],
+         [ 16, 22 ],
+         [ 31, 19 ],
+         [ 20, 13 ],
+         [ 27, 3 ],
+         [ 24, 29 ],
+         [ 30, 26 ],
+         [ 34, 3 ],
+         [ 38, 44 ],
+         [ 36, 40 ],
+         [ 45, 41 ],
+         [ 42, 47 ],
+         [ 48, 33 ],
+         [ 50, 52 ],
+         [ 56, 3 ],
+         [ 53, 55 ],
+         [ 77, 3 ],
+         [ 74, 76 ],
+         [ 71, 73 ],
+         [ 67, 69 ],
+         [ 62, 70 ],
+         [ 60, 66 ],
+         [ 80, 3 ],
+         [ 64, 82 ],
+         [ 83, 79 ],
+         [ 85, 91 ],
+         [ 87, 98 ],
+         [ 99, 92 ],
+         [ 102, 3 ],
+         [ 93, 104 ],
+         [ 105, 101 ],
+         [ 108, 3 ],
+         [ 96, 107 ],
+         [ 89, 95 ],
+         [ 113, 3 ],
+         [ 110, 115 ],
+         [ 116, 112 ],
+         [ 124, 3 ],
+         [ 118, 120 ],
+         [ 121, 123 ],
+         [ 129, 3 ],
+         [ 126, 131 ],
+         [ 132, 128 ],
+         [ 140, 3 ],
+         [ 134, 136 ],
+         [ 137, 139 ],
+         [ 58, 142 ],
+         [ 146, 3 ],
+         [ 143, 145 ],
+         [ 154, 3 ],
+         [ 148, 150 ],
+         [ 151, 153 ],
+         [ 162, 3 ],
+         [ 156, 158 ],
+         [ 165, 161 ],
+         [ 159, 169 ],
+         [ 171, 164 ],
+         [ 167, 173 ],
+         [ 174, 170 ],
+         [ 194, 3 ],
+         [ 181, 183 ],
+         [ 176, 178 ],
+         [ 179, 186 ],
+         [ 184, 187 ],
+         [ 188, 190 ],
+         [ 191, 193 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 100, 10, 16, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 0.0, 178.0, 568.0 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.40044695138931274, 0.53256881237030029, 0.80882352590560913 ],
+      "horizonTopColor" : [ 1.0, 1.0, 1.0 ]
+   }
+}

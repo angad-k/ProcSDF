@@ -5,15 +5,17 @@
 #include "Rendering/Renderer.h"
 #include "Rendering/ShaderGenerator.h"
 #include "GUI/Nodes/ObjectNode.h"
+#include "GUI/Nodes/OperationNodes.h"
 #include "Common/constant.h"
 #include "GUI/NodeGraph.h"
 #include "Common/os.h"
 #include "Rendering/Materials/CustomMaterial.h"
+
 void ShaderGenerator::computeAndSetObjectCount() {
 	
 	int l_objectCount = 0;
 	for (Node* node : NodeGraph::getSingleton()->m_nodes) {
-		if (node->m_isObjectNode) {
+		if (node->checkIfObject()) {
 			l_objectCount++;
 			ShaderGenerator::m_nodeIDToObjectIDMap[node->m_ID] = l_objectCount;
 			ShaderGenerator::m_objectIDToNodeIDMap[l_objectCount] = node->m_ID;
@@ -86,7 +88,7 @@ std::string ShaderGenerator::generateGetColorFunction()
 	std::string l_getColorCases = "";
 
 	for (Node* node : NodeGraph::getSingleton()->m_nodes) {
-		if (node->m_isObjectNode) {
+		if (node->checkIfObject()) {
 			ObjectNode* l_node = (ObjectNode*)node;
 			std::string l_caseStatement = shader_generation::get_color::CASE_STATEMENT;
 			l_caseStatement.replace(l_caseStatement.find('$'), 1, std::to_string(ShaderGenerator::m_nodeIDToObjectIDMap[node->m_ID]));
@@ -109,14 +111,26 @@ void ShaderGenerator::generateAndSetShader() {
 	computeAndSetObjectCount();
 	computeUniforms();
 
+	const std::string l_shaderHeader =
+	#include "Rendering/Shaders/header.fs"
+	"";
+
+	const std::string l_shaderFooter =
+	#include "Rendering/Shaders/footer.fs"
+	"";
+
+	const std::string l_shaderPrimitive =
+	#include "Rendering/Shaders/primitive.fs"
+	"";
+
 	std::string l_shaderString;
 	int l_index = 0;
 	// Appends the shader header which includes a number of utility functions.
-	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
+	l_shaderString.append(l_shaderHeader);
 	// Appends all the uniform declarations.
 	l_shaderString.append(ShaderGenerator::generateUniformDeclarations());
 	// Appends all the primitive functions.
-	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
+	l_shaderString.append(l_shaderPrimitive);
 	// Appends all the user defined functions.
 	appendCustomFunctions(l_shaderString);
 	// Generates the getColor function.
@@ -134,7 +148,9 @@ void ShaderGenerator::generateAndSetShader() {
 	// Generates and appends the get target ray function.
 	l_shaderString.append(ShaderGenerator::generateGetTargetRayFunction());
 	// Appends the raymarch and main function.
-	l_shaderString.append(OS::fetchFileContent(generateShaderFilePath(shader_generation::shader_files[l_index++])));
+	l_shaderString.append(l_shaderFooter);
+
+	std::cout << l_shaderString;
 
 	//std::cout << l_shaderString;
 	ShaderGenerator::setShader(l_shaderString);
@@ -344,7 +360,7 @@ std::string ShaderGenerator::generateObjectFunctions() {
 	for (int l_nodeID : l_topologicalSorting) {
 		
 		Node* l_nd = l_nodeGraph->getNode(l_nodeID);
-		if (l_nd->m_isTransformNode || l_nd->m_isFinalNode) {
+		if (l_nd->checkIfTransform() || l_nd->checkIfFinal()) {
 			continue;
 		}
 		std::string l_functionName = "f_" + l_nd->getVariableName();
@@ -355,7 +371,7 @@ std::string ShaderGenerator::generateObjectFunctions() {
 		
 		int l_index = 0;
 
-		if (l_nd->m_isObjectNode) {
+		if (l_nd->checkIfObject()) {
 			l_functionName = "object";
 			l_functionName.append("_");
 			l_functionName.append(std::to_string(ShaderGenerator::m_nodeIDToObjectIDMap[l_nd->m_ID]));
@@ -365,14 +381,28 @@ std::string ShaderGenerator::generateObjectFunctions() {
 
 		for (auto it : l_nd->m_operationOrdering) {
 			l_functionBody.append(shader_generation::object_function::POSITION_RESTORATION);
+			std::string l_scalingString = "1.0";
 			for (auto itr = it.second.rbegin(); itr < it.second.rend(); itr++) {
+				TransformNode* l_transformNode = (*itr);
+				if (l_transformNode->m_TransformationType == TransformationType::SCALE) {
+					l_scalingString.append(" * ");
+					l_scalingString.append(ShaderGenerator::getUniformStringFromLabel(l_transformNode->getVariableName(), l_transformNode->m_inputFloatLabels[0]));
+					continue;
+				}
 				l_functionBody.append(ShaderGenerator::getTransform(*itr));
 			}
+
+			std::string l_positionScaling = shader_generation::object_function::POSITION_SCALING;
+			l_positionScaling.replace(l_positionScaling.find('$'), 1, l_scalingString);
+			l_functionBody.append(l_positionScaling);
+
 			std::string l_valueAssignment = shader_generation::object_function::DISTANCE_STORAGE;
 			if (l_nd->m_previousNonTransformNode[l_index] == NULL) {
 				l_valueAssignment = "\n";
 				l_valueAssignment.append(l_nd->m_getString());
-				l_valueAssignment.append("\n");
+				l_valueAssignment.pop_back();
+				l_valueAssignment.append(" * " + l_scalingString);
+				l_valueAssignment.append(";\n");
 				l_returnVariable = l_nd->getVariableName();
 			}
 			else {
@@ -381,6 +411,7 @@ std::string ShaderGenerator::generateObjectFunctions() {
 				l_variableName.append(std::to_string(l_index));
 				l_valueAssignment.replace(l_valueAssignment.find('$'), 1, l_variableName);
 				l_valueAssignment.replace(l_valueAssignment.find('$'), 1, l_functionName);
+				l_valueAssignment.replace(l_valueAssignment.find('$'), 1, l_scalingString);
 				l_returnVariable = l_variableName;
 			}
 
@@ -388,12 +419,12 @@ std::string ShaderGenerator::generateObjectFunctions() {
 			l_index++;
 		}
 
-		if (!l_nd->m_isObjectNode) {
+		if (!l_nd->checkIfObject()) {
 			l_returnVariable = l_nd->getVariableName();
 		}
 		l_returnStatement.replace(l_returnStatement.find('$'), 1, l_returnVariable);
 
-		if (l_nd->m_isOperationNode) {
+		if (l_nd->checkIfOperation()) {
 			std::string l_finalStatement = "\n";
 			l_finalStatement.append(l_nd->m_getString());
 			l_finalStatement.append("\n");

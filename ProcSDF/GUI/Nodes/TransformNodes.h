@@ -7,7 +7,8 @@ enum class TransformationType
 	TRANSLATION,
 	ROTATION_X,
 	ROTATION_Y,
-	ROTATION_Z
+	ROTATION_Z,
+	SCALE
 };
 
 class TransformNode : public Node {
@@ -15,7 +16,6 @@ public:
 	TransformationType m_TransformationType;
 	TransformNode()
 	{
-		m_isTransformNode = true;
 		m_inputPins = { "Input" };
 		m_outputPins = { "Output" };
 		m_titleColor = imgui_colors::ORANGE;
@@ -90,6 +90,25 @@ public:
 		m_TransformationType = TransformationType::ROTATION_Z;
 		m_nodeName = "Rotation_Z";
 		m_inputFloatLabels = { "Theta" };
+		init(p_ID);
+	}
+};
+
+class Scale : public TransformNode {
+public:
+	Scale()
+	{
+		m_TransformationType = TransformationType::SCALE;
+		m_nodeName = "Scale";
+		m_inputFloatLabels = { "Scale Factor" };
+		init();
+	}
+
+	Scale(int p_ID)
+	{
+		m_TransformationType = TransformationType::SCALE;
+		m_nodeName = "Scale";
+		m_inputFloatLabels = { "Scale Factor" };
 		init(p_ID);
 	}
 };

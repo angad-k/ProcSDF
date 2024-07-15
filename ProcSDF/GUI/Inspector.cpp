@@ -126,6 +126,7 @@ void Inspector::drawRenderingSettings()
 		{
 			ImGui::DragInt(l_render_uniforms[i].c_str(), &Renderer::getSingleton()->m_render_uniforms_values[i]);
 		}
+		ImGui::Checkbox("Render continously", &Renderer::getSingleton()->m_render_continously);
 		ImGui::Unindent();
 		ImGui::TreePop();
 	}
@@ -283,6 +284,26 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<BoxFrameNode>();
 			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Round Box"))
+			{
+				addNode<RoundBoxNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Cone"))
+			{
+				addNode<ConeNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Capsule"))
+			{
+				addNode<CapsuleNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Cylinder"))
+			{
+				addNode<CylinderNode>();
+			}
 
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
@@ -301,6 +322,21 @@ void Inspector::drawNodeGraphSettings()
 			if (ImGui::Button("Union"))
 			{
 				addNode<UnionNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Subtraction"))
+			{
+				addNode<SubtractionNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Round"))
+			{
+				addNode<RoundNode>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Onion"))
+			{
+				addNode<OnionNode>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
@@ -346,6 +382,11 @@ void Inspector::drawNodeGraphSettings()
 			if (ImGui::Button("Rotation Around Z-Axis"))
 			{
 				addNode<RotationNodeZ>();
+			}
+			GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
+			if (ImGui::Button("Scale"))
+			{
+				addNode<Scale>();
 			}
 			ImGui::PopStyleColor();
 			ImGui::Unindent();

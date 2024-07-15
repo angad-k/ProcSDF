@@ -1,3 +1,4 @@
+R""(
 vec3 ray_march(in vec3 ray_origin, in vec3 ray_direction, in int depth)
 {
     float total_distance_traveled = 0.0;
@@ -115,3 +116,4 @@ void main()
     }
     FragColor = (vec4(output_color, 1.0));
 }
+)""

@@ -41,6 +41,7 @@ public:
 	std::vector<std::vector<float>> m_render_uniform_debug_cols = { {1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0} };
 	float m_horizon_top_color[3] = { 1.0, 1.0, 1.0 };
 	float m_horizon_bottom_color[3] = { 0.5, 0.7, 1.0 };
+	bool m_render_continously = true;
 	Renderer();
 	
 	static Renderer* getSingleton() {
@@ -51,7 +52,7 @@ public:
 		return s_renderer;
 	}
 
-	void draw(float p_width, float p_height);
+	void draw(float p_width, float p_height, bool from_export = false);
 
 	void setRenderUniforms()
 	{

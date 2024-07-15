@@ -6,7 +6,6 @@ public:
 	OperationNode()
 	{
 		m_titleColor = imgui_colors::BLUE;
-		m_isOperationNode = true;
 	}
 };
 class IntersectionNode : public OperationNode {
@@ -16,7 +15,6 @@ public:
 		m_nodeName = "Intersection";
 		m_inputPins = { "Input 1", "Input 2" };
 		m_outputPins = { "Output" };
-		m_isFinalNode = false;
 		init();
 	}
 	IntersectionNode(int p_ID)
@@ -24,7 +22,6 @@ public:
 		m_nodeName = "Intersection";
 		m_inputPins = { "Input 1", "Input 2" };
 		m_outputPins = { "Output" };
-		m_isFinalNode = false;
 		init(p_ID);
 	}
 };
@@ -36,7 +33,6 @@ public:
 		m_nodeName = "Union";
 		m_inputPins = { "Input 1", "Input 2" };
 		m_outputPins = { "Output" };
-		m_isFinalNode = false;
 		init();
 	}
 	UnionNode(int p_ID)
@@ -44,7 +40,64 @@ public:
 		m_nodeName = "Union";
 		m_inputPins = { "Input 1", "Input 2" };
 		m_outputPins = { "Output" };
-		m_isFinalNode = false;
+		init(p_ID);
+	}
+};
+
+class SubtractionNode : public OperationNode {
+public:
+	SubtractionNode()
+	{
+		m_nodeName = "Subtraction";
+		m_inputPins = { "Input 1", "Input 2"};
+		m_outputPins = { "Output" };
+		init();
+	}
+	SubtractionNode(int p_ID)
+	{
+		m_nodeName = "Subtraction";
+		m_inputPins = { "Input 1", "Input 2" };
+		m_outputPins = { "Output" };
+		init(p_ID);
+	}
+};
+
+class RoundNode : public OperationNode {
+public:
+	RoundNode()
+	{
+		m_nodeName = "Round";
+		m_inputPins = { "Input" };
+		m_inputFloatLabels = { "radius" };
+		m_outputPins = { "Output" };
+		init();
+	}
+	RoundNode(int p_ID)
+	{
+		m_nodeName = "Round";
+		m_inputPins = { "Input" };
+		m_inputFloatLabels = { "radius" };
+		m_outputPins = { "Output" };
+		init(p_ID);
+	}
+};
+
+class OnionNode : public OperationNode {
+public:
+	OnionNode()
+	{
+		m_nodeName = "Onion";
+		m_inputPins = { "Input" };
+		m_inputFloatLabels = { "thickness" };
+		m_outputPins = { "Output" };
+		init();
+	}
+	OnionNode(int p_ID)
+	{
+		m_nodeName = "Onion";
+		m_inputPins = { "Input" };
+		m_inputFloatLabels = { "thickness" };
+		m_outputPins = { "Output" };
 		init(p_ID);
 	}
 };

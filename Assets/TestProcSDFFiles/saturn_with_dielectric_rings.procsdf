@@ -1,0 +1,126 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 0.70098042488098145, 0.18898981809616089, 0.58051222562789917 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 0.8577921986579895, 0.56016916036605835, 0.92156863212585449 ],
+         "inputFloat" : [ 1.5, 0.44999998807907104 ],
+         "materialType" : "Dielectric"
+      },
+      "2" : {
+         "color" : [ 1.0, 0.70876586437225342, 0.0098039507865905762 ],
+         "inputFloat" : [ 1.0 ],
+         "materialType" : "Light"
+      },
+      "3" : {
+         "color" : [ 0.12197231501340866, 0.69117647409439087, 0.47353953123092651 ],
+         "inputFloat" : [ 0.64999997615814209 ],
+         "materialType" : "Metal"
+      },
+      "materialID" : [ 0, 1, 2, 3 ]
+   },
+   "nodeGraphSettings" : {
+      "0" : {
+         "inputFloat" : [ 2.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 1 ]
+      },
+      "12" : {
+         "inputFloat" : [ 20.0 ],
+         "inputIDs" : [ 13 ],
+         "nodeName" : "Rotation_X",
+         "outputIDS" : [ 14 ]
+      },
+      "15" : {
+         "inputFloat" : [ -57.0 ],
+         "inputIDs" : [ 16 ],
+         "nodeName" : "Rotation_Y",
+         "outputIDS" : [ 17 ]
+      },
+      "18" : {
+         "inputFloat" : [ 1.0 ],
+         "inputIDs" : [ 19 ],
+         "nodeName" : "Rotation_Z",
+         "outputIDS" : [ 20 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "21" : {
+         "inputFloat3" : [
+            [ 0.0, 0.25, 0.0 ]
+         ],
+         "inputIDs" : [ 22 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 23 ]
+      },
+      "24" : {
+         "inputFloat" : [ 62.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 25 ]
+      },
+      "26" : {
+         "inputIDs" : [ 27 ],
+         "materialID" : "2",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 28 ]
+      },
+      "29" : {
+         "inputFloat3" : [
+            [ 93.0, 87.0, 180.0 ]
+         ],
+         "inputIDs" : [ 30 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 31 ]
+      },
+      "4" : {
+         "inputIDs" : [ 5 ],
+         "materialID" : "3",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 6 ]
+      },
+      "7" : {
+         "inputFloat" : [ 3.0, 0.25 ],
+         "nodeName" : "Torus",
+         "outputIDS" : [ 8 ]
+      },
+      "9" : {
+         "inputIDs" : [ 10 ],
+         "materialID" : "1",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 11 ]
+      },
+      "nodeID" : [ 0, 2, 4, 7, 9, 12, 15, 18, 21, 24, 26, 29 ],
+      "nodeLink" : [
+         [ 1, 5 ],
+         [ 6, 3 ],
+         [ 11, 3 ],
+         [ 8, 22 ],
+         [ 23, 13 ],
+         [ 14, 16 ],
+         [ 17, 19 ],
+         [ 20, 10 ],
+         [ 28, 3 ],
+         [ 31, 27 ],
+         [ 25, 30 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 50, 500, 16, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 0.0, 0.0, 5.0 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.33333331346511841, 0.33333331346511841, 1.0 ],
+      "horizonTopColor" : [ 1.0, 0.88235294818878174, 0.0 ]
+   }
+}

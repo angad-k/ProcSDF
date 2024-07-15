@@ -8,6 +8,9 @@
 #include "GUI/NodeGraph.h"
 #include "GUI/Nodes/PrimitiveNodes.h"
 #include "GUI/Nodes/OperationNodes.h"
+#include "GUI/Nodes/TransformNodes.h"
+#include "GUI/Nodes/CustomNode.h"
+#include "GUI/Nodes/ObjectNode.h"
 #include "Common/logger.h"
 #include "Rendering/ShaderGenerator.h"
 
@@ -196,7 +199,9 @@ std::string Node::m_getString()
 		l_commaNeeded = true;
 	}
 
-	if (m_inputIDs.size() == 0) {
+	Node* l_self = this;
+	if (this->checkIfPrimitive())
+	{
 		l_nodestr.append(shader_generation::POSITION);
 		l_commaNeeded = true;
 	}
@@ -227,4 +232,75 @@ std::string Node::m_getString()
 
 	l_nodestr.append(");");
 	return l_nodestr;
+}
+
+bool Node::checkIfPrimitive()
+{
+	if (dynamic_cast<PrimitiveNode*>(this) != nullptr)
+	{
+		return true;
+	}
+
+	CustomNode* l_custom = dynamic_cast<CustomNode*>(this);
+
+	if (l_custom != nullptr && l_custom->isPrimitive())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Node::checkIfOperation()
+{
+	if (dynamic_cast<OperationNode*>(this) != nullptr)
+	{
+		return true;
+	}
+
+	CustomNode* l_custom = dynamic_cast<CustomNode*>(this);
+
+	if (l_custom != nullptr && l_custom->isOperation())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Node::checkIfTransform()
+{
+	if (dynamic_cast<TransformNode*>(this) != nullptr)
+	{
+		return true;
+	}
+
+	CustomNode* l_custom = dynamic_cast<CustomNode*>(this);
+
+	if (l_custom != nullptr && l_custom->isTransform())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Node::checkIfObject()
+{
+	if (dynamic_cast<ObjectNode*>(this) != nullptr)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Node::checkIfFinal()
+{
+	if (dynamic_cast<FinalNode*>(this) != nullptr)
+	{
+		return true;
+	}
+
+	return false;
 }

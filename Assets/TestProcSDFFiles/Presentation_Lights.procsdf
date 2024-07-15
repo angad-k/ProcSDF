@@ -1,0 +1,126 @@
+{
+   "materialSettings" : {
+      "0" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "materialType" : "Diffuse"
+      },
+      "1" : {
+         "color" : [ 1.0, 0.0, 0.0 ],
+         "inputFloat" : [ 0.0 ],
+         "materialType" : "Light"
+      },
+      "materialID" : [ 0, 1 ]
+   },
+   "nodeGraphSettings" : {
+      "0" : {
+         "inputFloat" : [ 2.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 1 ]
+      },
+      "10" : {
+         "inputFloat" : [ 54.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 11 ]
+      },
+      "12" : {
+         "inputFloat3" : [
+            [ 72.0, -15.0, 67.0 ]
+         ],
+         "inputIDs" : [ 13 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 14 ]
+      },
+      "15" : {
+         "inputFloat" : [ 0.75 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 16 ]
+      },
+      "17" : {
+         "inputFloat3" : [
+            [ 3.0, 1.0, -0.20000000298023224 ]
+         ],
+         "inputIDs" : [ 18 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 19 ]
+      },
+      "2" : {
+         "inputIDs" : [ 3 ],
+         "nodeName" : "Final node"
+      },
+      "20" : {
+         "inputIDs" : [ 21 ],
+         "materialID" : "1",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 22 ]
+      },
+      "23" : {
+         "inputIDs" : [ 24 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 25 ]
+      },
+      "26" : {
+         "inputFloat" : [ 2.0 ],
+         "nodeName" : "Sphere",
+         "outputIDS" : [ 27 ]
+      },
+      "28" : {
+         "inputFloat3" : [
+            [ 3.0, -3.0, -1.0 ]
+         ],
+         "inputIDs" : [ 29 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 30 ]
+      },
+      "31" : {
+         "inputIDs" : [ 32 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 33 ]
+      },
+      "4" : {
+         "inputIDs" : [ 5 ],
+         "materialID" : "0",
+         "nodeName" : "Object node",
+         "outputIDS" : [ 6 ]
+      },
+      "7" : {
+         "inputFloat3" : [
+            [ 0.0, 0.0, 0.0 ]
+         ],
+         "inputIDs" : [ 8 ],
+         "nodeName" : "Translation",
+         "outputIDS" : [ 9 ]
+      },
+      "nodeID" : [ 0, 2, 4, 7, 10, 12, 15, 17, 20, 23, 26, 28, 31 ],
+      "nodeLink" : [
+         [ 6, 3 ],
+         [ 22, 3 ],
+         [ 25, 3 ],
+         [ 33, 3 ],
+         [ 1, 8 ],
+         [ 9, 5 ],
+         [ 11, 13 ],
+         [ 14, 21 ],
+         [ 19, 24 ],
+         [ 16, 18 ],
+         [ 27, 29 ],
+         [ 30, 32 ]
+      ]
+   },
+   "renderSettings" : {
+      "renderDebugColor" : [
+         [ 1.0, 0.0, 0.0 ],
+         [ 0.0, 1.0, 0.0 ],
+         [ 0.0, 0.0, 1.0 ]
+      ],
+      "renderDebugValues" : [ false, false, false, false ],
+      "renderValues" : [ 25, 100, 16, 1000 ]
+   },
+   "worldSettings" : {
+      "cameraOrigin" : [ 1.5, -0.69999998807907104, 5.0 ],
+      "focalLength" : 1.0,
+      "horizonBottomColor" : [ 0.0, 0.0, 0.0 ],
+      "horizonTopColor" : [ 0.0, 0.0, 0.0 ]
+   }
+}
