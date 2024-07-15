@@ -6,7 +6,7 @@
 
 ---
 
-# What is ProcSDF?
+# What is ProcSDF ⁉️
 
 An **open-source**, **procedural**, **node-based**, **raymarched** 3D creation tool.
 
@@ -16,11 +16,11 @@ An **open-source**, **procedural**, **node-based**, **raymarched** 3D creation t
 
 - It's raymarched. Think raytracing, but more fun. Check out [this very fun blog](https://michaelwalczyk.com/blog-ray-marching.html) to know more about raymarching. Other than that [Inigo Quilez](https://iquilezles.org/)'s resources on raymarching are always a godsend. 
 
-# How to run ProcSDF?
+# How to run ProcSDF? ⚡
 
 The [latest release](https://github.com/angad-k/ProcSDF/releases/latest) on GitHub would be the easiest way to run ProcSDF. The zip file has the executable and some other useful files to get you started.
 
-# Tell me more about ProcSDF
+# Tell me more about ProcSDF❗
 
 - The GUI's made in the friendly neighbourhood GUI library - **ImGUI**. Check it out [here](https://github.com/ocornut/imgui).
 
@@ -35,7 +35,9 @@ The [latest release](https://github.com/angad-k/ProcSDF/releases/latest) on GitH
 
 ### Check out [this document](https://github.com/user-attachments/files/16238330/ProcSDF.pdf) to read up on ProcSDF in more detail. We made it as a our final report for the university project but works well in introducing the reader to everything there is to be known about ProcSDF - from implementation to usage.
 
-# Example Renders
+# What can I make with ProcSDF? 👀
+
+Maybe something like the following images!
 
 ![Mandelbulb](https://github.com/angad-k/ProcSDF/blob/main/Assets/ExampleRenders/Mandelbulb1.png)
 
