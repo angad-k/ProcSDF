@@ -18,7 +18,7 @@ An **open-source**, **procedural**, **node-based**, **raymarched** 3D creation t
 
 # How to run ProcSDF?
 
-Until we release this as a binary - the easiest way to run this is installing Visual Studio 2019 (2022 might work too, but all developers currently use 2019), the C++ development thingie - Visual Studio Desktop C++ development pack (or anything similar, since C++ is no longer a default language since at least Visual Studio 19), and open the `ProcSDF.sln` file in VS 2019 before running the application.
+The [latest release](https://github.com/angad-k/ProcSDF/releases/latest) on GitHub would be the easiest way to run ProcSDF. The zip file has the executable and some other useful files to get you started.
 
 # Tell me more about ProcSDF
 
@@ -27,9 +27,8 @@ Until we release this as a binary - the easiest way to run this is installing Vi
 - The pipeline and rendering stuff is handled in **OpenGL**.
 
 - Features :
-    - Primitives, Operations on them, translations and rotations.
-    - Adding your own SDFs
-    - Materials (coming soon)
-    - and we'll figure the rest of the stuff out as we go.
+    - Primitives, Operations on them, translations, scaling and rotations.
+    - Adding your own custom SDFs
+    - Materials (you can also add your own custom materials!)
 
 - The name doesn't have much thought to it. Though it does have a nice ring to it. We were working on making a procedural node based 3D edition software that uses SDFs and so, comes the name **ProcSDF**
