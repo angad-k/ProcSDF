@@ -115,7 +115,7 @@
          [ 0.0, 0.0, 1.0 ]
       ],
       "renderDebugValues" : [ false, false, false, false ],
-      "renderValues" : [ 25, 250, 16, 1000 ]
+      "renderValues" : [ 25, 50, 16, 1000 ]
    },
    "worldSettings" : {
       "cameraOrigin" : [ 1.5, -0.69999998807907104, 5.0 ],

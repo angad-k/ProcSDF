@@ -25,7 +25,7 @@
          "outputIDS" : [ 12 ]
       },
       "13" : {
-         "inputFloat" : [ 7.0 ],
+         "inputFloat" : [ 16.0 ],
          "inputIDs" : [ 14 ],
          "nodeName" : "Rotation_Z",
          "outputIDS" : [ 15 ]
@@ -41,7 +41,7 @@
          "outputIDS" : [ 6 ]
       },
       "7" : {
-         "inputFloat" : [ 49.0 ],
+         "inputFloat" : [ -79.0 ],
          "inputIDs" : [ 8 ],
          "nodeName" : "Rotation_X",
          "outputIDS" : [ 9 ]
@@ -65,7 +65,7 @@
          [ 0.0, 0.0, 1.0 ]
       ],
       "renderDebugValues" : [ false, false, false, false ],
-      "renderValues" : [ 50, 8, 16, 1000 ]
+      "renderValues" : [ 10, 1, 15, 1000 ]
    },
    "worldSettings" : {
       "cameraOrigin" : [ 0.0, 0.0, 1.8999999761581421 ],
