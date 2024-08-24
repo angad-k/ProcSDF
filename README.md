@@ -33,7 +33,7 @@ The [latest release](https://github.com/angad-k/ProcSDF/releases/latest) on GitH
 
 - The name doesn't have much thought to it. Though it does have a nice ring to it. We were working on making a procedural node based 3D edition software that uses SDFs and so, comes the name **ProcSDF**
 
-### Check out <a href= "https://github.com/user-attachments/files/16238330/ProcSDF.pdf" target="_blank">this document</a> to read up on ProcSDF in more detail. We made it as a our final report for the university project but works well in introducing the reader to everything there is to be known about ProcSDF - from implementation to usage.
+### Check out <a href= "https://www.angadkambli.com/ProcSDF/" target="_blank">this document</a> to read up on ProcSDF in more detail. We made it as a our final report for the university project but works well in introducing the reader to everything there is to be known about ProcSDF - from implementation to usage.
 
 # What can I make with ProcSDF? 👀
 
