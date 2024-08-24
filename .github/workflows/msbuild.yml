@@ -47,5 +47,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ProcSDF
-        path: ${{env.GITHUB_WORKSPACE}}/*
+        path: D:\a\ProcSDF\ProcSDF\x64\Debug\ProcSDF.exe
       
