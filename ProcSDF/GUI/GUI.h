@@ -18,6 +18,8 @@ private:
 	GLFWwindow* m_window;
 	GLFWwindow* setupImguiGlfw();
 
+	void setupStyle();
+
 	Renderer* m_renderer;
 	Inspector* m_inspector;
 	NodeEditor* m_nodeEditor;

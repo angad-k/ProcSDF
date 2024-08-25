@@ -25,7 +25,7 @@ inline Node* Inspector::addNode()
 
 void Inspector::draw()
 {
-	ImGui::Begin("Inspector");
+	ImGui::BeginChild("Inspector");
 
 	Tab l_oldTab = m_openedTab;
 
@@ -85,6 +85,7 @@ void Inspector::draw()
 	}
 
 	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0.0f, 5.0f));
 
 	switch (m_openedTab)
 	{
@@ -102,7 +103,7 @@ void Inspector::draw()
 		break;
 	}
 	
-	ImGui::End();
+	ImGui::EndChild();
 }
 
 void Inspector::drawWorldSettings()

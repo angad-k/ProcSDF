@@ -4,15 +4,20 @@
 #include "Common/constant.h"
 #include "Common/ProjectSaver.h"
 #include "Common/logger.h"
+#include "GUI.h"
 
 void NodeEditor::draw()
 {
-	ImGui::Begin("Nodes workspace");
-	if (ImGui::Button("Recompile"))
+	ImGui::BeginChild("Nodes workspace");
+
+	if (ImGui::Button("Load Project"))
 	{
-		NodeGraph::getSingleton()->recompileNodeGraph();
+		bool isParseSucessful = ProjectSaver::loadProject();
+		if (!isParseSucessful) {
+			ERR("Error in parsing uploaded file");
+		}
 	}
-	
+
 	ImGui::SameLine();
 
 	if (ImGui::Button("Save Project"))
@@ -22,12 +27,9 @@ void NodeEditor::draw()
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Load Project"))
+	if (ImGui::Button("Recompile"))
 	{
-		bool isParseSucessful = ProjectSaver::loadProject();
-		if (!isParseSucessful) {
-			ERR("Error in parsing uploaded file");
-		}
+		NodeGraph::getSingleton()->recompileNodeGraph();
 	}
 
 	ImGui::SameLine();
@@ -63,6 +65,36 @@ void NodeEditor::draw()
 	}
 	ImGui::PopStyleColor();
 	// ImNodes workspace starts from here.
+
+	ImGui::SameLine();
+	
+	ImGuiStyle style = ImGui::GetStyle();
+	float widthNeeded = ImGui::CalcTextSize("Quit").x + style.FramePadding.x * 2.f;
+	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - widthNeeded);
+	ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::RED);
+	if (ImGui::Button("Quit"))
+	{
+		ImGui::OpenPopup("Confirmation");
+	}
+	ImGui::PopStyleColor();
+	if (ImGui::BeginPopupModal("Confirmation")) {
+		ImGui::Text("Are you sure you want to quit? Unsaved changes would be lost.");
+
+		ImGui::Spacing();
+
+		if (ImGui::Button("Yes"))
+		{
+			glfwSetWindowShouldClose(GUI::getSingleton()->getWindow(), GL_TRUE);
+			
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("No"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
 
 	ImNodes::BeginNodeEditor();
 
@@ -108,5 +140,5 @@ void NodeEditor::draw()
 		ImNodes::GetSelectedNodes(m_selectedNodes.data());
 	}
 
-	ImGui::End();
+	ImGui::EndChild();
 }
