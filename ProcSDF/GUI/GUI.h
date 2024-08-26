@@ -26,6 +26,9 @@ private:
 
 	ImVec2 m_renderSceneSize;
 
+	ImFont* robotoFont;
+	ImFont* robotoRegularFont;
+
 public:
 	GUI();
 	~GUI();

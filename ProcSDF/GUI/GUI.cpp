@@ -1,5 +1,7 @@
 #include "GUI/GUI.h"
 #include "GUI/NodeGraph.h"
+#include "Roboto.cpp"
+#include "RobotoRegular.cpp"
 
 static void glfwErrorCallback(int p_error, const char* p_description)
 {
@@ -52,43 +54,46 @@ void GUI::setupFrame()
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 		ImGui::Begin("ProcSDF", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize);
 
+		ImGui::PushFont(robotoRegularFont);
+
 		static float w = 550.0f;
 		static float h = 500.0f;
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 		ImGui::BeginChild("Scene and Inspector", ImVec2(w, -1), true);
 		{
-			ImGui::BeginChild("Scene", ImVec2(w, h));
-			ImVec2 l_vMin = ImGui::GetWindowContentRegionMin();
-			ImVec2 l_vMax = ImGui::GetWindowContentRegionMax();
+			{
+				ImGui::BeginChild("Scene", ImVec2(w, h));
+				ImVec2 l_vMin = ImGui::GetWindowContentRegionMin();
+				ImVec2 l_vMax = ImGui::GetWindowContentRegionMax();
 
-			l_vMin.x += ImGui::GetWindowPos().x;
-			l_vMin.y += ImGui::GetWindowPos().y;
-			l_vMax.x += ImGui::GetWindowPos().x;
-			l_vMax.y += ImGui::GetWindowPos().y;
-			m_renderSceneSize = ImVec2(l_vMax.x - l_vMin.x, l_vMax.y - l_vMin.y);
+				l_vMin.x += ImGui::GetWindowPos().x;
+				l_vMin.y += ImGui::GetWindowPos().y;
+				l_vMax.x += ImGui::GetWindowPos().x;
+				l_vMax.y += ImGui::GetWindowPos().y;
+				m_renderSceneSize = ImVec2(l_vMax.x - l_vMin.x, l_vMax.y - l_vMin.y);
 
-			ImGui::Image((ImTextureID)m_renderer->getRenderTexture(), m_renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
-			ImGui::EndChild();
+				ImGui::Image((ImTextureID)m_renderer->getRenderTexture(), m_renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::EndChild();
 
-			//ImGui::InvisibleButton("hsplitter", ImVec2(w, 8.0f));
-			ImGui::Button("  ", ImVec2(w, 12.0f));
-			//ImGui::ColorButton("hsplitter", ImVec4(0.3f, 0.3f, 0.4f, 1.00f), 0, ImVec2(w, 8.0f));
-			if (ImGui::IsItemActive())
-				h += ImGui::GetIO().MouseDelta.y;
+				ImGui::Button("  ", ImVec2(w, 12.0f));
+				if (ImGui::IsItemActive())
+					h += ImGui::GetIO().MouseDelta.y;
+			}
 			
-			m_inspector->draw();
+			{
+				m_inspector->draw();
+			}
 			
 			
 		}
 		ImGui::EndChild();
-		
 		ImGui::SameLine();
-		//ImGui::InvisibleButton("vsplitter", ImVec2(8.0f, -1));
+
 		ImGui::Button(" ", ImVec2(12.0f, -1));
 		if (ImGui::IsItemActive())
 			w += ImGui::GetIO().MouseDelta.x;
 		ImGui::SameLine();
-		ImGui::BeginChild("child2", ImVec2(0, -1), false);
+		ImGui::BeginChild("Node Editor", ImVec2(0, -1), false);
 		{
 			m_nodeEditor->draw();
 		}
@@ -97,6 +102,8 @@ void GUI::setupFrame()
 		ImGui::PopStyleVar();
 
 		ImGui::PopStyleVar();
+
+		ImGui::PopFont();
 		ImGui::End();
 	}
 }
@@ -148,6 +155,8 @@ GLFWwindow* GUI::setupImguiGlfw()
 	io.ConfigDragClickToInputText = true;
 
 	setupStyle();
+	robotoFont = io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_compressed_data, Roboto_compressed_size, 18.0f);
+	robotoRegularFont = io.Fonts->AddFontFromMemoryCompressedTTF(RobotoRegular_compressed_data, RobotoRegular_compressed_size, 16.0f);
 
 	ImGui_ImplGlfw_InitForOpenGL(l_window, true);
 	ImGui_ImplOpenGL3_Init(l_glslVersion);
@@ -231,6 +240,14 @@ void GUI::setupStyle()
 	style.ChildRounding = 4;
 	style.FrameRounding = 3;
 	style.PopupRounding = 4;
+	style.ScrollbarRounding = 9;
+	style.GrabRounding = 3;
+	style.LogSliderDeadzone = 4;
+	style.TabRounding = 4;
+	style.WindowRounding = 1;
+	style.ChildRounding = 1;
+	style.FrameRounding = 1;
+	style.PopupRounding = 1;
 	style.ScrollbarRounding = 9;
 	style.GrabRounding = 3;
 	style.LogSliderDeadzone = 4;

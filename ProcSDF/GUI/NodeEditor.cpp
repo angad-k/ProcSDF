@@ -77,16 +77,25 @@ void NodeEditor::draw()
 		ImGui::OpenPopup("Confirmation");
 	}
 	ImGui::PopStyleColor();
-	if (ImGui::BeginPopupModal("Confirmation")) {
-		ImGui::Text("Are you sure you want to quit? Unsaved changes would be lost.");
+	if (ImGui::BeginPopupModal("Confirmation", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-		ImGui::Spacing();
+		const char confString[] = "Are you sure you want to quit? Unsaved changes would be lost.";
+		ImGui::Text(confString);
 
+		ImGui::Dummy(ImVec2(0.0f, 5.0f));
+
+		float widthNeeded = ImGui::CalcTextSize("Yes").x + style.FramePadding.x * 2.f + ImGui::CalcTextSize("No").x + 5.0f;
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(confString).x - widthNeeded);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::RED);
 		if (ImGui::Button("Yes"))
 		{
 			glfwSetWindowShouldClose(GUI::getSingleton()->getWindow(), GL_TRUE);
 			
 		}
+		ImGui::PopStyleColor();
+		ImGui::SameLine();
+		ImGui::Dummy(ImVec2(5.0f, 5.0f));
 		ImGui::SameLine();
 		if (ImGui::Button("No"))
 		{
