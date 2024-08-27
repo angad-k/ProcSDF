@@ -84,7 +84,6 @@ void Material::draw(bool &p_del)
 		}
 		ImGui::PopStyleColor();
 	}
-	ImGui::Separator();	
 }
 
 void Material::setUniforms()

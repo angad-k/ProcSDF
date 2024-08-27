@@ -10,6 +10,11 @@ void NodeEditor::draw()
 {
 	ImGui::BeginChild("Nodes workspace");
 
+	ImGui::Dummy(ImVec2(0, 0));
+
+	ImGui::Dummy(ImVec2(0, 0));
+	ImGui::SameLine();
+
 	if (ImGui::Button("Load Project"))
 	{
 		bool isParseSucessful = ProjectSaver::loadProject();
@@ -105,6 +110,11 @@ void NodeEditor::draw()
 		ImGui::EndPopup();
 	}
 
+	//ImNodesStyle& style = ImNodes::GetStyle();
+	ImNodes::GetStyle().Colors[ImNodesCol_GridBackground] = IM_COL32(0.05f, 0.07f, 0.120f, 1.0f);
+
+	GUI::getSingleton()->pushMediumFont();
+
 	ImNodes::BeginNodeEditor();
 
 	ImNodes::GetIO().LinkDetachWithModifierClick.Modifier = &ImGui::GetIO().KeyCtrl;
@@ -121,8 +131,10 @@ void NodeEditor::draw()
 		const std::pair<int, int> p = l_nodeGraph->m_links[i];
 		ImNodes::Link(i, p.first, p.second);
 	}
-
+	ImNodes::MiniMap(0.2f, ImNodesMiniMapLocation_TopRight);
 	ImNodes::EndNodeEditor();
+
+	ImGui::PopFont();
 
 	int l_startAttr;
 	int l_endAttr;

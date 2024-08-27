@@ -26,7 +26,7 @@ private:
 
 	ImVec2 m_renderSceneSize;
 
-	ImFont* robotoFont;
+	ImFont* robotoMediumFont;
 	ImFont* robotoRegularFont;
 
 public:
@@ -40,6 +40,11 @@ public:
 			s_gui = new GUI();
 		}
 		return s_gui;
+	}
+
+	void pushMediumFont()
+	{
+		ImGui::PushFont(robotoMediumFont);
 	}
 
 	GLFWwindow* getWindow()

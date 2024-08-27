@@ -9,6 +9,7 @@
 #include "GuiUtilities.h"
 #include "Common/os.h"
 #include "Rendering/Materials/CustomMaterial.h"
+#include "GUI.h"
 
 void Inspector::initialize()
 {
@@ -25,67 +26,75 @@ inline Node* Inspector::addNode()
 
 void Inspector::draw()
 {
-	ImGui::BeginChild("Inspector");
-
 	Tab l_oldTab = m_openedTab;
+
+	ImVec2 l_buttonSize = ImVec2((ImGui::GetContentRegionAvail().x - 12.0) / 4, 20.0f);
+	ImGui::Dummy(ImVec2(0.0f, 0.0f));
 
 	if (l_oldTab == Tab::WORLD_SETTINGS)
 	{
 		ImGui::BeginDisabled();
+		GUI::getSingleton()->pushMediumFont();
 	}
-	if (ImGui::Button("World Settings"))
+	if (ImGui::Button("World Settings", l_buttonSize))
 	{
 		m_openedTab = Tab::WORLD_SETTINGS;
 	}
 	if (l_oldTab == Tab::WORLD_SETTINGS)
 	{
 		ImGui::EndDisabled();
+		ImGui::PopFont();
 	}
 	ImGui::SameLine();
 
 	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::BeginDisabled();
+		GUI::getSingleton()->pushMediumFont();
 	}
-	if (ImGui::Button("Rendering Settings"))
+	if (ImGui::Button("Rendering Settings", l_buttonSize))
 	{
 		m_openedTab = Tab::RENDERING_SETTINGS;
 	}
 	if (l_oldTab == Tab::RENDERING_SETTINGS)
 	{
 		ImGui::EndDisabled();
+		ImGui::PopFont();
 	}
 	ImGui::SameLine();
 
 	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
 	{
 		ImGui::BeginDisabled();
+		GUI::getSingleton()->pushMediumFont();
 	}
-	if (ImGui::Button("Node graph settings"))
+	if (ImGui::Button("Node graph settings", l_buttonSize))
 	{
 		m_openedTab = Tab::NODEGRAPH_SETTINGS;
 	}
 	if (l_oldTab == Tab::NODEGRAPH_SETTINGS)
 	{
 		ImGui::EndDisabled();
+		ImGui::PopFont();
 	}
 	ImGui::SameLine();
 
 	if (l_oldTab == Tab::MATERIAL_SETTINGS)
 	{
 		ImGui::BeginDisabled();
+		GUI::getSingleton()->pushMediumFont();
 	}
-	if (ImGui::Button("Material settings"))
+	if (ImGui::Button("Material settings", l_buttonSize))
 	{
 		m_openedTab = Tab::MATERIAL_SETTINGS;
 	}
 	if (l_oldTab == Tab::MATERIAL_SETTINGS)
 	{
 		ImGui::EndDisabled();
+		ImGui::PopFont();
 	}
 
-	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0.0f, 5.0f));
+	ImGui::Dummy(ImVec2(0.0f, 0.0f));
 
 	switch (m_openedTab)
 	{
@@ -102,8 +111,7 @@ void Inspector::draw()
 		drawMaterialSettings();
 		break;
 	}
-	
-	ImGui::EndChild();
+
 }
 
 void Inspector::drawWorldSettings()
@@ -269,7 +277,7 @@ void Inspector::drawNodeGraphSettings()
 	{
 		ImGui::Indent();
 		
-		const int l_approximateButtonSize = 85;
+		const int l_approximateButtonSize = 150;
 
 		if (ImGui::TreeNode("Primitives"))
 		{

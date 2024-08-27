@@ -1,6 +1,9 @@
 #pragma once
 #include "ImGui/imgui.h"
+#include "GUI.h"
 #include <string>
+
+#define SPACING  4.0f
 
 namespace GUI_Utilities {
 	static void horizontalSeperator(unsigned int p_width)
