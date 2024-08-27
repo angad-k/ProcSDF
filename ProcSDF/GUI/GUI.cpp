@@ -1,5 +1,7 @@
 #include "GUI/GUI.h"
 #include "GUI/NodeGraph.h"
+#include "Roboto.cpp"
+#include "RobotoRegular.cpp"
 
 static void glfwErrorCallback(int p_error, const char* p_description)
 {
@@ -40,30 +42,75 @@ void GUI::setupFrame()
 
 	ImGui::NewFrame();
 	{
+#ifdef IMGUI_HAS_VIEWPORT
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->GetWorkPos());
+		ImGui::SetNextWindowSize(viewport->GetWorkSize());
+		ImGui::SetNextWindowViewport(viewport->ID);
+#else 
+		ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
+#endif
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::Begin("ProcSDF", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize);
+
+		ImGui::PushFont(robotoRegularFont);
+
+		static float w = 550.0f;
+		static float h = 500.0f;
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+		ImGui::BeginChild("Scene and Inspector", ImVec2(w, -1), true);
 		{
-			ImGui::Begin("Scene");
+			{
+				ImGui::BeginChild("Scene", ImVec2(w, h));
+				ImVec2 l_vMin = ImGui::GetWindowContentRegionMin();
+				ImVec2 l_vMax = ImGui::GetWindowContentRegionMax();
 
-			ImVec2 l_vMin = ImGui::GetWindowContentRegionMin();
-			ImVec2 l_vMax = ImGui::GetWindowContentRegionMax();
+				l_vMin.x += ImGui::GetWindowPos().x;
+				l_vMin.y += ImGui::GetWindowPos().y;
+				l_vMax.x += ImGui::GetWindowPos().x;
+				l_vMax.y += ImGui::GetWindowPos().y;
+				m_renderSceneSize = ImVec2(l_vMax.x - l_vMin.x, l_vMax.y - l_vMin.y);
 
-			l_vMin.x += ImGui::GetWindowPos().x;
-			l_vMin.y += ImGui::GetWindowPos().y;
-			l_vMax.x += ImGui::GetWindowPos().x;
-			l_vMax.y += ImGui::GetWindowPos().y;
-			m_renderSceneSize = ImVec2(l_vMax.x - l_vMin.x, l_vMax.y - l_vMin.y);
+				ImGui::Image((ImTextureID)m_renderer->getRenderTexture(), m_renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::EndChild();
 
-			ImGui::Image((ImTextureID)m_renderer->getRenderTexture(), m_renderSceneSize, ImVec2(0, 1), ImVec2(1, 0));
-
-			ImGui::End();
+				ImGui::Button("  ", ImVec2(w, 4.0f));
+				if (ImGui::IsItemActive())
+					h += ImGui::GetIO().MouseDelta.y;
+			}
+			
+			{
+				ImGui::BeginChild("Inspector", ImVec2(w, -1));
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 4.0f));
+				m_inspector->draw();
+				ImGui::PopStyleVar();
+				ImGui::EndChild();
+			}
+			
+			
 		}
+		ImGui::EndChild();
+		ImGui::SameLine();
 
+		ImGui::Button(" ", ImVec2(4.0f, -1));
+		if (ImGui::IsItemActive())
+			w += ImGui::GetIO().MouseDelta.x;
+		ImGui::SameLine();
+		ImGui::BeginChild("Node Editor", ImVec2(0, -1), false);
 		{
-			m_inspector->draw();
-		}
-
-		{
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 4.0f));
 			m_nodeEditor->draw();
+			ImGui::PopStyleVar();
 		}
+		ImGui::EndChild();
+		
+		ImGui::PopStyleVar();
+
+		ImGui::PopStyleVar();
+
+		ImGui::PopFont();
+		ImGui::End();
 	}
 }
 
@@ -91,7 +138,11 @@ GLFWwindow* GUI::setupImguiGlfw()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-	GLFWwindow* l_window = glfwCreateWindow(1280, 720, "ProcSDF", NULL, NULL);
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+	GLFWwindow* l_window = glfwCreateWindow(mode->width, mode->height, "ProcSDF", monitor, nullptr);
 	if (l_window == NULL)
 		return NULL;
 	glfwMakeContextCurrent(l_window);
@@ -109,12 +160,82 @@ GLFWwindow* GUI::setupImguiGlfw()
 
 	io.ConfigDragClickToInputText = true;
 
-	ImGui::StyleColorsDark();
+	setupStyle();
+	defaultFont = io.Fonts->AddFontDefault();
+	robotoMediumFont = io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_compressed_data, Roboto_compressed_size, 16.0f);
+	robotoRegularFont = io.Fonts->AddFontFromMemoryCompressedTTF(RobotoRegular_compressed_data, RobotoRegular_compressed_size, 16.0f);
 
 	ImGui_ImplGlfw_InitForOpenGL(l_window, true);
 	ImGui_ImplOpenGL3_Init(l_glslVersion);
 
 	return l_window;
+}
+
+void GUI::setupStyle()
+{
+	ImVec4* colors = ImGui::GetStyle().Colors;
+
+
+
+	auto& style = ImGui::GetStyle();
+	style.Colors[ImGuiCol_Text] = TEXT(0.78f);
+	style.Colors[ImGuiCol_TextDisabled] = TEXT(0.28f);
+	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
+	style.Colors[ImGuiCol_ChildBg] = BG(0.9f);
+	style.Colors[ImGuiCol_PopupBg] = BG(0.9f);
+	style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.00f, 0.00f);
+	style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+	style.Colors[ImGuiCol_FrameBg] = BG(1.00f);
+	style.Colors[ImGuiCol_FrameBgHovered] = MED(0.78f);
+	style.Colors[ImGuiCol_FrameBgActive] = MED(1.00f);
+	style.Colors[ImGuiCol_TitleBg] = LOW(1.00f);
+	style.Colors[ImGuiCol_TitleBgActive] = HI(1.00f);
+	style.Colors[ImGuiCol_TitleBgCollapsed] = BG(0.75f);
+	style.Colors[ImGuiCol_MenuBarBg] = BG(0.47f);
+	style.Colors[ImGuiCol_ScrollbarBg] = BG(1.00f);
+	style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.09f, 0.15f, 0.16f, 1.00f);
+	style.Colors[ImGuiCol_ScrollbarGrabHovered] = MED(0.78f);
+	style.Colors[ImGuiCol_ScrollbarGrabActive] = MED(1.00f);
+	style.Colors[ImGuiCol_CheckMark] = ImVec4(0.71f, 0.22f, 0.27f, 1.00f);
+	style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.47f, 0.77f, 0.83f, 0.14f);
+	style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.71f, 0.22f, 0.27f, 1.00f);
+	style.Colors[ImGuiCol_Button] = ImVec4(0.47f, 0.77f, 0.83f, 0.05f);
+	style.Colors[ImGuiCol_ButtonHovered] = HI(1.0f);
+	style.Colors[ImGuiCol_ButtonActive] = MED(1.00f);
+	style.Colors[ImGuiCol_Header] = MED(0.76f);
+	style.Colors[ImGuiCol_HeaderHovered] = MED(0.86f);
+	style.Colors[ImGuiCol_HeaderActive] = HI(1.00f);
+	style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.47f, 0.77f, 0.83f, 0.04f);
+	style.Colors[ImGuiCol_ResizeGripHovered] = MED(0.78f);
+	style.Colors[ImGuiCol_ResizeGripActive] = MED(1.00f);
+	style.Colors[ImGuiCol_PlotLines] = TEXT(0.63f);
+	style.Colors[ImGuiCol_PlotLinesHovered] = MED(1.00f);
+	style.Colors[ImGuiCol_PlotHistogram] = TEXT(0.63f);
+	style.Colors[ImGuiCol_PlotHistogramHovered] = MED(1.00f);
+	style.Colors[ImGuiCol_TextSelectedBg] = MED(0.43f);
+	style.Colors[ImGuiCol_ModalWindowDimBg] = BG(0.73f);
+
+	style.WindowPadding = ImVec2(6, 4);
+	style.WindowRounding = 0.0f;
+	style.FramePadding = ImVec2(5, 2);
+	style.FrameRounding = 0.0f;
+	style.ItemSpacing = ImVec2(10, 10);
+	style.ItemInnerSpacing = ImVec2(1, 1);
+	style.TouchExtraPadding = ImVec2(0, 0);
+	style.IndentSpacing = 6.0f;
+	style.ScrollbarSize = 12.0f;
+	style.ScrollbarRounding = 16.0f;
+	style.GrabMinSize = 20.0f;
+	style.GrabRounding = 2.0f;
+	style.WindowTitleAlign.x = 0.50f;
+	
+	style.WindowRounding = 1;
+	style.ChildRounding = 1;
+	style.FrameRounding = 1;
+	style.PopupRounding = 1;
+
+	style.Colors[ImGuiCol_Border] = ImVec4(0.539f, 0.479f, 0.255f, 0.162f);
+	style.WindowBorderSize = 1.0f;
 }
 
 GUI::~GUI()

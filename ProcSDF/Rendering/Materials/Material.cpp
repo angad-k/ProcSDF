@@ -70,6 +70,7 @@ void Material::draw(bool &p_del)
 	{
 		// std::string l_edit_mat_str = "Edit " + m_name;
 		ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(m_color[0] * 255, m_color[1] * 255, m_color[2] * 255, 255));
+		GUI::getSingleton()->pushMediumFont();
 		if (!GUI_Utilities::isWhiteContrasting(m_color))
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, imgui_colors::BLACK);
@@ -82,9 +83,9 @@ void Material::draw(bool &p_del)
 		{
 			ImGui::PopStyleColor();
 		}
+		ImGui::PopFont();
 		ImGui::PopStyleColor();
 	}
-	ImGui::Separator();	
 }
 
 void Material::setUniforms()
