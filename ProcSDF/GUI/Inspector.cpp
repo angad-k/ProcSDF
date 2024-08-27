@@ -28,7 +28,7 @@ void Inspector::draw()
 {
 	Tab l_oldTab = m_openedTab;
 
-	ImVec2 l_buttonSize = ImVec2((ImGui::GetContentRegionAvail().x - 12.0) / 4, 20.0f);
+	ImVec2 l_buttonSize = ImVec2((ImGui::GetContentRegionAvail().x - 16.0) / 4, 20.0f);
 	ImGui::Dummy(ImVec2(0.0f, 0.0f));
 
 	if (l_oldTab == Tab::WORLD_SETTINGS)
@@ -93,7 +93,6 @@ void Inspector::draw()
 		ImGui::EndDisabled();
 		ImGui::PopFont();
 	}
-
 	ImGui::Dummy(ImVec2(0.0f, 0.0f));
 
 	switch (m_openedTab)
@@ -240,6 +239,7 @@ void Inspector::drawMaterialSettings()
 	if (ImGui::TreeNode("Add Custom Materials"))
 	{
 		ImGui::Indent();
+		GUI::getSingleton()->pushMediumFont();
 		std::vector <std::string> l_customMaterialNames = NodeGraph::getSingleton()->getCustomMaterialNames();
 		for (int i = 0; i < l_customMaterialNames.size(); i++)
 		{
@@ -256,6 +256,7 @@ void Inspector::drawMaterialSettings()
 				}
 			}
 		}
+		ImGui::PopFont();
 		ImGui::Unindent();
 		ImGui::TreePop();
 	}
@@ -282,6 +283,7 @@ void Inspector::drawNodeGraphSettings()
 		if (ImGui::TreeNode("Primitives"))
 		{
 			ImGui::Indent();
+			GUI::getSingleton()->pushMediumFont();
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::PRIMITIVE);
 			if (ImGui::Button("Sphere"))
 			{
@@ -322,7 +324,7 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<CylinderNode>();
 			}
-
+			ImGui::PopFont();
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
@@ -331,6 +333,7 @@ void Inspector::drawNodeGraphSettings()
 		if (ImGui::TreeNode("Operations"))
 		{
 			ImGui::Indent();
+			GUI::getSingleton()->pushMediumFont();
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OPERATION);
 			if (ImGui::Button("Intersection"))
 			{
@@ -356,6 +359,7 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<OnionNode>();
 			}
+			ImGui::PopFont();
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
@@ -364,6 +368,7 @@ void Inspector::drawNodeGraphSettings()
 		if (ImGui::TreeNode("Object"))
 		{
 			ImGui::Indent();
+			GUI::getSingleton()->pushMediumFont();
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::OBJECT);
 			if (ImGui::Button("Object"))
 			{
@@ -373,6 +378,7 @@ void Inspector::drawNodeGraphSettings()
 				NodeGraph::getSingleton()->addLink(object_node->m_outputIDs[0], 
 					NodeGraph::getSingleton()->m_finalNode->m_inputIDs[0]);
 			}
+			ImGui::PopFont();
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
@@ -381,6 +387,7 @@ void Inspector::drawNodeGraphSettings()
 		if (ImGui::TreeNode("Transform"))
 		{
 			ImGui::Indent();
+			GUI::getSingleton()->pushMediumFont();
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::TRANFSFORM);
 			if (ImGui::Button("Translation"))
 			{
@@ -406,6 +413,7 @@ void Inspector::drawNodeGraphSettings()
 			{
 				addNode<Scale>();
 			}
+			ImGui::PopFont();
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();
@@ -413,6 +421,7 @@ void Inspector::drawNodeGraphSettings()
 		if (ImGui::TreeNode("Custom Nodes"))
 		{
 			ImGui::Indent();
+			GUI::getSingleton()->pushMediumFont();
 			ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::CUSTOM_NODE);
 			std::vector <std::string> l_customNodeNames = NodeGraph::getSingleton()->getCustomNodeNames();
 			for (int i = 0; i < l_customNodeNames.size(); i++)
@@ -434,6 +443,7 @@ void Inspector::drawNodeGraphSettings()
 					GUI_Utilities::appendToSameLineIfApplicable(l_approximateButtonSize);
 				}
 			}
+			ImGui::PopFont();
 			ImGui::PopStyleColor();
 			ImGui::Unindent();
 			ImGui::TreePop();

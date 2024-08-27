@@ -161,6 +161,7 @@ GLFWwindow* GUI::setupImguiGlfw()
 	io.ConfigDragClickToInputText = true;
 
 	setupStyle();
+	defaultFont = io.Fonts->AddFontDefault();
 	robotoMediumFont = io.Fonts->AddFontFromMemoryCompressedTTF(Roboto_compressed_data, Roboto_compressed_size, 16.0f);
 	robotoRegularFont = io.Fonts->AddFontFromMemoryCompressedTTF(RobotoRegular_compressed_data, RobotoRegular_compressed_size, 16.0f);
 
@@ -174,21 +175,13 @@ void GUI::setupStyle()
 {
 	ImVec4* colors = ImGui::GetStyle().Colors;
 
-#define HI(v)   ImVec4(0.502f, 0.075f, 0.256f, v)
-#define MED(v)  ImVec4(0.455f, 0.198f, 0.301f, v)
-//#define MED(v)  ImVec4(0.255f, 0.098f, 0.101f, v)
-#define LOW(v)  ImVec4(0.232f, 0.201f, 0.271f, v)
-	// backgrounds (@todo: complete with BG_MED, BG_LOW)
-#define BG(v)   ImVec4(0.05f, 0.07f, 0.120f, v)
-// text
-//#define TEXT(v) ImVec4(0.860f, 0.930f, 0.890f, v)
-#define TEXT(v) ImVec4(0.860f, 0.930f, 0.890f, v)
+
 
 	auto& style = ImGui::GetStyle();
 	style.Colors[ImGuiCol_Text] = TEXT(0.78f);
 	style.Colors[ImGuiCol_TextDisabled] = TEXT(0.28f);
 	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.13f, 0.14f, 0.17f, 1.00f);
-	style.Colors[ImGuiCol_ChildBg] = BG(0.58f);
+	style.Colors[ImGuiCol_ChildBg] = BG(0.9f);
 	style.Colors[ImGuiCol_PopupBg] = BG(0.9f);
 	style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.00f, 0.00f);
 	style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
@@ -206,16 +199,12 @@ void GUI::setupStyle()
 	style.Colors[ImGuiCol_CheckMark] = ImVec4(0.71f, 0.22f, 0.27f, 1.00f);
 	style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.47f, 0.77f, 0.83f, 0.14f);
 	style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.71f, 0.22f, 0.27f, 1.00f);
-	style.Colors[ImGuiCol_Button] = ImVec4(0.47f, 0.77f, 0.83f, 0.14f);
-	//style.Colors[ImGuiCol_Button] = ImVec4(0.25f, 0.27f, 0.320f, 0.5);
-	style.Colors[ImGuiCol_ButtonHovered] = MED(0.86f);
+	style.Colors[ImGuiCol_Button] = ImVec4(0.47f, 0.77f, 0.83f, 0.05f);
+	style.Colors[ImGuiCol_ButtonHovered] = HI(1.0f);
 	style.Colors[ImGuiCol_ButtonActive] = MED(1.00f);
 	style.Colors[ImGuiCol_Header] = MED(0.76f);
 	style.Colors[ImGuiCol_HeaderHovered] = MED(0.86f);
 	style.Colors[ImGuiCol_HeaderActive] = HI(1.00f);
-	//style.Colors[ImGuiCol_Column] = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
-	//style.Colors[ImGuiCol_ColumnHovered] = MED(0.78f);
-	//style.Colors[ImGuiCol_ColumnActive] = MED(1.00f);
 	style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.47f, 0.77f, 0.83f, 0.04f);
 	style.Colors[ImGuiCol_ResizeGripHovered] = MED(0.78f);
 	style.Colors[ImGuiCol_ResizeGripActive] = MED(1.00f);
@@ -224,7 +213,6 @@ void GUI::setupStyle()
 	style.Colors[ImGuiCol_PlotHistogram] = TEXT(0.63f);
 	style.Colors[ImGuiCol_PlotHistogramHovered] = MED(1.00f);
 	style.Colors[ImGuiCol_TextSelectedBg] = MED(0.43f);
-	// [...]
 	style.Colors[ImGuiCol_ModalWindowDimBg] = BG(0.73f);
 
 	style.WindowPadding = ImVec2(6, 4);

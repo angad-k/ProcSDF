@@ -32,9 +32,17 @@ void NodeEditor::draw()
 
 	ImGui::SameLine();
 
+	if ((!NodeGraph::getSingleton()->checkCompilationError()) && NodeGraph::getSingleton()->isDirty())
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, HI(1.0));
+	}
 	if (ImGui::Button("Recompile"))
 	{
 		NodeGraph::getSingleton()->recompileNodeGraph();
+	}
+	if ((!NodeGraph::getSingleton()->checkCompilationError()) && NodeGraph::getSingleton()->isDirty())
+	{
+		ImGui::PopStyleColor();
 	}
 
 	ImGui::SameLine();
@@ -92,13 +100,11 @@ void NodeEditor::draw()
 		float widthNeeded = ImGui::CalcTextSize("Yes").x + style.FramePadding.x * 2.f + ImGui::CalcTextSize("No").x + 5.0f;
 		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::CalcTextSize(confString).x - widthNeeded);
 
-		ImGui::PushStyleColor(ImGuiCol_Button, imgui_colors::RED);
 		if (ImGui::Button("Yes"))
 		{
 			glfwSetWindowShouldClose(GUI::getSingleton()->getWindow(), GL_TRUE);
 			
 		}
-		ImGui::PopStyleColor();
 		ImGui::SameLine();
 		ImGui::Dummy(ImVec2(5.0f, 5.0f));
 		ImGui::SameLine();
